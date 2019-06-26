@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:projectE"
         mc:Ignorable="d"
         
-        Title="Тест" Height="650" Width="1000"
+        Title="NewMovies" Height="650" Width="1000"
         MinWidth="460"
         MinHeight="450"
         MaxHeight="{DynamicResource {x:Static SystemParameters.VirtualScreenHeight}}"
@@ -68,7 +68,7 @@
                 <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
                     <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/панель2.png" Stretch="Fill"/>
                 </Button>
-                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="0" Background="Red" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="Wrap" Text="может по возр/убыв?" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch"/>
+                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="0" Background="#FF0E1621" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="Wrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="#FF6C7883"/>
 
             </Grid>
         </Border>
