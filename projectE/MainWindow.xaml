@@ -10,7 +10,7 @@
         MinWidth="460"
         MinHeight="450"
         MaxHeight="{DynamicResource {x:Static SystemParameters.VirtualScreenHeight}}"
-        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp"
+        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp" Icon="pack://siteoforigin:,,,/Resources/icon.ico"
         >
 
     <Grid Name="grid">
