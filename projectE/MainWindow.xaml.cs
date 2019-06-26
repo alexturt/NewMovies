@@ -106,6 +106,7 @@ namespace projectE
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+
              imgmass = new BitmapImage[8]
                 {
                     poster0Img,
@@ -678,6 +679,8 @@ namespace projectE
         private void button_home_Click(object sender, RoutedEventArgs e)
         {
             list_load();
+            Parser parser = new Parser();
+            parser.UpdateList();
         }
 
         private void button_favorite_Click_1(object sender, RoutedEventArgs e)
