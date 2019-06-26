@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:projectE"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="#0E1621"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+        </Style>
     </Application.Resources>
 </Application>
