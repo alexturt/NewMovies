@@ -39,7 +39,13 @@ namespace projectE
             string description, string poster, string urltrailer,
             string urlinfo, string urlwatch, bool favorite, bool watched)
         {
-            byte[] bytes = wb.DownloadData(poster);
+            byte[] bytes = null;
+            try
+            {
+                bytes = wb.DownloadData(poster);
+            }
+            catch(Exception ex)
+            {            }
             cmd = new SQLiteCommand(conn);
             cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
             cmd.Parameters.Add("@name", DbType.String).Value = name;

@@ -78,9 +78,9 @@ namespace projectE
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //пример добавление фильма в базу
-            //db.connect();
-            //db.AddMovie("123", 123, "2019-10-12", "123", "123", "123", "123", "https://st.kp.yandex.net/images/film_iphone/iphone360_1125423.jpg", "asd", "asd", "asd", false, false);
-            //db.close();
+            db.connect();
+            db.AddMovie("123", 123, "2019-10-12", "123", "123", "123", "123", "https://metanit.com/sharp/wpf/pics/3.6.png", "asd", "asd", "asd", false, false);
+            db.close();
             //тут тестовые данные
             imgmass = new BitmapImage[8]
                 {
