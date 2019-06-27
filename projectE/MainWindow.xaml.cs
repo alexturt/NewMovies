@@ -375,7 +375,7 @@ namespace projectE
                 var backColor = Brushes.Cornsilk;
                 var fontSize = 14;
 
-                Button butt = new Button()//Импорт и экспорт
+                Button save_my_butt = new Button()//Импорт и экспорт
                 {
                     Name = "button_in_settings",
                     VerticalContentAlignment = VerticalAlignment.Center,
@@ -389,6 +389,8 @@ namespace projectE
                     ClickMode = ClickMode.Press,
                     //Padding = new Thickness(50, 50, 50, 50)
                 };
+                save_my_butt.Click += save_my_butt_Click;
+                
                 CheckBox notify = new CheckBox()//Уведомления
                 {
                     Name = "checkbox_in_settings_notify",
@@ -560,10 +562,7 @@ namespace projectE
                 };
                 //------------//------------//
 
-
-
-
-
+                
                 Grid.SetColumn(notify, 0);
                 Grid.SetRow(notify, 0);
                 Grid.SetColumnSpan(notify, 2);
@@ -574,10 +573,10 @@ namespace projectE
                 Grid.SetColumnSpan(age, 2);
                 grid_content.Children.Add(age);
 
-                Grid.SetColumn(butt, 3);
-                Grid.SetRow(butt, 0);
-                Grid.SetRowSpan(butt, 2);
-                grid_content.Children.Add(butt);
+                Grid.SetColumn(save_my_butt, 3);
+                Grid.SetRow(save_my_butt, 0);
+                Grid.SetRowSpan(save_my_butt, 2);
+                grid_content.Children.Add(save_my_butt);
 
                 Grid.SetColumn(lbl, 0);
                 Grid.SetRow(lbl, 4);
@@ -619,6 +618,11 @@ namespace projectE
 
 
             }
+        }
+
+        void save_my_butt_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Not ready");
         }
 
         private void list_load()
