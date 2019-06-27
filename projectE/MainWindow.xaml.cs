@@ -31,7 +31,7 @@ namespace projectE
             Width = 450;
             stack_content.Visibility = Visibility.Hidden;
         }
-        
+        DB db = new DB();
         //нажатие на кнопку открыть/закрыть правую панель
         private void button_panel_Click(object sender, RoutedEventArgs e)
         {
@@ -77,8 +77,12 @@ namespace projectE
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //пример добавление фильма в базу
+            //db.connect();
+            //db.AddMovie("123", 123, "2019-10-12", "123", "123", "123", "123", "https://metanit.com/sharp/wpf/pics/3.6.png", "asd", "asd", "asd", false, false);
+            //db.close();
             //тут тестовые данные
-             imgmass = new BitmapImage[8]
+            imgmass = new BitmapImage[8]
                 {
                     poster0Img,
                     poster1Img,
@@ -243,7 +247,7 @@ namespace projectE
             }
         }
 
-        //определение id фильма по нажатию на элементы в центральном гриде
+        //определение id фильма по нажатию на элементы в центральном гриде и открытие правой вкладке и инфой о фильме
         private void grid_list_MouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
         {
             if (e.Source == null)
@@ -267,8 +271,13 @@ namespace projectE
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
+            grid_content.RowDefinitions.Clear();
+            grid_content.ColumnDefinitions.Clear();
             RowDefinition rd = new RowDefinition();
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
             grid_content.RowDefinitions.Add(rd);
+            grid_content.RowDefinitions.Add(new RowDefinition());
             Image img = new Image()
             {
                 Name = "image_right_content",
@@ -322,29 +331,29 @@ namespace projectE
             Grid.SetColumnSpan(tb2, 2);
             Grid.SetRow(tb2, 1);
             grid_content.Children.Add(tb2);
+            Title.Text = grid_content.RowDefinitions.Count.ToString();
         }
 
-        private void settings_load()//Подгрузка контента
+        private void settings_load()//Подгрузка настроек
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
-            ColumnDefinition cd = new ColumnDefinition();
-            RowDefinition rd3 = new RowDefinition();
-            RowDefinition rd4 = new RowDefinition();
-            RowDefinition rd5 = new RowDefinition();
-            RowDefinition rd6 = new RowDefinition();
-            RowDefinition rd7 = new RowDefinition();
-            RowDefinition rd8 = new RowDefinition();
-            grid_content.ColumnDefinitions.Add(cd);
-            grid_content.RowDefinitions.Add(rd3);
-            grid_content.RowDefinitions.Add(rd4);
-            grid_content.RowDefinitions.Add(rd5);
-            grid_content.RowDefinitions.Add(rd6);
-            grid_content.RowDefinitions.Add(rd7);
-            grid_content.RowDefinitions.Add(rd8);
+            grid_content.RowDefinitions.Clear();
+            grid_content.ColumnDefinitions.Clear();
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
             //grid_content.ShowGridLines = true;
-
             var foreColor = Brushes.WhiteSmoke;
             var backColor = Brushes.Cornsilk;
             var fontSize = 14;
@@ -588,8 +597,7 @@ namespace projectE
             Grid.SetRow(otherSource, 7);
             Grid.SetColumnSpan(otherSource, 2);
             grid_content.Children.Add(otherSource);
-
-
+            
         }
 
         void save_my_butt_Click(object sender, RoutedEventArgs e)
