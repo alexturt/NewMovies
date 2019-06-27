@@ -357,55 +357,94 @@ namespace projectE
                 RowDefinition rd = new RowDefinition();
                 grid_content.RowDefinitions.Add(rd);
 
-                Button butt = new Button()
+                Button butt = new Button()//Импорт и экспорт
                 {
                     Name = "button_in_settings",
                     VerticalContentAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Height = 30,
+                    FontSize = 16,
                     //Width = 100,
                     Background = Brushes.WhiteSmoke,
                     Foreground = Brushes.Black,
                     Content = "Export/Import",
-                    ClickMode = ClickMode.Press
+                    ClickMode = ClickMode.Press,
+                    Padding = new Thickness(50, 50, 50, 50)
                 };
-                CheckBox notify = new CheckBox()
+                CheckBox notify = new CheckBox()//Уведомления
                 {
                     Name = "checkbox_in_settings_notify",
                     IsThreeState = false,
                     IsChecked = true,
-                    Height = 20,
+                    Height = 40,
+                    FontSize = 16,
                     //Width = 100,
                     Content = "Включить уведомления?",
                     VerticalContentAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Background = Brushes.AntiqueWhite,
-                    Foreground = Brushes.Black
+                    Foreground = Brushes.Black,
+                    Padding = new Thickness(5, 5, 5, 5)
                 };
-                CheckBox age = new CheckBox()
+                CheckBox age = new CheckBox()//18+ защита
                 {
                     Name = "checkbox_in_settings_age",
                     IsThreeState = false,
                     IsChecked = false,
-                    Height = 20,
+                    Height = 40,
+                    FontSize = 16,
                     //Width = 100,
                     Content = "Включить детский режим?",
-                    VerticalContentAlignment = VerticalAlignment.Top,
+                    VerticalContentAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Background = Brushes.AntiqueWhite,
-                    Foreground = Brushes.Black
+                    Foreground = Brushes.Black,
+                    Padding = new Thickness(5, 5, 5, 5)
+                };
+                Label lbl = new Label()//Лейбл для выбора источника
+                {
+                    Name = "textblock_parser",
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Bottom,
+                    FontSize = 16,
+                    Content = "Выбор источника:",
+                    //Margin = new Thickness(5,5,5,5),
+                    Foreground = Brushes.Black,
+                    Padding = new Thickness(5, 5, 5, 5)
+                };
+                ComboBox cb = new ComboBox()//Выбор источника
+                {
+                    Name = "comboBox_parser",
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    FontSize = 16,
+                    Height = 30,
+                    Width = 200,
+                    Text = "источник",
+                    //Margin = new Thickness(164,112,0,0),
+                    Background = Brushes.AntiqueWhite,
+                    Foreground = Brushes.Black,
+                    Padding = new Thickness(5, 5, 5, 5)
                 };
 
+                //Grid.SetColumn(butt, 1);
+                //Grid.SetRow(butt, 0);
+                //grid_content.Children.Add(butt);
+
+                Grid.SetColumn(lbl, 0);
+                Grid.SetRow(lbl, 0);
+                grid_content.Children.Add(lbl);
+
+                Grid.SetColumn(cb, 0);
+                Grid.SetRow(cb, 1);
+                grid_content.Children.Add(cb);
+                
                 Grid.SetColumn(notify, 0);
-                Grid.SetRow(notify, 0);
+                Grid.SetRow(notify, 2);
                 grid_content.Children.Add(notify);
 
-                Grid.SetColumn(butt, 1);
-                Grid.SetRow(butt, 0);
-                grid_content.Children.Add(butt);
-
                 Grid.SetColumn(age, 0);
-                Grid.SetRow(age, 1);
+                Grid.SetRow(age, 3);
                 grid_content.Children.Add(age);
 
             }
@@ -778,11 +817,6 @@ namespace projectE
             button_sctoll_top.Visibility = Visibility.Hidden;
         }
         
-        private void scroll_viewer_center_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            
-        }
-
         private void stack_list_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta < 0)
