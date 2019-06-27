@@ -348,276 +348,272 @@ namespace projectE
                     "Возраст\t" + dt.Rows[i]["agelimit"].ToString(),*/
         }
 
-        private void content_load(string mode)//Подгрузка контента
+        private void settings_load()//Подгрузка контента
         {
-            if (mode == "settings")
+            if (!grid.ColumnDefinitions[2].IsEnabled)
+                openPanel();
+            grid_content.Children.Clear();
+            ColumnDefinition cd = new ColumnDefinition();
+            RowDefinition rd3 = new RowDefinition();
+            RowDefinition rd4 = new RowDefinition();
+            RowDefinition rd5 = new RowDefinition();
+            RowDefinition rd6 = new RowDefinition();
+            RowDefinition rd7 = new RowDefinition();
+            RowDefinition rd8 = new RowDefinition();
+            grid_content.ColumnDefinitions.Add(cd);
+            grid_content.RowDefinitions.Add(rd3);
+            grid_content.RowDefinitions.Add(rd4);
+            grid_content.RowDefinitions.Add(rd5);
+            grid_content.RowDefinitions.Add(rd6);
+            grid_content.RowDefinitions.Add(rd7);
+            grid_content.RowDefinitions.Add(rd8);
+            //grid_content.ShowGridLines = true;
+
+            var foreColor = Brushes.WhiteSmoke;
+            var backColor = Brushes.Cornsilk;
+            var fontSize = 14;
+
+            Button save_my_butt = new Button()//Импорт и экспорт
             {
-                if (!grid.ColumnDefinitions[2].IsEnabled)
-                    openPanel();
-                grid_content.Children.Clear();
-                ColumnDefinition cd = new ColumnDefinition();
-                RowDefinition rd3 = new RowDefinition();
-                RowDefinition rd4 = new RowDefinition();
-                RowDefinition rd5 = new RowDefinition();
-                RowDefinition rd6 = new RowDefinition();
-                RowDefinition rd7 = new RowDefinition();
-                RowDefinition rd8 = new RowDefinition();
-                grid_content.ColumnDefinitions.Add(cd);
-                grid_content.RowDefinitions.Add(rd3);
-                grid_content.RowDefinitions.Add(rd4);
-                grid_content.RowDefinitions.Add(rd5);
-                grid_content.RowDefinitions.Add(rd6);
-                grid_content.RowDefinitions.Add(rd7);
-                grid_content.RowDefinitions.Add(rd8);
-                //grid_content.ShowGridLines = true;
+                Name = "button_in_settings",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Height = 50,
+                FontSize = fontSize,
+                Width = 100,
+                Background = Brushes.Black,
+                Foreground = foreColor,
+                Content = "Export/Import",
+                ClickMode = ClickMode.Press,
+                //Padding = new Thickness(50, 50, 50, 50)
+            };
+            save_my_butt.Click += save_my_butt_Click;
 
-                var foreColor = Brushes.WhiteSmoke;
-                var backColor = Brushes.Cornsilk;
-                var fontSize = 14;
-
-                Button save_my_butt = new Button()//Импорт и экспорт
-                {
-                    Name = "button_in_settings",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Height = 50,
-                    FontSize = fontSize,
-                    Width = 100,
-                    Background = Brushes.Black,
-                    Foreground = foreColor,
-                    Content = "Export/Import",
-                    ClickMode = ClickMode.Press,
-                    //Padding = new Thickness(50, 50, 50, 50)
-                };
-                save_my_butt.Click += save_my_butt_Click;
-                
-                CheckBox notify = new CheckBox()//Уведомления
-                {
-                    Name = "checkbox_in_settings_notify",
-                    IsThreeState = false,
-                    IsChecked = true,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "Включить уведомления?",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                CheckBox age = new CheckBox()//18+ защита
-                {
-                    Name = "checkbox_in_settings_age",
-                    IsThreeState = false,
-                    IsChecked = false,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "Включить детский режим?",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
+            CheckBox notify = new CheckBox()//Уведомления
+            {
+                Name = "checkbox_in_settings_notify",
+                IsThreeState = false,
+                IsChecked = true,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "Включить уведомления?",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            CheckBox age = new CheckBox()//18+ защита
+            {
+                Name = "checkbox_in_settings_age",
+                IsThreeState = false,
+                IsChecked = false,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "Включить детский режим?",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
 
 
 
 
-                //------------//------------//
-                Label lbl = new Label()//Лейбл для выбора источников
-                {
-                    Name = "label_parser",
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Bottom,
-                    FontSize = fontSize,
-                    Content = "Выбор источников:",
-                    //Margin = new Thickness(5,5,5,5),
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                //------------
-                CheckBox netflix_com = new CheckBox()//NetFlix
-                {
-                    Name = "checkbox_in_settings_netflix_com",
-                    IsThreeState = false,
-                    IsChecked = true,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "NetFlix",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                CheckBox ivi_ru = new CheckBox()//Ivi
-                {
-                    Name = "checkbox_in_settings_ivi_ru",
-                    IsThreeState = false,
-                    IsChecked = true,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "ivi.ru",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                CheckBox megogo_net = new CheckBox()//Megogo
-                {
-                    Name = "checkbox_in_settings_megogo_net",
-                    IsThreeState = false,
-                    IsChecked = true,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "megogo.net",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                //------------
-                CheckBox kinokrad_co = new CheckBox()//Kinokrad
-                {
-                    Name = "checkbox_in_settings_kinokrad_co",
-                    IsThreeState = false,
-                    IsChecked = true,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "kinokrad.co",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                CheckBox filmzor_net = new CheckBox()//Filmzor
-                {
-                    Name = "checkbox_in_settings_filmzor_net",
-                    IsThreeState = false,
-                    IsChecked = true,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "filmzor.net",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                CheckBox hdkinozor_ru = new CheckBox()//HDKinozor
-                {
-                    Name = "checkbox_in_settings_hdkinozor_ru",
-                    IsThreeState = false,
-                    IsChecked = true,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "hdkinozor.ru",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                //------------
-                CheckBox lostfilm_tv = new CheckBox()//Lostfilm
-                {
-                    Name = "checkbox_in_settings_lostfilm_tv",
-                    IsThreeState = false,
-                    IsChecked = true,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "lostfilm.tv",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                CheckBox otherSource = new CheckBox()//Add other source
-                {
-                    Name = "checkbox_in_settings_other",
-                    IsThreeState = false,
-                    IsChecked = false,
-                    Height = 40,
-                    FontSize = fontSize,
-                    //Width = 100,
-                    Content = "Другой источник...",
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Background = backColor,
-                    Foreground = foreColor,
-                    Padding = new Thickness(5, 5, 5, 5)
-                };
-                //------------//------------//
-
-                
-                Grid.SetColumn(notify, 0);
-                Grid.SetRow(notify, 0);
-                Grid.SetColumnSpan(notify, 2);
-                grid_content.Children.Add(notify);
-
-                Grid.SetColumn(age, 0);
-                Grid.SetRow(age, 1);
-                Grid.SetColumnSpan(age, 2);
-                grid_content.Children.Add(age);
-
-                Grid.SetColumn(save_my_butt, 3);
-                Grid.SetRow(save_my_butt, 0);
-                Grid.SetRowSpan(save_my_butt, 2);
-                grid_content.Children.Add(save_my_butt);
-
-                Grid.SetColumn(lbl, 0);
-                Grid.SetRow(lbl, 4);
-                grid_content.Children.Add(lbl);
-                
-                Grid.SetColumn(netflix_com, 0);
-                Grid.SetRow(netflix_com, 5);
-                grid_content.Children.Add(netflix_com);
-
-                Grid.SetColumn(ivi_ru, 1);
-                Grid.SetRow(ivi_ru, 5);
-                grid_content.Children.Add(ivi_ru);
-
-                Grid.SetColumn(megogo_net, 2);
-                Grid.SetRow(megogo_net, 5);
-                grid_content.Children.Add(megogo_net);
-
-                Grid.SetColumn(kinokrad_co, 0);
-                Grid.SetRow(kinokrad_co, 6);
-                grid_content.Children.Add(kinokrad_co);
-
-                Grid.SetColumn(filmzor_net, 1);
-                Grid.SetRow(filmzor_net, 6);
-                grid_content.Children.Add(filmzor_net);
-
-                Grid.SetColumn(hdkinozor_ru, 2);
-                Grid.SetRow(hdkinozor_ru, 6);
-                grid_content.Children.Add(hdkinozor_ru);
-
-                Grid.SetColumn(lostfilm_tv, 0);
-                Grid.SetRow(lostfilm_tv, 7);
-                grid_content.Children.Add(lostfilm_tv);
-
-                Grid.SetColumn(otherSource, 1);
-                Grid.SetRow(otherSource, 7);
-                Grid.SetColumnSpan(otherSource, 2);
-                grid_content.Children.Add(otherSource);
+            //------------//------------//
+            Label lbl = new Label()//Лейбл для выбора источников
+            {
+                Name = "label_parser",
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                FontSize = fontSize,
+                Content = "Выбор источников:",
+                //Margin = new Thickness(5,5,5,5),
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            //------------
+            CheckBox netflix_com = new CheckBox()//NetFlix
+            {
+                Name = "checkbox_in_settings_netflix_com",
+                IsThreeState = false,
+                IsChecked = true,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "NetFlix",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            CheckBox ivi_ru = new CheckBox()//Ivi
+            {
+                Name = "checkbox_in_settings_ivi_ru",
+                IsThreeState = false,
+                IsChecked = true,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "ivi.ru",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            CheckBox megogo_net = new CheckBox()//Megogo
+            {
+                Name = "checkbox_in_settings_megogo_net",
+                IsThreeState = false,
+                IsChecked = true,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "megogo.net",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            //------------
+            CheckBox kinokrad_co = new CheckBox()//Kinokrad
+            {
+                Name = "checkbox_in_settings_kinokrad_co",
+                IsThreeState = false,
+                IsChecked = true,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "kinokrad.co",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            CheckBox filmzor_net = new CheckBox()//Filmzor
+            {
+                Name = "checkbox_in_settings_filmzor_net",
+                IsThreeState = false,
+                IsChecked = true,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "filmzor.net",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            CheckBox hdkinozor_ru = new CheckBox()//HDKinozor
+            {
+                Name = "checkbox_in_settings_hdkinozor_ru",
+                IsThreeState = false,
+                IsChecked = true,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "hdkinozor.ru",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            //------------
+            CheckBox lostfilm_tv = new CheckBox()//Lostfilm
+            {
+                Name = "checkbox_in_settings_lostfilm_tv",
+                IsThreeState = false,
+                IsChecked = true,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "lostfilm.tv",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            CheckBox otherSource = new CheckBox()//Add other source
+            {
+                Name = "checkbox_in_settings_other",
+                IsThreeState = false,
+                IsChecked = false,
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "Другой источник...",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            //------------//------------//
 
 
+            Grid.SetColumn(notify, 0);
+            Grid.SetRow(notify, 0);
+            Grid.SetColumnSpan(notify, 2);
+            grid_content.Children.Add(notify);
 
-            }
+            Grid.SetColumn(age, 0);
+            Grid.SetRow(age, 1);
+            Grid.SetColumnSpan(age, 2);
+            grid_content.Children.Add(age);
+
+            Grid.SetColumn(save_my_butt, 3);
+            Grid.SetRow(save_my_butt, 0);
+            Grid.SetRowSpan(save_my_butt, 2);
+            grid_content.Children.Add(save_my_butt);
+
+            Grid.SetColumn(lbl, 0);
+            Grid.SetRow(lbl, 4);
+            grid_content.Children.Add(lbl);
+
+            Grid.SetColumn(netflix_com, 0);
+            Grid.SetRow(netflix_com, 5);
+            grid_content.Children.Add(netflix_com);
+
+            Grid.SetColumn(ivi_ru, 1);
+            Grid.SetRow(ivi_ru, 5);
+            grid_content.Children.Add(ivi_ru);
+
+            Grid.SetColumn(megogo_net, 2);
+            Grid.SetRow(megogo_net, 5);
+            grid_content.Children.Add(megogo_net);
+
+            Grid.SetColumn(kinokrad_co, 0);
+            Grid.SetRow(kinokrad_co, 6);
+            grid_content.Children.Add(kinokrad_co);
+
+            Grid.SetColumn(filmzor_net, 1);
+            Grid.SetRow(filmzor_net, 6);
+            grid_content.Children.Add(filmzor_net);
+
+            Grid.SetColumn(hdkinozor_ru, 2);
+            Grid.SetRow(hdkinozor_ru, 6);
+            grid_content.Children.Add(hdkinozor_ru);
+
+            Grid.SetColumn(lostfilm_tv, 0);
+            Grid.SetRow(lostfilm_tv, 7);
+            grid_content.Children.Add(lostfilm_tv);
+
+            Grid.SetColumn(otherSource, 1);
+            Grid.SetRow(otherSource, 7);
+            Grid.SetColumnSpan(otherSource, 2);
+            grid_content.Children.Add(otherSource);
+
+
         }
 
         void save_my_butt_Click(object sender, RoutedEventArgs e)
@@ -1003,7 +999,7 @@ namespace projectE
 
         private void Button_settings_Click(object sender, RoutedEventArgs e)//Settings butt clicked
         {
-            content_load("settings");
+            settings_load();
         }
     }
 }
