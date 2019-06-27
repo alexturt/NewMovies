@@ -274,7 +274,10 @@ namespace projectE
             grid_content.RowDefinitions.Clear();
             grid_content.ColumnDefinitions.Clear();
             RowDefinition rd = new RowDefinition();
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
             grid_content.RowDefinitions.Add(rd);
+            grid_content.RowDefinitions.Add(new RowDefinition());
             Image img = new Image()
             {
                 Name = "image_right_content",
