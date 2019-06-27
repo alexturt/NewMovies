@@ -29,38 +29,46 @@ namespace projectE
 
             Start = DateTime.Now.TimeOfDay;
             Console.WriteLine("Парсим Фильмзор. Начало: " + Start);
-            UpdateListFilmzor(@"https://filmzor.net/filter/fy2019-t2");
+                    UpdateListFilmzor(@"https://filmzor.net/filter/fy2019-t2");
             Stop = DateTime.Now.TimeOfDay;
             FullTime += Stop.Subtract(Start);
             Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
             Start = DateTime.Now.TimeOfDay;
             Console.WriteLine("Парсим Иви. Начало: " + Start);
-            UpdateListIvi(@"https://www.ivi.ru/movies/2019/page3");
+                     UpdateListIvi(@"https://www.ivi.ru/movies/2019/page3");
             Stop = DateTime.Now.TimeOfDay;
             FullTime += Stop.Subtract(Start);
             Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
             Start = DateTime.Now.TimeOfDay;
             Console.WriteLine("Парсим Кинокрад. Начало: " + Start);
-            UpdateListKinokrad(@"https://kino50.top/filmy-online/browse/1/all/all/2019?sort_by=field_weight_value");
+                   UpdateListKinokrad(@"https://kino50.top/filmy-online/browse/1/all/all/2019?sort_by=field_weight_value");
             Stop = DateTime.Now.TimeOfDay;
             FullTime += Stop.Subtract(Start);
             Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
             Start = DateTime.Now.TimeOfDay;
             Console.WriteLine("Парсим Нетфликс. Начало: " + Start);
-            UpdateListNetflix(@"http://netflix.kinoyou.com/god/2019/");
+                   UpdateListNetflix(@"http://netflix.kinoyou.com/god/2019/");
             Stop = DateTime.Now.TimeOfDay;
             FullTime += Stop.Subtract(Start);
             Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
             Start = DateTime.Now.TimeOfDay;
             Console.WriteLine("Парсим ХДКинозор. Начало: " + Start);
-            UpdateListHDKinozor(@"https://hdkinozor.ru/top2019.html");
+                  UpdateListHDKinozor(@"https://hdkinozor.ru/top2019.html");
             Stop = DateTime.Now.TimeOfDay;
             FullTime += Stop.Subtract(Start);
             Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
+
+            Start = DateTime.Now.TimeOfDay;
+            Console.WriteLine("Парсим Лостфильм. Начало: " + Start);
+            UpdateListLostfilm(@"https://www.lostfilm.tv/series/?type=search&s=3&t=1");
+            Stop = DateTime.Now.TimeOfDay;
+            FullTime += Stop.Subtract(Start);
+            Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
+
             Console.WriteLine("Было выгружено : " + countElem + ". Всего потрачено: " + FullTime);
 
         }
@@ -476,6 +484,74 @@ namespace projectE
                         foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(8) > span > a")) //Страна
                         {
                             films[countElem, 9] += obj.FirstChild.NodeValue.Trim() + " ";
+                        }
+                        films[countElem, 10] = Html; //Сам фильм
+                        countElem++;
+                    }
+                }
+            }
+        }
+
+        private void UpdateListLostfilm(string Html)
+        {
+            List<string> ListFilm = new List<string>();
+            CQ film = CQ.CreateFromUrl(Html);
+            for (int i = 1; i < 35; i++)
+            {
+                foreach (IDomObject obj in film.Find("#serials_list > div:nth-child(" + i + ") > a"))
+                {
+                    if (obj.GetAttribute("href") != null)
+                    {
+                        ListFilm.Add(obj.GetAttribute("href"));
+                    }
+                }
+            }
+            AddFilmLostfilm(ListFilm.Distinct().ToList());
+        }
+
+        private void AddFilmLostfilm(List<string> ListFilm)
+        {
+            for (int i = 0; i < ListFilm.Count; i++)
+            {
+                Task.Delay(500).Wait();
+                string Html = @"https://www.lostfilm.tv" + ListFilm[i];
+                WebClient client = new WebClient();
+                client.DownloadFile(Html, "film.txt");
+                CQ film = CQ.CreateFromFile("film.txt");
+                string name = film.Find("#left-pane > div:nth-child(1) > h1 > div.title-ru").Text().Trim();
+                string[] yearMas = film.Find("#left-pane > div:nth-child(4) > div.details-pane > div.left-box > a:nth-child(1)").Text().Split(' ').ToArray();
+                string year = yearMas[2];
+                if (name != "")
+                {
+                    if (!DoubleFilm(name, year))
+                    {
+                        films[countElem, 0] = Html; //ссылка
+                        films[countElem, 1] = name; //Название
+                        films[countElem, 2] = year; //Год
+                                                    //        films[countElem, 3] = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(5) > div > div.finfo-text > a").Text(); //Жанр
+                        foreach (IDomObject obj in film.Find("#left-pane > div:nth-child(4) > div.details-pane > div.right-box > a:nth-child(1)")) //Жанр
+                        {
+                            //            if (!(obj.FirstChild.NodeValue.Trim()).Equals("По сериалу"))
+                            //             {
+                            films[countElem, 3] += obj.FirstChild.NodeValue.Trim() + " ";
+                            //             }
+                        }
+                        foreach (IDomObject obj in film.Find("#left-pane > div.text-block.description > div.body > div")) //Описание
+                        {
+                            films[countElem, 4] = obj.FirstChild.NextElementSibling.PreviousSibling.NodeValue.Trim() + "... (полный текст читай на сайте-источнике)";
+                        }
+                        //       films[countElem, 4] = film.Find("#dle-content > div.kikos > div > span.masha_index.masha_index44").Text().Trim(); //Описание
+                        //       films[countElem, 4] = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
+                        films[countElem, 5] = Html + "/video"; //Трейлер
+                        films[countElem, 6] = "0+"; //Возр.огр
+                                                    //       films[countElem, 7] = @"https://hdkinozor.ru" + film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img").Attr("src"); //Картинка
+
+                        films[countElem, 7] = @"https://e-torrent.ru/uploads/posts/2016-11/1479684493_garo_svyaschennoe_plamya_2016.jpg"; //Картинка
+                        films[countElem, 8] = film.Find("#left-pane > div:nth-child(4) > div.details-pane > div.left-box > a:nth-child(1)").Text(); //Дата выхода
+                                                                                                                                                    //          films[countElem, 9] = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
+                        foreach (IDomObject obj in film.Find("#left-pane > div:nth-child(4) > div.details-pane > div.left-box > a:nth-child(3)")) //Страна
+                        {
+                            films[countElem, 9] += obj.FirstChild.ParentNode.NextSibling.NodeValue.Replace("(","").Replace(")","").Trim() + " ";
                         }
                         films[countElem, 10] = Html; //Сам фильм
                         countElem++;
