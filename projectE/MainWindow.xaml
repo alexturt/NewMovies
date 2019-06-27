@@ -14,7 +14,7 @@
         AllowsTransparency="True"
         
         MaxHeight="{DynamicResource {x:Static SystemParameters.VirtualScreenHeight}}"
-        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged"
+        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged" Closing="Window_Closing"
         >
 
     <Grid Name="grid" Width="auto">

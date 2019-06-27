@@ -33,12 +33,14 @@ namespace projectE
         }
         
         
-        // добавление подразделения
+        // добавление фильма
         public void AddMovie(string name, int year, string date,
             string country, string genres, string agerating,
             string description, string poster, string urltrailer,
             string urlinfo, string urlwatch, bool favorite, bool watched)
         {
+            if (conn.State == ConnectionState.Closed)
+                connect();
             byte[] bytes = null;
             try
             {
@@ -63,7 +65,38 @@ namespace projectE
             cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
             cmd.ExecuteNonQuery();
         }
-        
+        //выгрузка всех фильмов
+        public DataTable GetMovies()
+        {
+            if (conn.State == ConnectionState.Closed)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies", conn);
+            dataAdapter.Fill(dt);
+            return dt;
+        }
+        //устанавливаем/снимаем избранное
+        public void SetFavorite(int index, bool favorite)
+        {
+            if (conn.State == ConnectionState.Closed)
+                connect();
+            ExecuteQuery("update movies set favorite=" + favorite + " where id=" + index);
+        }
+        //устанавливаем/снимаем просмотренное
+        public void SetWatched(int index, bool watched)
+        {
+            if (conn.State == ConnectionState.Closed)
+                connect();
+            ExecuteQuery("update movies set watched=" + watched + " where id=" + index);
+        }
+        //для удаления удаленных записей из файла БД
+        public void Vacuum()
+        {
+            if (conn.State == ConnectionState.Closed)
+                connect();
+            ExecuteQuery("vacuum;");
+            close();
+        }
         private void ExecuteQuery(string txtQuery)
         {
             connect();
