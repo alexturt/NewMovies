@@ -103,6 +103,16 @@ namespace projectE.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap poster_none {
+            get {
+                object obj = ResourceManager.GetObject("poster_none", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap poster1 {
             get {
                 object obj = ResourceManager.GetObject("poster1", resourceCulture);

@@ -13,8 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
-using System.IO;
-using System.Threading;
+using System.IO; 
 
 namespace projectE
 {
@@ -26,13 +25,14 @@ namespace projectE
         public MainWindow()
         {
             InitializeComponent();
-
+            
             grid.ColumnDefinitions[2].Width = new GridLength(0);
             grid.ColumnDefinitions[2].IsEnabled = false;
             Width = 450;
             stack_content.Visibility = Visibility.Hidden;
         }
         DB db = new DB();
+        DataTable dt_movies = new DataTable();
         //нажатие на кнопку открыть/закрыть правую панель
         private void button_panel_Click(object sender, RoutedEventArgs e)
         {
@@ -65,186 +65,54 @@ namespace projectE
         BitmapImage FavoriteImg = new BitmapImage(new Uri("/Resources/звезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage poster0Img = new BitmapImage(new Uri("/Resources/posterTEST.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage poster1Img = new BitmapImage(new Uri("/Resources/poster1.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage poster2Img = new BitmapImage(new Uri("/Resources/poster2.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage poster3Img = new BitmapImage(new Uri("/Resources/poster3.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage poster4Img = new BitmapImage(new Uri("/Resources/poster4.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage poster5Img = new BitmapImage(new Uri("/Resources/poster5.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage poster6Img = new BitmapImage(new Uri("/Resources/poster6.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage poster7Img = new BitmapImage(new Uri("/Resources/poster7.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage[] imgmass;
+
 
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            GetMoviesFromDB();
+            //Image img = new Image() {  Source = (dt_movies.Rows[11]["poster"] as BitmapImage) };
+            //grid_content.Children.Add(img);
+            //poster0Img = LoadImage((byte[])dt_movies.Rows[11]["poster"]);
             //пример добавление фильма в базу
             //db.connect();
             //db.AddMovie("123", 123, "2019-10-12", "123", "123", "123", "123", "https://metanit.com/sharp/wpf/pics/3.6.png", "asd", "asd", "asd", false, false);
             //db.close();
             //тут тестовые данные
-            imgmass = new BitmapImage[8]
-                {
-                    poster0Img,
-                    poster1Img,
-                    poster2Img,
-                    poster3Img,
-                    poster4Img,
-                    poster5Img,
-                    poster6Img,
-                    poster7Img
-                };
-
-            dt.Columns.Add("name");
-            dt.Columns.Add("nameEN");
-            dt.Columns.Add("year");
-            dt.Columns.Add("country");
-            dt.Columns.Add("director");
-            dt.Columns.Add("genre");
-            dt.Columns.Add("date");
-            dt.Columns.Add("agelimit");
-            dt.Columns.Add("description");
-            dt.Columns.Add("watched");
-            dt.Columns.Add("favorite");
-            {
-                dt.Rows.Add(
-                    "Люди в черном: Интернэшнл",
-                    "Men in Black International",
-                    "2019",
-                    "США",
-                    "Ф. Гэри Грей",
-                    "фантастика, боевик, комедия, приключения",
-                    "4 сентября 2019",
-                    "16+",
-                    "Люди в черном, тайная организация на страже покоя и безопасности Земли, уже не раз защищали нас от нападения отбросов Вселенной. На этот раз самая большая опасность для мирового сообщества, которой агентам предстоит противостоять — шпион в их рядах.",
-                    false,
-                    false
-                    );
-                dt.Rows.Add(
-                    "Детские игры",
-                    "Child's Play",
-                    "2019",
-                    "Франция, Канада, США",
-                    "Ларс Клевберг",
-                    "ужасы",
-                    "20 июня 2019",
-                    "18+",
-                    "Мать-одиночка Карен дарит своему сыну Энди куклу, о которой мечтают все дети. Однако, вскоре становится ясно, что Энди достается больше, чем просто игрушка…",
-                    false,
-                    false
-                    );
-                dt.Rows.Add(
-                    "Дылда",
-                    "",
-                    "2019",
-                    "Россия",
-                    "Кантемир Балагов",
-                    "драма",
-                    "20 июня 2019",
-                    "16+",
-                    "История двух молодых женщин-фронтовичек, которые возвращаются в послевоенный Ленинград и пытаются обрести новую мирную жизнь, когда и вокруг, и главное, внутри них — руины.",
-                    false,
-                    false
-                    );
-                dt.Rows.Add(
-                    "История игрушек 4",
-                    "Toy Story 4",
-                    "2019",
-                    "США",
-                    "Джош Кули",
-                    "мультфильм, фэнтези, комедия, приключения, семейный",
-                    "20 июня 2019",
-                    "6+",
-                    "Астронавт Базз, ковбой Вуди, собака Спиралька, тиранозавр Рекс и вся команда игрушек снова вместе, и они как никогда готовы к приключениям. С тех пор, как Энди поступил в колледж, игрушки поселились в доме своей новой хозяйки Бонни. Первый день Бонни в школе положит начало череде событий, в которой найдется место и путешествиям с погонями, и знакомству с новыми игрушками, и встречам с некоторыми из старых друзей, и даже романтической истории.",
-                    false,
-                    false
-                    );
-                dt.Rows.Add(
-                    "Люди Икс: Тёмный Феникс",
-                    "Dark Phoenix",
-                    "2019",
-                    "США",
-                    "Саймон Кинберг",
-                    "фантастика, боевик, приключения",
-                    "6 июня 2019",
-                    "16+",
-                    "История Джин Грей, которая разворачивается в тот момент, когда героиня превращается в культового Тёмного Феникса. Во время опасной для жизни спасательной миссии в космосе девушка оказывается поражена таинственной космической силой, которая превращает её в одного из самых могущественных мутантов. В борьбе с этой всё более изменчивой мощью и со своими собственными демонами Джин выходит из-под контроля: раскалывает семью Людей Икс и угрожает уничтожить всю нашу планету.",
-                    false,
-                    false
-                    );
-                dt.Rows.Add(
-                    "Тайная жизнь домашних животных 2",
-                    "The Secret Life of Pets 2",
-                    "2019",
-                    "США, Франция, Япония",
-                    "Крис Рено, Джонатан дель Валь",
-                    "мультфильм, комедия, приключения, семейный",
-                    "25 июля 2019",
-                    "6+",
-                    "Макс уезжает с хозяйкой, мужем и ребёнком в гости на ранчо. Тем временем, в городе у Снежка и Гиджет свои приключения.",
-                    false,
-                    false
-                    );
-                dt.Rows.Add(
-                    "Ма",
-                    "Ma",
-                    "2019",
-                    "США",
-                    "Тейт Тейлор",
-                    "ужасы, триллер",
-                    "13 июня 2019",
-                    "18+",
-                    "Все знают, что у МА самые крутые вечеринки в городе. Здесь всегда громкая музыка, и алкоголь льется рекой. В этом доме нет никаких ограничений, кроме одного: никогда не заходи в ее комнату. Добро пожаловать к МА.",
-                    false,
-                    false
-                    );
-                dt.Rows.Add(
-                    "Аладдин",
-                    "Aladdin",
-                    "2019",
-                    "США",
-                    "Гай Ричи",
-                    "мюзикл, фэнтези, мелодрама, комедия, приключения, семейный",
-                    "30 августа 2019",
-                    "6+",
-                    "Молодой воришка по имени Аладдин хочет стать принцем, чтобы жениться на принцессе Жасмин. Тем временем визирь Аграбы Джафар намеревается захватить власть над Аграбой, а для этого он стремится заполучить волшебную лампу, хранящуюся в пещере чудес, доступ к которой разрешен лишь тому, кого называют «алмаз неограненный», и этим человеком является не кто иной, как сам Аладдин.",
-                    false,
-                    false
-                    );
-            }
-
             list_load();
         }
         //нажатие на кнопку добавить/удалить из избранного
         private void button_favorite_Click(object sender, RoutedEventArgs e)
         {
             int index = Convert.ToInt32((sender as Button).Tag);//получить id фильма
-            bool favorite = Convert.ToBoolean(dt.Rows[index]["favorite"]);
+            bool favorite = Convert.ToBoolean(dt_movies.Rows[index]["favorite"]);
+            db.SetFavorite(Convert.ToInt32(dt_movies.Rows[index]["id"]),!favorite);
             if (favorite)
             {
                 (sender as Button).Content = new Image() { Source = noFavoriteImg };
-                dt.Rows[index]["favorite"] = false;
+                dt_movies.Rows[index]["favorite"] = false;
             }
             else
             {
                 (sender as Button).Content = new Image() { Source = FavoriteImg };
-                dt.Rows[index]["favorite"] = true;
+                dt_movies.Rows[index]["favorite"] = true;
             }
         }
         //нажатие на кнопку добавить/удалить из просмотренного
         private void button_watched_Click(object sender, RoutedEventArgs e)
         {
             int index = Convert.ToInt32((sender as Button).Tag);//получить id фильма
-            bool watched = Convert.ToBoolean(dt.Rows[index]["watched"]);
+            //тут добавить запрос на редактирования в БД
+            bool watched = Convert.ToBoolean(dt_movies.Rows[index]["watched"]);
             if (watched)
             {
                 (sender as Button).Content = new Image() { Source = noWatchedImg };
-                dt.Rows[index]["watched"] = false;
+                dt_movies.Rows[index]["watched"] = false;
             }
             else
             {
                 (sender as Button).Content = new Image() { Source = WatchedImg };
-                dt.Rows[index]["watched"] = true;
+                dt_movies.Rows[index]["watched"] = true;
             }
         }
 
@@ -266,7 +134,7 @@ namespace projectE
             }
             e.Handled = true;//это чтобы родительские элементы ничего не натворили
         }
-
+        
         private void content_load(int index)//Подгрузка контента
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
@@ -282,7 +150,10 @@ namespace projectE
             Image img = new Image()
             {
                 Name = "image_right_content",
-                Source = imgmass[index],
+                Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative))
+                {
+                    CreateOptions = BitmapCreateOptions.IgnoreImageCache
+                } : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Stretch = Stretch.Uniform
@@ -295,13 +166,12 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 FontSize = 16,
-                Text = dt.Rows[index]["name"].ToString() + Environment.NewLine + dt.Rows[index]["nameEN"] + Environment.NewLine +
-                    "Год\t" + dt.Rows[index]["year"].ToString() + Environment.NewLine +
-                    "Страна\t" + dt.Rows[index]["country"].ToString() + Environment.NewLine +
-                    "Режиссер\t" + dt.Rows[index]["director"].ToString() + Environment.NewLine +
-                    "Жанр\t" + dt.Rows[index]["genre"].ToString() + Environment.NewLine +
-                    "Дата\t" + dt.Rows[index]["date"].ToString() + Environment.NewLine +
-                    "Возраст\t" + dt.Rows[index]["agelimit"].ToString(),
+                Text = dt_movies.Rows[index]["name"].ToString() + Environment.NewLine + 
+                    "Год\t" + dt_movies.Rows[index]["year"].ToString() + Environment.NewLine +
+                    "Страна\t" + dt_movies.Rows[index]["country"].ToString() + Environment.NewLine +
+                    "Жанр\t" + dt_movies.Rows[index]["genres"].ToString() + Environment.NewLine +
+                    "Дата\t" + ConvertDate(dt_movies.Rows[index]["date"].ToString()) + Environment.NewLine +
+                    "Возраст\t" + dt_movies.Rows[index]["agerating"].ToString(),//добавить ссылки (трейлер инфа просмотр)???
                 //Margin = new Thickness(5,5,5,5),
                 Foreground = Brushes.Gray,
                 Padding = new Thickness(5, 5, 5, 5)
@@ -314,12 +184,12 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 FontSize = 16,
-                Text = dt.Rows[index]["description"].ToString(),
+                Text = dt_movies.Rows[index]["description"].ToString(),
                 //Margin = new Thickness(5,5,5,5),
                 Foreground = Brushes.Gray,
                 Padding = new Thickness(5, 5, 5, 5)
             };
-
+            
             Grid.SetColumn(img, 0);
             Grid.SetRow(img, 0);
             grid_content.Children.Add(img);
@@ -340,7 +210,7 @@ namespace projectE
 
 
         //Блок методов для меню настроек -->
-
+        
         private void settings_load()//Подгрузка настроек
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
@@ -580,8 +450,8 @@ namespace projectE
             Grid.SetColumn(hdkinozor_ru, 2);
             Grid.SetRow(hdkinozor_ru, 6);
             grid_content.Children.Add(hdkinozor_ru);
-
-
+            
+            
         }
 
         //Export or Import
@@ -589,7 +459,7 @@ namespace projectE
         {
             MessageBox.Show("Not ready");
         }
-
+        
         //Notification
         void notify_Checked(object sender, RoutedEventArgs e)
         {
@@ -611,7 +481,7 @@ namespace projectE
         {
 
         }
-
+        
         //Netflix
         void netflix_com_Checked(object sender, RoutedEventArgs e)
         {
@@ -693,99 +563,9 @@ namespace projectE
             button_sctoll_top.Visibility = Visibility.Hidden;//скрыть кнопку "вверх"
             grid_list.Children.Clear();//очистить элементы из центрального грида
             grid_list.RowDefinitions.Clear();//удалить все строки из центрального грида
-            RowDefinition rd;//строка
-            for (int i = 0; i < dt.Rows.Count; i++)//цикл по всем фильмам
+            for (int i = 0; i < dt_movies.Rows.Count; i++)//цикл по всем фильмам
             {
-                rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };//создание строки с высотой "1*"
-                grid_list.RowDefinitions.Add(rd);//добавление строки в грид
-                Button btf = new Button()//кнопка добавления/удаления из избранного
-                {
-                    Name = "button_favorite" + i,
-                    Height = 40,
-                    Width = 40,
-                    Background = null,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    //присвоение соответсвтующей картинки
-                    Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill },
-                    Tag = i//id фильма
-                };
-                btf.Click += button_favorite_Click;//привязывание события клика
-                Button btw = new Button()//кнопка добавления/удаления из просмотренного
-                {
-                    Name = "button_watched" + i,
-                    Height = 40,
-                    Width = 40,
-                    Background = null,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    //присвоение соответсвтующей картинки
-                    Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["watched"]) == false ? noWatchedImg : WatchedImg, Stretch = Stretch.Fill },
-                    Tag = i//id фильма
-                };
-                btw.Click += button_watched_Click;//привязывание события клика
-                TextBlock tb = new TextBlock()//текст справа от постера
-                {
-                    Name = "textBlock_middle_content" + i,
-                    TextWrapping = TextWrapping.Wrap,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    /*Text = "Люди в черном: Интернэшнл (2019)"+Environment.NewLine + "Men in Black International"+
-                    Environment.NewLine+ "США, реж. Ф. Гэри Грей 16+"+
-                    Environment.NewLine+ "фантастика, боевик, комедия ...",*/
-                    Text = dt.Rows[i]["name"].ToString() + " " + dt.Rows[i]["year"].ToString() + Environment.NewLine + dt.Rows[i]["nameEN"] + Environment.NewLine +
-
-                    dt.Rows[i]["country"].ToString() + " " + dt.Rows[i]["director"].ToString() + Environment.NewLine +
-                    dt.Rows[i]["genre"].ToString() + Environment.NewLine,
-                    //Margin = new Thickness(5,5,5,5),
-                    Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i//id фильма
-                };
-                Image img = new Image()//постер
-                {
-                    Source = imgmass[i],//картинка из массива по id
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Stretch = Stretch.Uniform,
-                    Tag = i//id фильма
-                };
-                TextBlock date = new TextBlock()//текст с датой под кнопками добавить/удалить из избранного/просмотренного
-                {
-                    Name = "textBlock_date" + i,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Text = dt.Rows[i]["date"].ToString().Replace(" ", Environment.NewLine),
-                    TextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(0, 0, 0, 0),
-                    Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 45, 5, 5),
-                    Tag = i//id фильма
-                };
-                //расстановка и добавление элементов в грид
-                Grid.SetColumn(img, 0);
-                Grid.SetRow(img, i);
-                grid_list.Children.Add(img);
-
-                Grid.SetColumn(tb, 1);
-                Grid.SetRow(tb, i);
-                grid_list.Children.Add(tb);
-
-                Grid.SetColumn(date, 2);
-                Grid.SetRow(date, i);
-                grid_list.Children.Add(date);
-                //btf и btw последние чтобы были поверх текста с датой
-                Grid.SetColumn(btf, 2);
-                Grid.SetRow(btf, i);
-                grid_list.Children.Add(btf);
-
-                Grid.SetColumn(btw, 2);
-                Grid.SetRow(btw, i);
-                grid_list.Children.Add(btw);
-
-
+                create_and_add_elements(i);
             }
         }
         //показывает список избранного
@@ -795,102 +575,11 @@ namespace projectE
             button_sctoll_top.Visibility = Visibility.Hidden;//скрываем кнопку "вверх"
             grid_list.Children.Clear();//очищаем центральную панель от элементов
             grid_list.RowDefinitions.Clear();//удаляем все строки в центральном гриде
-            RowDefinition rd;//строка
-            for (int i = 0; i < dt.Rows.Count; i++)//цикл по всем фильмам
+            for (int i = 0; i < dt_movies.Rows.Count; i++)//цикл по всем фильмам
             {
-                if (Convert.ToBoolean(dt.Rows[i]["favorite"]) == false)//если фильм отмечен избранным
+                if (Convert.ToBoolean(dt_movies.Rows[i]["favorite"]) == false)//если фильм отмечен избранным
                     continue;//то переходим на следующую итерацию
-                rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };//создание строки с высотой "1*"
-                grid_list.RowDefinitions.Add(rd);//добавление строки в грид
-                Button btf = new Button()//кнопка добавления/уделаения из избранного
-                {
-                    Name = "button_favorite" + i,
-                    Height = 40,
-                    Width = 40,
-                    Background = null,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    //не надо проверять в избраном или нет т.к. показываем список избранного
-                    Content = new Image() { Source = FavoriteImg, Stretch = Stretch.Fill },
-                    Tag = i//id фильма
-                };
-                btf.Click += button_favorite_Click;//привязывание собития клика
-                Button btw = new Button()//кнопка добавления/удаления из просмотренноо
-                {
-                    Name = "button_watched" + i,
-                    Height = 40,
-                    Width = 40,
-                    Background = null,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    //проверяем просмотренный или нет и присваиваем соответствующую картинку
-                    Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["watched"]) == false ? noWatchedImg : WatchedImg, Stretch = Stretch.Fill },
-                    Tag = i//id фильма
-                };
-                btw.Click += button_watched_Click;//привязывание собития клика
-                TextBlock tb = new TextBlock()//текст с инфой о фильма справа от постера
-                {
-                    Name = "textBlock_middle_content" + i,
-                    TextWrapping = TextWrapping.Wrap,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    /*Text = "Люди в черном: Интернэшнл (2019)"+Environment.NewLine + "Men in Black International"+
-                    Environment.NewLine+ "США, реж. Ф. Гэри Грей 16+"+
-                    Environment.NewLine+ "фантастика, боевик, комедия ...",*/
-                    Text = dt.Rows[i]["name"].ToString() + " " + dt.Rows[i]["year"].ToString() + Environment.NewLine + dt.Rows[i]["nameEN"] + Environment.NewLine +
-
-                    dt.Rows[i]["country"].ToString() + " " + dt.Rows[i]["director"].ToString() + Environment.NewLine +
-                    dt.Rows[i]["genre"].ToString() + Environment.NewLine,
-                    //Margin = new Thickness(5,5,5,5),
-                    Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i//id фильма
-                };
-                Image img = new Image()//постер
-                {
-                    Source = imgmass[i],//картинка из массива по id
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Stretch = Stretch.Uniform,
-                    Tag = i//id фильма
-                };
-                TextBlock date = new TextBlock()//текст с датой под кнопками добавить/удалить из избранного/просмотренного
-                {
-                    Name = "textBlock_date" + i,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Text = dt.Rows[i]["date"].ToString().Replace(" ", Environment.NewLine),
-                    TextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(0, 40, 0, 0),
-                    Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i//id фильма
-                };
-
-                int index = grid_list.RowDefinitions.Count - 1;//индекс последней строки
-                //расстановка и добавление элементов в грид
-                Grid.SetColumn(img, 0);
-                Grid.SetRow(img, index);
-                grid_list.Children.Add(img);
-
-                Grid.SetColumn(tb, 1);
-                Grid.SetRow(tb, index);
-                grid_list.Children.Add(tb);
-
-                Grid.SetColumn(date, 2);
-                Grid.SetRow(date, index);
-                grid_list.Children.Add(date);
-                //btf и btw последние чтобы были поверх текста с датой
-                Grid.SetColumn(btf, 2);
-                Grid.SetRow(btf, index);
-                grid_list.Children.Add(btf);
-
-                Grid.SetColumn(btw, 2);
-                Grid.SetRow(btw, index);
-                grid_list.Children.Add(btw);
-
+                create_and_add_elements(i);
             }
         }
         //показывает просмотренные
@@ -900,133 +589,119 @@ namespace projectE
             button_sctoll_top.Visibility = Visibility.Hidden;//скрываем кнопку "вверх"
             grid_list.Children.Clear();//очищаем элементы в центральной панели
             grid_list.RowDefinitions.Clear();//удаляем все строки в центральной панели
-            RowDefinition rd;//новая строка
-            for (int i = 0; i < dt.Rows.Count; i++)//цикл по всем фильмам
+            for (int i = 0; i < dt_movies.Rows.Count; i++)//цикл по всем фильмам
             {
-                if (Convert.ToBoolean(dt.Rows[i]["watched"]) == false)//если фильм не просмотренный
+                if (Convert.ToBoolean(dt_movies.Rows[i]["watched"]) == false)//если фильм не просмотренный
                     continue;//то переходим на следующую итерацию
-                rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) }; //создание новой строки с высотой "1*"
-                grid_list.RowDefinitions.Add(rd);//добавляем эту строку в центральную сетку
-                Button btf = new Button()//создание кнопки "добавить/удалить из избранное"
-                {
-                    Name = "button_favorite" + i,
-                    Height = 40,
-                    Width = 40,
-                    Background = null,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    Content = new Image()
-                    {//выбор картинки для кнопки в зависимости от добавлено ли в избранное или нет
-                        Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg,
-                        Stretch = Stretch.Fill
-                    },
-                    Tag = i//id фильма
-                };
-                btf.Click += button_favorite_Click;//привязывание события клика
-                Button btw = new Button()//создание кнопки "добавить/удалить из просмотренного"
-                {
-                    Name = "button_watched" + i,
-                    Height = 40,
-                    Width = 40,
-                    Background = null,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    //здесь не надо проверять просмотреный фильм или нет потому-что показываем просмотренное
-                    Content = new Image() { Source = WatchedImg, Stretch = Stretch.Fill },
-                    Tag = i//id фильма
-                };
-                btw.Click += button_watched_Click;//привязывание собития клика
-                TextBlock tb = new TextBlock()//текст с инфой о фильме в центре справа от постера
-                {
-                    Name = "textBlock_middle_content" + i,
-                    TextWrapping = TextWrapping.Wrap,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    /*Text = "Люди в черном: Интернэшнл (2019)"+Environment.NewLine + "Men in Black International"+
-                    Environment.NewLine+ "США, реж. Ф. Гэри Грей 16+"+
-                    Environment.NewLine+ "фантастика, боевик, комедия ...",*/
-                    Text = dt.Rows[i]["name"].ToString() + " " + dt.Rows[i]["year"].ToString() + Environment.NewLine + dt.Rows[i]["nameEN"] + Environment.NewLine +
-
-                    dt.Rows[i]["country"].ToString() + " " + dt.Rows[i]["director"].ToString() + Environment.NewLine +
-                    dt.Rows[i]["genre"].ToString() + Environment.NewLine,
-                    //Margin = new Thickness(5,5,5,5),
-                    Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i//id фильма
-                };
-                Image img = new Image()//создание постера
-                {
-                    Source = imgmass[i],//загружаем картинку из массива по id
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Stretch = Stretch.Uniform,
-                    Tag = i//id фильма
-                };
-                TextBlock date = new TextBlock()//текст с датой выхода фильма под кнопкам "добавить в избранное/просмотренное"
-                {
-                    Name = "textBlock_date" + i,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Text = dt.Rows[i]["date"].ToString().Replace(" ", Environment.NewLine),
-                    TextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(0, 40, 0, 0),
-                    Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i
-                };
-
-                int index = grid_list.RowDefinitions.Count - 1;//индекс последней строки в гриде
-                //расстановка и добавление элементов в грид
-                Grid.SetColumn(img, 0);
-                Grid.SetRow(img, index);
-                grid_list.Children.Add(img);
-
-                Grid.SetColumn(tb, 1);
-                Grid.SetRow(tb, index);
-                grid_list.Children.Add(tb);
-
-                Grid.SetColumn(btf, 2);
-                Grid.SetRow(btf, index);
-                grid_list.Children.Add(btf);
-                // btw и btf последние чтобы были поверх текста с датой
-                Grid.SetColumn(btw, 2);
-                Grid.SetRow(btw, index);
-                grid_list.Children.Add(btw);
-
-                Grid.SetColumn(date, 2);
-                Grid.SetRow(date, index);
-                grid_list.Children.Add(date);
+                create_and_add_elements(i);
             }
+        }
+        private void create_and_add_elements(int i)
+        {
+            grid_list.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });//добавление строки в грид
+            Button btf = new Button()//кнопка добавления/удаления из избранного
+            {
+                Name = "button_favorite" + i,
+                Height = 40,
+                Width = 40,
+                Background = null,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                BorderThickness = new Thickness(0, 0, 0, 0),
+                //присвоение соответсвтующей картинки
+                Content = new Image() { Source = Convert.ToBoolean(dt_movies.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill },
+                Tag = i//id фильма
+            };
+            btf.Click += button_favorite_Click;//привязывание события клика
+            Button btw = new Button()//кнопка добавления/удаления из просмотренного
+            {
+                Name = "button_watched" + i,
+                Height = 40,
+                Width = 40,
+                Background = null,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                BorderThickness = new Thickness(0, 0, 0, 0),
+                //присвоение соответсвтующей картинки
+                Content = new Image() { Source = Convert.ToBoolean(dt_movies.Rows[i]["watched"]) == false ? noWatchedImg : WatchedImg, Stretch = Stretch.Fill },
+                Tag = i//id фильма
+            };
+            btw.Click += button_watched_Click;//привязывание события клика
+            TextBlock tb = new TextBlock()//текст справа от постера
+            {
+                Name = "textBlock_middle_content" + i,
+                TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                /*Text = "Люди в черном: Интернэшнл (2019)"+Environment.NewLine + "Men in Black International"+
+                Environment.NewLine+ "США, реж. Ф. Гэри Грей 16+"+
+                Environment.NewLine+ "фантастика, боевик, комедия ...",*/
+                Text = dt_movies.Rows[i]["name"].ToString() + " " + dt_movies.Rows[i]["year"].ToString() + Environment.NewLine +
+
+                dt_movies.Rows[i]["country"].ToString() + Environment.NewLine +
+                dt_movies.Rows[i]["genres"].ToString() + Environment.NewLine +
+                dt_movies.Rows[i]["agerating"].ToString(),
+                //Margin = new Thickness(5,5,5,5),
+                Foreground = Brushes.Gray,
+                Padding = new Thickness(5, 5, 5, 5),
+                Tag = i//id фильма
+            };
+            Image img = new Image()//постер
+            {
+                Source = dt_movies.Rows[i]["poster"].GetType()==typeof(DBNull)? new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }:LoadImage((byte[])dt_movies.Rows[i]["poster"]),//картинка из массива по id
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Stretch = Stretch.Uniform,
+                Tag = i//id фильма
+            };
+            TextBlock date = new TextBlock()//текст с датой под кнопками добавить/удалить из избранного/просмотренного
+            {
+                Name = "textBlock_date" + i,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Text = ConvertDate(dt_movies.Rows[i]["date"].ToString()).Replace(" ", Environment.NewLine),
+                TextAlignment = TextAlignment.Center,
+                Margin = new Thickness(0, 0, 0, 0),
+                Foreground = Brushes.Gray,
+                Padding = new Thickness(5, 45, 5, 5),
+                Tag = i//id фильма
+            };
+            int index = grid_list.RowDefinitions.Count - 1;//индекс последней строки в гриде
+            //расстановка и добавление элементов в грид
+            Grid.SetColumn(img, 0);
+            Grid.SetRow(img, index);
+            grid_list.Children.Add(img);
+
+            Grid.SetColumn(tb, 1);
+            Grid.SetRow(tb, index);
+            grid_list.Children.Add(tb);
+
+            Grid.SetColumn(date, 2);
+            Grid.SetRow(date, index);
+            grid_list.Children.Add(date);
+            //btf и btw последние чтобы были поверх текста с датой
+            Grid.SetColumn(btf, 2);
+            Grid.SetRow(btf, index);
+            grid_list.Children.Add(btf);
+
+            Grid.SetColumn(btw, 2);
+            Grid.SetRow(btw, index);
+            grid_list.Children.Add(btw);
         }
         //для отладки и прочего
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Space)//если нажали пробел
+            if(e.Key == Key.Space)//если нажали пробел
             {
                 //stack_content.Visibility = Visibility.Hidden;
-                scroll_viewer_center.ScrollToTop();
+                Title.Text = grid_list.RowDefinitions.Count.ToString();
             }
-        }
-        bool isRun;
-        private void Upd()
-        {
-            isRun = true;
-            Parser parser = new Parser();
-            parser.UpdateList();
-            isRun = false;
         }
         //нажали кнопку домой
         private void button_home_Click(object sender, RoutedEventArgs e)
         {
-            Thread thread = new Thread(Upd);
-            if (!isRun)
-            {
-                thread.Start();
-            }
-
-            //    parser.UpdateList();
+            Parser parser = new Parser();
+        //    parser.UpdateList();
             list_load();//показывает все фильмы
             scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
@@ -1061,8 +736,8 @@ namespace projectE
         }
         //при изменении размера окна
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (Width < 700 && grid.ColumnDefinitions[2].IsEnabled)//если ширина окна меньше 700
+        { 
+            if (Width < 800 && grid.ColumnDefinitions[2].IsEnabled)//если ширина окна меньше 700
                 closePanel(); // закрываем правую панель
         }
         //нажали кнопку "вверх"
@@ -1091,6 +766,88 @@ namespace projectE
         {
             watched_load();//показывает просмотренные фильмы
             scroll_viewer_center.ScrollToTop();//проскролить вверх
+        }
+        //выгрузка всех фильмов из БД
+        private void GetMoviesFromDB()
+        {
+            db.connect();
+            dt_movies = db.GetMovies();
+            db.close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {//удаление удаленных записей из файла БД
+            db.Vacuum();
+        }
+        //из массива байт в картинку
+        private static BitmapImage LoadImage(byte[] imageData)
+        {
+            if (imageData == null || imageData.Length == 0)
+                return new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+            var image = new BitmapImage();
+            using (var mem = new MemoryStream(imageData))
+            {
+                mem.Position = 0;
+                image.BeginInit();
+                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.UriSource = null;
+                image.StreamSource = mem;
+                image.EndInit();
+            }
+            image.Freeze();
+            return image;
+        }
+        //конвертирует дату из "гггг.мм.дд 00:00:00" в "20 июня 2019"
+        private string ConvertDate(string str)
+        {
+            if (str != null || str != "")
+            {
+                string[] temp = str.Remove(10).Split('.');
+                switch (temp[1])
+                {
+                    case "01":
+                        temp[1] = "Января";
+                        break;
+                    case "02":
+                        temp[1] = "Февраля";
+                        break;
+                    case "03":
+                        temp[1] = "Марта";
+                        break;
+                    case "04":
+                        temp[1] = "Апреля";
+                        break;
+                    case "05":
+                        temp[1] = "Мая";
+                        break;
+                    case "06":
+                        temp[1] = "Июня";
+                        break;
+                    case "07":
+                        temp[1] = "Июля";
+                        break;
+                    case "08":
+                        temp[1] = "Августа";
+                        break;
+                    case "09":
+                        temp[1] = "Сентября";
+                        break;
+                    case "10":
+                        temp[1] = "Октября";
+                        break;
+                    case "11":
+                        temp[1] = "Ноября";
+                        break;
+                    case "12":
+                        temp[1] = "Декабря";
+                        break;
+                }
+                str = temp[0] + " " + temp[1] + " " + temp[2];
+            }
+            else
+                str = "Скоро";
+            return str;
         }
     }
 }
