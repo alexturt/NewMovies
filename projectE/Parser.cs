@@ -17,6 +17,7 @@ namespace projectE
         string[,] films = new string[500, 11];
         int countElem = 0;
 
+
         public void UpdateList()
         {
             TimeSpan FullTime = TimeSpan.Zero;
@@ -70,7 +71,6 @@ namespace projectE
             Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
             Console.WriteLine("Было выгружено : " + countElem + ". Всего потрачено: " + FullTime);
-
         }
 
         private string FindTrailer(string name, string year)

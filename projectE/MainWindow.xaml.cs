@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
-using System.IO; 
+using System.IO;
+using System.Threading;
 
 namespace projectE
 {
@@ -25,7 +26,7 @@ namespace projectE
         public MainWindow()
         {
             InitializeComponent();
-            
+
             grid.ColumnDefinitions[2].Width = new GridLength(0);
             grid.ColumnDefinitions[2].IsEnabled = false;
             Width = 450;
@@ -265,7 +266,7 @@ namespace projectE
             }
             e.Handled = true;//это чтобы родительские элементы ничего не натворили
         }
-        
+
         private void content_load(int index)//Подгрузка контента
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
@@ -318,7 +319,7 @@ namespace projectE
                 Foreground = Brushes.Gray,
                 Padding = new Thickness(5, 5, 5, 5)
             };
-            
+
             Grid.SetColumn(img, 0);
             Grid.SetRow(img, 0);
             grid_content.Children.Add(img);
@@ -339,7 +340,7 @@ namespace projectE
 
 
         //Блок методов для меню настроек -->
-        
+
         private void settings_load()//Подгрузка настроек
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
@@ -579,8 +580,8 @@ namespace projectE
             Grid.SetColumn(hdkinozor_ru, 2);
             Grid.SetRow(hdkinozor_ru, 6);
             grid_content.Children.Add(hdkinozor_ru);
-            
-            
+
+
         }
 
         //Export or Import
@@ -588,7 +589,7 @@ namespace projectE
         {
             MessageBox.Show("Not ready");
         }
-        
+
         //Notification
         void notify_Checked(object sender, RoutedEventArgs e)
         {
@@ -610,7 +611,7 @@ namespace projectE
         {
 
         }
-        
+
         //Netflix
         void netflix_com_Checked(object sender, RoutedEventArgs e)
         {
@@ -695,7 +696,7 @@ namespace projectE
             RowDefinition rd;//строка
             for (int i = 0; i < dt.Rows.Count; i++)//цикл по всем фильмам
             {
-                rd = new RowDefinition() { Height = new GridLength(1,GridUnitType.Star) };//создание строки с высотой "1*"
+                rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };//создание строки с высотой "1*"
                 grid_list.RowDefinitions.Add(rd);//добавление строки в грид
                 Button btf = new Button()//кнопка добавления/удаления из избранного
                 {
@@ -784,7 +785,7 @@ namespace projectE
                 Grid.SetRow(btw, i);
                 grid_list.Children.Add(btw);
 
-                
+
             }
         }
         //показывает список избранного
@@ -825,7 +826,7 @@ namespace projectE
                     HorizontalAlignment = HorizontalAlignment.Left,
                     BorderThickness = new Thickness(0, 0, 0, 0),
                     //проверяем просмотренный или нет и присваиваем соответствующую картинку
-                    Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["watched"]) == false ? noWatchedImg:WatchedImg, Stretch = Stretch.Fill },
+                    Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["watched"]) == false ? noWatchedImg : WatchedImg, Stretch = Stretch.Fill },
                     Tag = i//id фильма
                 };
                 btw.Click += button_watched_Click;//привязывание собития клика
@@ -868,7 +869,7 @@ namespace projectE
                     Tag = i//id фильма
                 };
 
-                int index = grid_list.RowDefinitions.Count-1;//индекс последней строки
+                int index = grid_list.RowDefinitions.Count - 1;//индекс последней строки
                 //расстановка и добавление элементов в грид
                 Grid.SetColumn(img, 0);
                 Grid.SetRow(img, index);
@@ -917,7 +918,8 @@ namespace projectE
                     BorderThickness = new Thickness(0, 0, 0, 0),
                     Content = new Image()
                     {//выбор картинки для кнопки в зависимости от добавлено ли в избранное или нет
-                        Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill
+                        Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg,
+                        Stretch = Stretch.Fill
                     },
                     Tag = i//id фильма
                 };
@@ -1001,17 +1003,30 @@ namespace projectE
         //для отладки и прочего
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Space)//если нажали пробел
+            if (e.Key == Key.Space)//если нажали пробел
             {
                 //stack_content.Visibility = Visibility.Hidden;
                 scroll_viewer_center.ScrollToTop();
             }
         }
+        bool isRun;
+        private void Upd()
+        {
+            isRun = true;
+            Parser parser = new Parser();
+            parser.UpdateList();
+            isRun = false;
+        }
         //нажали кнопку домой
         private void button_home_Click(object sender, RoutedEventArgs e)
         {
-            Parser parser = new Parser();
-        //    parser.UpdateList();
+            Thread thread = new Thread(Upd);
+            if (!isRun)
+            {
+                thread.Start();
+            }
+
+            //    parser.UpdateList();
             list_load();//показывает все фильмы
             scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
@@ -1046,7 +1061,7 @@ namespace projectE
         }
         //при изменении размера окна
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        { 
+        {
             if (Width < 700 && grid.ColumnDefinitions[2].IsEnabled)//если ширина окна меньше 700
                 closePanel(); // закрываем правую панель
         }
