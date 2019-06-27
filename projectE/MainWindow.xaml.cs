@@ -395,6 +395,18 @@ namespace projectE
                     Background = Brushes.AntiqueWhite,
                     Foreground = Brushes.Black
                 };
+                TextBlock tb = new TextBlock()
+                {
+                    Name = "textblock_right_description",
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    FontSize = 16,
+                    Text = "description",
+                    //Margin = new Thickness(5,5,5,5),
+                    Foreground = Brushes.Gray,
+                    Padding = new Thickness(5, 5, 5, 5)
+                };
 
                 Grid.SetColumn(notify, 0);
                 Grid.SetRow(notify, 0);
