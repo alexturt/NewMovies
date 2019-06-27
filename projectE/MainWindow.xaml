@@ -5,32 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:projectE"
         mc:Ignorable="d"
-        
-        Title="Тест" Height="650" Width="1000"
+        BorderBrush="{x:Null}"
+        BorderThickness="5"
+        Title="NewMovies" Height="650" Width="1000"
         MinWidth="460"
         MinHeight="450"
+        ResizeMode="CanResizeWithGrip"
+        AllowsTransparency="True"
+        
         MaxHeight="{DynamicResource {x:Static SystemParameters.VirtualScreenHeight}}"
-        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp"
+        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged"
         >
 
-    <Grid Name="grid">
+    <Grid Name="grid" Width="auto">
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding ElementName= button_settings, Path=ActualWidth}"></ColumnDefinition>
-            <ColumnDefinition MinWidth="400" Width="*" MaxWidth="500"></ColumnDefinition>
             <ColumnDefinition MinWidth="400" Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <!-- заголовок окна -->
+        <Grid Background="#283949" Name="grid_top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightSlateGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
+            <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click">
+                <Image Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center" Source="Resources/hide.png"/>
+            </Button>
+            <Button Name="button_maximazing" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_maximazing_Click">
+                <Image Height="20" Width="20" Stretch="Fill" Source="Resources/window.png"/>
+            </Button>
+            <Button Name="button_exit" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_exit_Click" Padding="0" Margin="0">
+                <Image Height="20" Width="20" Stretch="Uniform" Source="Resources/exit.png"/>
+            </Button>
+        </Grid>
         <!-- левая панель -->
-        <Border  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Name="border_menu" BorderBrush="#0A121B" BorderThickness="0,0,1,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
-            <Grid Name="grid_menu" Background="#17212B" Height="{Binding ElementName= grid, Path=ActualHeight}">
+        <Border  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Name="border_menu" BorderBrush="#0A121B" BorderThickness="0,0,1,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_menu" Background="#17212B" HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{Binding ElementName= button_home, Path=ActualHeight}"></RowDefinition>
-                    <RowDefinition Height="{Binding ElementName= button_search, Path=ActualHeight}"></RowDefinition>
                     <RowDefinition Height="{Binding ElementName= button_favorite, Path=ActualHeight}"></RowDefinition>
-                    <RowDefinition Height="{Binding ElementName= button_watched, Path=ActualHeight}"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="{Binding ElementName= button_settings, Path=ActualHeight}"></RowDefinition>
                 </Grid.RowDefinitions>
@@ -43,17 +68,14 @@
                 <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_Click_1">
                     <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/звезда2.png" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_watched" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_watched_Click_1">
-                    <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/watched.png" Stretch="Fill"/>
-                </Button>
-                <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="5" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black">
+                <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="3" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click">
                     <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/шестерня2.png" Stretch="Fill"/>
                 </Button>
             </Grid>
         </Border>
         <!-- верхняя панель -->
-        <Border  Grid.Row="0" Grid.Column="1" Name="border_search" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
-            <Grid Name="grid_search" Grid.Column="1" Grid.Row="0" Background="#17212B">
+        <Border  Grid.Row="1" Grid.Column="1" Name="border_search" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_search" Grid.Column="1" Grid.Row="1" Background="#17212B">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
@@ -68,17 +90,17 @@
                 <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
                     <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/панель2.png" Stretch="Fill"/>
                 </Button>
-                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="0" Background="Red" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="Wrap" Text="может по возр/убыв?" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch"/>
+                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="0" Background="#FF0E1621" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="Wrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="#FF6C7883"/>
 
             </Grid>
         </Border>
         <!-- центральная панель -->
-        <ScrollViewer Grid.Column="1"  HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto">
-            <StackPanel Name="stack_list" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" HorizontalAlignment="Stretch" Background="#0E1621" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" CanVerticallyScroll="True" CanHorizontallyScroll="True">
+        <ScrollViewer Name="scroll_viewer_center" Grid.Column="1"  HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Hidden">
+            <StackPanel Name="stack_list" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" HorizontalAlignment="Stretch" Background="#0E1621" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" CanVerticallyScroll="True" CanHorizontallyScroll="True" MouseWheel="stack_list_MouseWheel">
                 <Grid Name="grid_list" Background="#0E1621"  ShowGridLines="False" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
                         <ColumnDefinition Width="80"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                 </Grid>
@@ -86,24 +108,31 @@
                 </DataGrid>-->
             </StackPanel>
         </ScrollViewer>
+        <Button Name="button_sctoll_top" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0">
+            <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Source="Resources/up.png" Stretch="Fill"/>
+        </Button>
+
         <!-- правая панель -->
-        <Border  Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
-            <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B">
-                <Grid Name="grid_content">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                </Grid>
-                
-            </StackPanel>
+        <Border  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Hidden">
+
+                <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B">
+                    <Grid Name="grid_content">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                    </Grid>
+
+                </StackPanel>
+            </ScrollViewer>
         </Border>
     </Grid>
-    
-    
-    
+
+
+
 </Window>
