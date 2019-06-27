@@ -650,6 +650,8 @@ namespace projectE
 
         private void button_home_Click(object sender, RoutedEventArgs e)
         {
+            Parser parser = new Parser();
+          //  parser.UpdateList();
             list_load();
             scroll_viewer_center.ScrollToTop();
         }
