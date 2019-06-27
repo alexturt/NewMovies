@@ -243,7 +243,7 @@ namespace projectE
             }
         }
 
-        //определение id фильма по нажатию на элементы в центральном гриде
+        //определение id фильма по нажатию на элементы в центральном гриде и открытие правой вкладке и инфой о фильме
         private void grid_list_MouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
         {
             if (e.Source == null)
@@ -267,6 +267,8 @@ namespace projectE
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
+            grid_content.RowDefinitions.Clear();
+            grid_content.ColumnDefinitions.Clear();
             RowDefinition rd = new RowDefinition();
             grid_content.RowDefinitions.Add(rd);
             Image img = new Image()
@@ -322,13 +324,16 @@ namespace projectE
             Grid.SetColumnSpan(tb2, 2);
             Grid.SetRow(tb2, 1);
             grid_content.Children.Add(tb2);
+            Title.Text = grid_content.RowDefinitions.Count.ToString();
         }
 
-        private void settings_load()//Подгрузка контента
+        private void settings_load()//Подгрузка настроек
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
+            //grid_content.RowDefinitions.Clear();
+            //grid_content.ColumnDefinitions.Clear();
             ColumnDefinition cd = new ColumnDefinition();
             RowDefinition rd3 = new RowDefinition();
             RowDefinition rd4 = new RowDefinition();
@@ -344,7 +349,6 @@ namespace projectE
             grid_content.RowDefinitions.Add(rd7);
             grid_content.RowDefinitions.Add(rd8);
             //grid_content.ShowGridLines = true;
-
             var foreColor = Brushes.WhiteSmoke;
             var backColor = Brushes.Cornsilk;
             var fontSize = 14;
