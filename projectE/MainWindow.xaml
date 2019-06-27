@@ -39,7 +39,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock Name="Title" Grid.Column="0" Text="Title" Height="20" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightSlateGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
+            <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightSlateGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
             <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click">
                 <Image Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center" Source="Resources/hide.png"/>
             </Button>
