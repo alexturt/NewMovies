@@ -25,13 +25,14 @@ namespace projectE
         public MainWindow()
         {
             InitializeComponent();
+            
             grid.ColumnDefinitions[2].Width = new GridLength(0);
             grid.ColumnDefinitions[2].IsEnabled = false;
             Width = 450;
             stack_content.Visibility = Visibility.Hidden;
         }
         
-
+        //нажатие на кнопку открыть/закрыть правую панель
         private void button_panel_Click(object sender, RoutedEventArgs e)
         {
             if (grid.ColumnDefinitions[2].IsEnabled)
@@ -39,27 +40,25 @@ namespace projectE
             else
                 openPanel();
         }
-
+        //открытие правой панели
         void openPanel()
-        {
+        {//тут все работает ок
             grid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
             grid.ColumnDefinitions[2].IsEnabled = true;
             Width += grid.ColumnDefinitions[1].ActualWidth;
             stack_content.Visibility = Visibility.Visible;
         }
-
+        //закрытие правой панели
         void closePanel()
-        {
+        {//тут все работает ок
             double size = grid.ColumnDefinitions[2].ActualWidth;
             grid_content.Children.Clear();
             grid.ColumnDefinitions[2].IsEnabled = false;
             grid.ColumnDefinitions[2].Width = new GridLength(0);
             Width -= size;
-            
-            
             stack_content.Visibility = Visibility.Hidden;
         }
-
+        //тестовые данные
         DataTable dt = new DataTable();
         BitmapImage noFavoriteImg = new BitmapImage(new Uri("/Resources/пустаязвезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         BitmapImage FavoriteImg = new BitmapImage(new Uri("/Resources/звезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
@@ -78,6 +77,7 @@ namespace projectE
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //тут тестовые данные
              imgmass = new BitmapImage[8]
                 {
                     poster0Img,
@@ -210,10 +210,10 @@ namespace projectE
 
             list_load();
         }
-        
+        //нажатие на кнопку добавить/удалить из избранного
         private void button_favorite_Click(object sender, RoutedEventArgs e)
         {
-            int index = Convert.ToInt32((sender as Button).Tag);
+            int index = Convert.ToInt32((sender as Button).Tag);//получить id фильма
             bool favorite = Convert.ToBoolean(dt.Rows[index]["favorite"]);
             if (favorite)
             {
@@ -226,10 +226,10 @@ namespace projectE
                 dt.Rows[index]["favorite"] = true;
             }
         }
-
+        //нажатие на кнопку добавить/удалить из просмотренного
         private void button_watched_Click(object sender, RoutedEventArgs e)
         {
-            int index = Convert.ToInt32((sender as Button).Tag);
+            int index = Convert.ToInt32((sender as Button).Tag);//получить id фильма
             bool watched = Convert.ToBoolean(dt.Rows[index]["watched"]);
             if (watched)
             {
@@ -243,24 +243,7 @@ namespace projectE
             }
         }
 
-        private void grid_list_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            
-        }
-
-        private void testmouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (sender != null)
-            {
-                //string str = sender.;
-                //Grid _grid = sender as Grid;
-                //int _row = (int)_grid.GetValue(Grid.RowProperty);
-                //int _column = (int)_grid.GetValue(Grid.ColumnProperty);
-                //Title = string.Format("Кликнул по колонке {0}, строке {1}", _column, _row);
-                //Title = Convert.ToInt32( (sender as Control).Tag).ToString(); 
-            }
-        }
-        
+        //определение id фильма по нажатию на элементы в центральном гриде
         private void grid_list_MouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
         {
             if (e.Source == null)
@@ -268,15 +251,15 @@ namespace projectE
             if (e.Source.GetType() == typeof(TextBlock))
             {
                 Title.Text = (e.Source as TextBlock).Tag.ToString();
-                content_load(Convert.ToInt32((e.Source as TextBlock).Tag));
+                content_load(Convert.ToInt32((e.Source as TextBlock).Tag));//показать инфу о фильме в правой вкладке
             }
             else
             if (e.Source.GetType() == typeof(Image))
             {
                 Title.Text = (e.Source as Image).Tag.ToString();
-                content_load(Convert.ToInt32((e.Source as Image).Tag));
+                content_load(Convert.ToInt32((e.Source as Image).Tag));//показать инфу о фильме в правой вкладке
             }
-            e.Handled = true;
+            e.Handled = true;//это чтобы родительские элементы ничего не натворили
         }
         
         private void content_load(int index)//Подгрузка контента
@@ -339,13 +322,6 @@ namespace projectE
             Grid.SetColumnSpan(tb2, 2);
             Grid.SetRow(tb2, 1);
             grid_content.Children.Add(tb2);
-            /*Text = dt.Rows[i]["name"].ToString() + Environment.NewLine + dt.Rows[i]["nameEN"] + Environment.NewLine +
-                    "Год\t" + dt.Rows[i]["year"].ToString() + Environment.NewLine +
-                    "Страна\t" + dt.Rows[i]["country"].ToString() + Environment.NewLine +
-                    "Режиссер\t" + dt.Rows[i]["director"].ToString() + Environment.NewLine +
-                    "Жанр\t" + dt.Rows[i]["genre"].ToString() + Environment.NewLine +
-                    "Дата\t" + dt.Rows[i]["date"].ToString() + Environment.NewLine +
-                    "Возраст\t" + dt.Rows[i]["agelimit"].ToString(),*/
         }
 
         private void content_load(string mode)//Подгрузка контента
@@ -620,19 +596,19 @@ namespace projectE
 
             }
         }
-
+        //показать все фильмы
         private void list_load()
         {
-            button_sctoll_top.IsEnabled = false;
-            button_sctoll_top.Visibility = Visibility.Hidden;
-            grid_list.Children.Clear();
-            grid_list.RowDefinitions.Clear();
-            RowDefinition rd;
-            for (int i = 0; i < dt.Rows.Count; i++)
+            button_sctoll_top.IsEnabled = false;//выключение кнопки "вверх"
+            button_sctoll_top.Visibility = Visibility.Hidden;//скрыть кнопку "вверх"
+            grid_list.Children.Clear();//очистить элементы из центрального грида
+            grid_list.RowDefinitions.Clear();//удалить все строки из центрального грида
+            RowDefinition rd;//строка
+            for (int i = 0; i < dt.Rows.Count; i++)//цикл по всем фильмам
             {
-                rd = new RowDefinition() { Height = new GridLength(1,GridUnitType.Star) };
-                grid_list.RowDefinitions.Add(rd);
-                Button btf = new Button()
+                rd = new RowDefinition() { Height = new GridLength(1,GridUnitType.Star) };//создание строки с высотой "1*"
+                grid_list.RowDefinitions.Add(rd);//добавление строки в грид
+                Button btf = new Button()//кнопка добавления/удаления из избранного
                 {
                     Name = "button_favorite" + i,
                     Height = 40,
@@ -641,11 +617,12 @@ namespace projectE
                     VerticalAlignment = VerticalAlignment.Top,
                     HorizontalAlignment = HorizontalAlignment.Right,
                     BorderThickness = new Thickness(0, 0, 0, 0),
+                    //присвоение соответсвтующей картинки
                     Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill },
-                    Tag = i
+                    Tag = i//id фильма
                 };
-                btf.Click += button_favorite_Click;
-                /*Button btw = new Button()
+                btf.Click += button_favorite_Click;//привязывание события клика
+                Button btw = new Button()//кнопка добавления/удаления из просмотренного
                 {
                     Name = "button_watched" + i,
                     Height = 40,
@@ -654,11 +631,12 @@ namespace projectE
                     VerticalAlignment = VerticalAlignment.Top,
                     HorizontalAlignment = HorizontalAlignment.Left,
                     BorderThickness = new Thickness(0, 0, 0, 0),
+                    //присвоение соответсвтующей картинки
                     Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["watched"]) == false ? noWatchedImg : WatchedImg, Stretch = Stretch.Fill },
-                    Tag = i
+                    Tag = i//id фильма
                 };
-                btw.Click += button_watched_Click;*/
-                TextBlock tb = new TextBlock()
+                btw.Click += button_watched_Click;//привязывание события клика
+                TextBlock tb = new TextBlock()//текст справа от постера
                 {
                     Name = "textBlock_middle_content" + i,
                     TextWrapping = TextWrapping.Wrap,
@@ -674,17 +652,17 @@ namespace projectE
                     //Margin = new Thickness(5,5,5,5),
                     Foreground = Brushes.Gray,
                     Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i
+                    Tag = i//id фильма
                 };
-                Image img = new Image()
+                Image img = new Image()//постер
                 {
-                    Source = imgmass[i],
+                    Source = imgmass[i],//картинка из массива по id
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Stretch = Stretch.Uniform,
-                    Tag = i
+                    Tag = i//id фильма
                 };
-                TextBlock date = new TextBlock()
+                TextBlock date = new TextBlock()//текст с датой под кнопками добавить/удалить из избранного/просмотренного
                 {
                     Name = "textBlock_date" + i,
                     HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -694,8 +672,9 @@ namespace projectE
                     Margin = new Thickness(0, 0, 0, 0),
                     Foreground = Brushes.Gray,
                     Padding = new Thickness(5, 45, 5, 5),
-                    Tag = i
+                    Tag = i//id фильма
                 };
+                //расстановка и добавление элементов в грид
                 Grid.SetColumn(img, 0);
                 Grid.SetRow(img, i);
                 grid_list.Children.Add(img);
@@ -707,32 +686,33 @@ namespace projectE
                 Grid.SetColumn(date, 2);
                 Grid.SetRow(date, i);
                 grid_list.Children.Add(date);
-
+                //btf и btw последние чтобы были поверх текста с датой
                 Grid.SetColumn(btf, 2);
                 Grid.SetRow(btf, i);
                 grid_list.Children.Add(btf);
 
-                /*Grid.SetColumn(btw, 2);
+                Grid.SetColumn(btw, 2);
                 Grid.SetRow(btw, i);
-                grid_list.Children.Add(btw);*/
+                grid_list.Children.Add(btw);
 
                 
             }
         }
+        //показывает список избранного
         private void favorite_load()
         {
-            button_sctoll_top.IsEnabled = false;
-            button_sctoll_top.Visibility = Visibility.Hidden;
-            grid_list.Children.Clear();
-            grid_list.RowDefinitions.Clear();
-            RowDefinition rd;
-            for (int i = 0; i < dt.Rows.Count; i++)
+            button_sctoll_top.IsEnabled = false;//выключаем кнопку "вверх"
+            button_sctoll_top.Visibility = Visibility.Hidden;//скрываем кнопку "вверх"
+            grid_list.Children.Clear();//очищаем центральную панель от элементов
+            grid_list.RowDefinitions.Clear();//удаляем все строки в центральном гриде
+            RowDefinition rd;//строка
+            for (int i = 0; i < dt.Rows.Count; i++)//цикл по всем фильмам
             {
-                if (Convert.ToBoolean(dt.Rows[i]["favorite"]) == false)
-                    continue;
-                rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
-                grid_list.RowDefinitions.Add(rd);
-                Button btf = new Button()
+                if (Convert.ToBoolean(dt.Rows[i]["favorite"]) == false)//если фильм отмечен избранным
+                    continue;//то переходим на следующую итерацию
+                rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };//создание строки с высотой "1*"
+                grid_list.RowDefinitions.Add(rd);//добавление строки в грид
+                Button btf = new Button()//кнопка добавления/уделаения из избранного
                 {
                     Name = "button_favorite" + i,
                     Height = 40,
@@ -741,11 +721,12 @@ namespace projectE
                     VerticalAlignment = VerticalAlignment.Top,
                     HorizontalAlignment = HorizontalAlignment.Right,
                     BorderThickness = new Thickness(0, 0, 0, 0),
+                    //не надо проверять в избраном или нет т.к. показываем список избранного
                     Content = new Image() { Source = FavoriteImg, Stretch = Stretch.Fill },
-                    Tag = i
+                    Tag = i//id фильма
                 };
-                btf.Click += button_favorite_Click;
-                /*Button btw = new Button()
+                btf.Click += button_favorite_Click;//привязывание собития клика
+                Button btw = new Button()//кнопка добавления/удаления из просмотренноо
                 {
                     Name = "button_watched" + i,
                     Height = 40,
@@ -754,11 +735,12 @@ namespace projectE
                     VerticalAlignment = VerticalAlignment.Top,
                     HorizontalAlignment = HorizontalAlignment.Left,
                     BorderThickness = new Thickness(0, 0, 0, 0),
+                    //проверяем просмотренный или нет и присваиваем соответствующую картинку
                     Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["watched"]) == false ? noWatchedImg:WatchedImg, Stretch = Stretch.Fill },
-                    Tag = i
+                    Tag = i//id фильма
                 };
-                btw.Click += button_watched_Click;*/
-                TextBlock tb = new TextBlock()
+                btw.Click += button_watched_Click;//привязывание собития клика
+                TextBlock tb = new TextBlock()//текст с инфой о фильма справа от постера
                 {
                     Name = "textBlock_middle_content" + i,
                     TextWrapping = TextWrapping.Wrap,
@@ -774,17 +756,124 @@ namespace projectE
                     //Margin = new Thickness(5,5,5,5),
                     Foreground = Brushes.Gray,
                     Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i
+                    Tag = i//id фильма
                 };
-                Image img = new Image()
+                Image img = new Image()//постер
                 {
-                    Source = imgmass[i],
+                    Source = imgmass[i],//картинка из массива по id
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Stretch = Stretch.Uniform,
-                    Tag = i
+                    Tag = i//id фильма
                 };
-                TextBlock date = new TextBlock()
+                TextBlock date = new TextBlock()//текст с датой под кнопками добавить/удалить из избранного/просмотренного
+                {
+                    Name = "textBlock_date" + i,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Text = dt.Rows[i]["date"].ToString().Replace(" ", Environment.NewLine),
+                    TextAlignment = TextAlignment.Center,
+                    Margin = new Thickness(0, 40, 0, 0),
+                    Foreground = Brushes.Gray,
+                    Padding = new Thickness(5, 5, 5, 5),
+                    Tag = i//id фильма
+                };
+
+                int index = grid_list.RowDefinitions.Count-1;//индекс последней строки
+                //расстановка и добавление элементов в грид
+                Grid.SetColumn(img, 0);
+                Grid.SetRow(img, index);
+                grid_list.Children.Add(img);
+
+                Grid.SetColumn(tb, 1);
+                Grid.SetRow(tb, index);
+                grid_list.Children.Add(tb);
+
+                Grid.SetColumn(date, 2);
+                Grid.SetRow(date, index);
+                grid_list.Children.Add(date);
+                //btf и btw последние чтобы были поверх текста с датой
+                Grid.SetColumn(btf, 2);
+                Grid.SetRow(btf, index);
+                grid_list.Children.Add(btf);
+
+                Grid.SetColumn(btw, 2);
+                Grid.SetRow(btw, index);
+                grid_list.Children.Add(btw);
+
+            }
+        }
+        //показывает просмотренные
+        private void watched_load()
+        {
+            button_sctoll_top.IsEnabled = false;//выключаем кнопку "вверх"
+            button_sctoll_top.Visibility = Visibility.Hidden;//скрываем кнопку "вверх"
+            grid_list.Children.Clear();//очищаем элементы в центральной панели
+            grid_list.RowDefinitions.Clear();//удаляем все строки в центральной панели
+            RowDefinition rd;//новая строка
+            for (int i = 0; i < dt.Rows.Count; i++)//цикл по всем фильмам
+            {
+                if (Convert.ToBoolean(dt.Rows[i]["watched"]) == false)//если фильм не просмотренный
+                    continue;//то переходим на следующую итерацию
+                rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) }; //создание новой строки с высотой "1*"
+                grid_list.RowDefinitions.Add(rd);//добавляем эту строку в центральную сетку
+                Button btf = new Button()//создание кнопки "добавить/удалить из избранное"
+                {
+                    Name = "button_favorite" + i,
+                    Height = 40,
+                    Width = 40,
+                    Background = null,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    BorderThickness = new Thickness(0, 0, 0, 0),
+                    Content = new Image()
+                    {//выбор картинки для кнопки в зависимости от добавлено ли в избранное или нет
+                        Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill
+                    },
+                    Tag = i//id фильма
+                };
+                btf.Click += button_favorite_Click;//привязывание события клика
+                Button btw = new Button()//создание кнопки "добавить/удалить из просмотренного"
+                {
+                    Name = "button_watched" + i,
+                    Height = 40,
+                    Width = 40,
+                    Background = null,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    BorderThickness = new Thickness(0, 0, 0, 0),
+                    //здесь не надо проверять просмотреный фильм или нет потому-что показываем просмотренное
+                    Content = new Image() { Source = WatchedImg, Stretch = Stretch.Fill },
+                    Tag = i//id фильма
+                };
+                btw.Click += button_watched_Click;//привязывание собития клика
+                TextBlock tb = new TextBlock()//текст с инфой о фильме в центре справа от постера
+                {
+                    Name = "textBlock_middle_content" + i,
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    /*Text = "Люди в черном: Интернэшнл (2019)"+Environment.NewLine + "Men in Black International"+
+                    Environment.NewLine+ "США, реж. Ф. Гэри Грей 16+"+
+                    Environment.NewLine+ "фантастика, боевик, комедия ...",*/
+                    Text = dt.Rows[i]["name"].ToString() + " " + dt.Rows[i]["year"].ToString() + Environment.NewLine + dt.Rows[i]["nameEN"] + Environment.NewLine +
+
+                    dt.Rows[i]["country"].ToString() + " " + dt.Rows[i]["director"].ToString() + Environment.NewLine +
+                    dt.Rows[i]["genre"].ToString() + Environment.NewLine,
+                    //Margin = new Thickness(5,5,5,5),
+                    Foreground = Brushes.Gray,
+                    Padding = new Thickness(5, 5, 5, 5),
+                    Tag = i//id фильма
+                };
+                Image img = new Image()//создание постера
+                {
+                    Source = imgmass[i],//загружаем картинку из массива по id
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Stretch = Stretch.Uniform,
+                    Tag = i//id фильма
+                };
+                TextBlock date = new TextBlock()//текст с датой выхода фильма под кнопкам "добавить в избранное/просмотренное"
                 {
                     Name = "textBlock_date" + i,
                     HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -797,8 +886,8 @@ namespace projectE
                     Tag = i
                 };
 
-                int index = grid_list.RowDefinitions.Count-1;
-
+                int index = grid_list.RowDefinitions.Count - 1;//индекс последней строки в гриде
+                //расстановка и добавление элементов в грид
                 Grid.SetColumn(img, 0);
                 Grid.SetRow(img, index);
                 grid_list.Children.Add(img);
@@ -807,199 +896,97 @@ namespace projectE
                 Grid.SetRow(tb, index);
                 grid_list.Children.Add(tb);
 
-                Grid.SetColumn(date, 2);
-                Grid.SetRow(date, index);
-                grid_list.Children.Add(date);
-
                 Grid.SetColumn(btf, 2);
                 Grid.SetRow(btf, index);
                 grid_list.Children.Add(btf);
-
-                /*Grid.SetColumn(btw, 2);
+                // btw и btf последние чтобы были поверх текста с датой
+                Grid.SetColumn(btw, 2);
                 Grid.SetRow(btw, index);
-                grid_list.Children.Add(btw);*/
+                grid_list.Children.Add(btw);
 
+                Grid.SetColumn(date, 2);
+                Grid.SetRow(date, index);
+                grid_list.Children.Add(date);
             }
         }
-        //private void watched_load()
-        //{
-        //    button_sctoll_top.IsEnabled = false;
-        //    button_sctoll_top.Visibility = Visibility.Hidden;
-        //    grid_list.Children.Clear();
-        //    grid_list.RowDefinitions.Clear();
-        //    RowDefinition rd;
-        //    for (int i = 0; i < dt.Rows.Count; i++)
-        //    {
-        //        if (Convert.ToBoolean(dt.Rows[i]["watched"]) == false)
-        //            continue;
-        //        rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
-        //        grid_list.RowDefinitions.Add(rd);
-        //        Button btf = new Button()
-        //        {
-        //            Name = "button_favorite" + i,
-        //            Height = 40,
-        //            Width = 40,
-        //            Background = null,
-        //            VerticalAlignment = VerticalAlignment.Top,
-        //            HorizontalAlignment = HorizontalAlignment.Right,
-        //            BorderThickness = new Thickness(0, 0, 0, 0),
-        //            Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill },
-        //            Tag = i
-        //        };
-        //        btf.Click += button_favorite_Click;
-        //        /*Button btw = new Button()
-        //        {
-        //            Name = "button_watched" + i,
-        //            Height = 40,
-        //            Width = 40,
-        //            Background = null,
-        //            VerticalAlignment = VerticalAlignment.Top,
-        //            HorizontalAlignment = HorizontalAlignment.Left,
-        //            BorderThickness = new Thickness(0, 0, 0, 0),
-        //            Content = new Image() { Source = WatchedImg, Stretch = Stretch.Fill },
-        //            Tag = i
-        //        };
-        //        btw.Click += button_watched_Click;*/
-        //        TextBlock tb = new TextBlock()
-        //        {
-        //            Name = "textBlock_middle_content" + i,
-        //            TextWrapping = TextWrapping.Wrap,
-        //            HorizontalAlignment = HorizontalAlignment.Stretch,
-        //            VerticalAlignment = VerticalAlignment.Stretch,
-        //            /*Text = "Люди в черном: Интернэшнл (2019)"+Environment.NewLine + "Men in Black International"+
-        //            Environment.NewLine+ "США, реж. Ф. Гэри Грей 16+"+
-        //            Environment.NewLine+ "фантастика, боевик, комедия ...",*/
-        //            Text = dt.Rows[i]["name"].ToString() + " " + dt.Rows[i]["year"].ToString() + Environment.NewLine + dt.Rows[i]["nameEN"] + Environment.NewLine +
-
-        //            dt.Rows[i]["country"].ToString() + " " + dt.Rows[i]["director"].ToString() + Environment.NewLine +
-        //            dt.Rows[i]["genre"].ToString() + Environment.NewLine,
-        //            //Margin = new Thickness(5,5,5,5),
-        //            Foreground = Brushes.Gray,
-        //            Padding = new Thickness(5, 5, 5, 5),
-        //            Tag = i
-        //        };
-        //        Image img = new Image()
-        //        {
-        //            Source = imgmass[i],
-        //            HorizontalAlignment = HorizontalAlignment.Stretch,
-        //            VerticalAlignment = VerticalAlignment.Stretch,
-        //            Stretch = Stretch.Uniform,
-        //            Tag = i
-        //        };
-        //        TextBlock date = new TextBlock()
-        //        {
-        //            Name = "textBlock_date" + i,
-        //            HorizontalAlignment = HorizontalAlignment.Stretch,
-        //            VerticalAlignment = VerticalAlignment.Stretch,
-        //            Text = dt.Rows[i]["date"].ToString().Replace(" ", Environment.NewLine),
-        //            TextAlignment = TextAlignment.Center,
-        //            Margin = new Thickness(0, 40, 0, 0),
-        //            Foreground = Brushes.Gray,
-        //            Padding = new Thickness(5, 5, 5, 5),
-        //            Tag = i
-        //        };
-
-        //        int index = grid_list.RowDefinitions.Count - 1;
-
-        //        Grid.SetColumn(img, 0);
-        //        Grid.SetRow(img, index);
-        //        grid_list.Children.Add(img);
-
-        //        Grid.SetColumn(tb, 1);
-        //        Grid.SetRow(tb, index);
-        //        grid_list.Children.Add(tb);
-
-        //        Grid.SetColumn(btf, 2);
-        //        Grid.SetRow(btf, index);
-        //        grid_list.Children.Add(btf);
-
-        //        /*Grid.SetColumn(btw, 2);
-        //        Grid.SetRow(btw, index);
-        //        grid_list.Children.Add(btw);*/
-
-        //        Grid.SetColumn(date, 2);
-        //        Grid.SetRow(date, index);
-        //        grid_list.Children.Add(date);
-        //    }
-        //}
-
+        //для отладки и прочего
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Space)
+            if(e.Key == Key.Space)//если нажали пробел
             {
                 //stack_content.Visibility = Visibility.Hidden;
                 scroll_viewer_center.ScrollToTop();
             }
         }
-
+        //нажали кнопку домой
         private void button_home_Click(object sender, RoutedEventArgs e)
         {
             Parser parser = new Parser();
         //    parser.UpdateList();
-            list_load();
-            scroll_viewer_center.ScrollToTop();
+            list_load();//показывает все фильмы
+            scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
-
+        //нажали кнопку избранное (меню)
         private void button_favorite_Click_1(object sender, RoutedEventArgs e)
         {
-            favorite_load();
-            scroll_viewer_center.ScrollToTop();
+            favorite_load();//показывает избранные фильмы
+            scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
-
+        //нажали кнопку закрыть окно
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
-
+        //нажали кнопку "во весь экран" или "вернуть к нормальному размеру"
         private void button_maximazing_Click(object sender, RoutedEventArgs e)
         {
-            if (WindowState == WindowState.Maximized)
-                WindowState = WindowState.Normal;
+            if (WindowState == WindowState.Maximized)//если сейчас максимальный
+                WindowState = WindowState.Normal;//то возвращаем к нормальному
             else
-                WindowState = WindowState.Maximized;
+                WindowState = WindowState.Maximized;//иначе делаем во весь экран
         }
-
+        //нажали кнопку скрыть в трей
         private void button_hide_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
-
+        //перетаскивание окна за верхнюю панельку
         private void Title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
-
+        //при изменении размера окна
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         { 
-            if (Width < 700 && grid.ColumnDefinitions[2].IsEnabled)
-            {
-                /*grid.ColumnDefinitions[2].Width = new GridLength(0);
-                grid.ColumnDefinitions[2].IsEnabled = false;
-                stack_content.Visibility = Visibility.Hidden;*/
-                //Width = grid.ColumnDefinitions[1].ActualWidth + 40;
-                closePanel();
-            }
+            if (Width < 700 && grid.ColumnDefinitions[2].IsEnabled)//если ширина окна меньше 700
+                closePanel(); // закрываем правую панель
         }
-
+        //нажали кнопку "вверх"
         private void button_sctoll_top_Click(object sender, RoutedEventArgs e)
         {
-            scroll_viewer_center.ScrollToTop();
-            button_sctoll_top.IsEnabled = false;
-            button_sctoll_top.Visibility = Visibility.Hidden;
+            scroll_viewer_center.ScrollToTop();//проскролить вверх
+            button_sctoll_top.IsEnabled = false;//выключить кнопку
+            button_sctoll_top.Visibility = Visibility.Hidden;//спрятать кнопку
         }
-        
+        //покрутили колесико в центральной вкладке
         private void stack_list_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (e.Delta < 0)
+            if (e.Delta < 0)//если покрутили вниз
             {
-                button_sctoll_top.IsEnabled = true;
-                button_sctoll_top.Visibility = Visibility.Visible;
+                button_sctoll_top.IsEnabled = true;//включить кнопку "вверх"
+                button_sctoll_top.Visibility = Visibility.Visible;//показать кнопку "вверх"
             }
         }
-
-        private void Button_settings_Click(object sender, RoutedEventArgs e)//Settings butt clicked
+        //Settings butt clicked
+        private void Button_settings_Click(object sender, RoutedEventArgs e)
         {
             content_load("settings");
+        }
+        //нажали кнопку просмотренное (меню)
+        private void button_watched_Click_1(object sender, RoutedEventArgs e)
+        {
+            watched_load();//показывает просмотренные фильмы
+            scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
     }
 }

@@ -56,6 +56,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{Binding ElementName= button_home, Path=ActualHeight}"></RowDefinition>
                     <RowDefinition Height="{Binding ElementName= button_favorite, Path=ActualHeight}"></RowDefinition>
+                    <RowDefinition Height="{Binding ElementName= button_watched, Path=ActualHeight}"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="{Binding ElementName= button_settings, Path=ActualHeight}"></RowDefinition>
                 </Grid.RowDefinitions>
@@ -68,7 +69,10 @@
                 <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_Click_1">
                     <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/звезда2.png" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="3" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click">
+                <Button x:Name="button_watched" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_watched_Click_1" >
+                    <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/глаз2.png" Stretch="Fill"/>
+                </Button>
+                <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click">
                     <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/шестерня2.png" Stretch="Fill"/>
                 </Button>
             </Grid>
