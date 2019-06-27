@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
-using System.IO; 
+using System.IO;
+using System.Threading;
 
 namespace projectE
 {
@@ -697,11 +698,22 @@ namespace projectE
                 Title.Text = grid_list.RowDefinitions.Count.ToString();
             }
         }
+        bool isRun;
+        private void Upd()
+        {
+            isRun = true;
+            Parser parser = new Parser();
+            parser.UpdateList();
+            isRun = false;
+        }
         //нажали кнопку домой
         private void button_home_Click(object sender, RoutedEventArgs e)
         {
-            Parser parser = new Parser();
-        //    parser.UpdateList();
+            Thread thread = new Thread(Upd);
+            if (!isRun)
+            {
+                thread.Start();
+            }
             list_load();//показывает все фильмы
             scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
