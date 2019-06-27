@@ -711,11 +711,6 @@ namespace projectE
             button_sctoll_top.Visibility = Visibility.Hidden;
         }
         
-        private void scroll_viewer_center_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            
-        }
-
         private void stack_list_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta < 0)
