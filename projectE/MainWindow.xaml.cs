@@ -25,7 +25,7 @@ namespace projectE
         public MainWindow()
         {
             InitializeComponent();
-            //grid.ColumnDefinitions[2].Width = new GridLength(0);
+            grid.ColumnDefinitions[2].Width = new GridLength(0);
             grid.ColumnDefinitions[2].IsEnabled = false;
             Width = 450;
             stack_content.Visibility = Visibility.Hidden;
@@ -348,6 +348,8 @@ namespace projectE
         }
         private void list_load()
         {
+            button_sctoll_top.IsEnabled = false;
+            button_sctoll_top.Visibility = Visibility.Hidden;
             grid_list.Children.Clear();
             grid_list.RowDefinitions.Clear();
             RowDefinition rd;
@@ -368,7 +370,7 @@ namespace projectE
                     Tag = i
                 };
                 btf.Click += button_favorite_Click;
-                Button btw = new Button()
+                /*Button btw = new Button()
                 {
                     Name = "button_watched" + i,
                     Height = 40,
@@ -380,7 +382,7 @@ namespace projectE
                     Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["watched"]) == false ? noWatchedImg : WatchedImg, Stretch = Stretch.Fill },
                     Tag = i
                 };
-                btw.Click += button_watched_Click;
+                btw.Click += button_watched_Click;*/
                 TextBlock tb = new TextBlock()
                 {
                     Name = "textBlock_middle_content" + i,
@@ -414,9 +416,9 @@ namespace projectE
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Text = dt.Rows[i]["date"].ToString().Replace(" ", Environment.NewLine),
                     TextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(0, 40, 0, 0),
+                    Margin = new Thickness(0, 0, 0, 0),
                     Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 5, 5, 5),
+                    Padding = new Thickness(5, 45, 5, 5),
                     Tag = i
                 };
                 Grid.SetColumn(img, 0);
@@ -427,21 +429,25 @@ namespace projectE
                 Grid.SetRow(tb, i);
                 grid_list.Children.Add(tb);
 
+                Grid.SetColumn(date, 2);
+                Grid.SetRow(date, i);
+                grid_list.Children.Add(date);
+
                 Grid.SetColumn(btf, 2);
                 Grid.SetRow(btf, i);
                 grid_list.Children.Add(btf);
 
-                Grid.SetColumn(btw, 2);
+                /*Grid.SetColumn(btw, 2);
                 Grid.SetRow(btw, i);
-                grid_list.Children.Add(btw);
+                grid_list.Children.Add(btw);*/
 
-                Grid.SetColumn(date, 2);
-                Grid.SetRow(date, i);
-                grid_list.Children.Add(date);
+                
             }
         }
         private void favotite_load()
         {
+            button_sctoll_top.IsEnabled = false;
+            button_sctoll_top.Visibility = Visibility.Hidden;
             grid_list.Children.Clear();
             grid_list.RowDefinitions.Clear();
             RowDefinition rd;
@@ -464,7 +470,7 @@ namespace projectE
                     Tag = i
                 };
                 btf.Click += button_favorite_Click;
-                Button btw = new Button()
+                /*Button btw = new Button()
                 {
                     Name = "button_watched" + i,
                     Height = 40,
@@ -476,7 +482,7 @@ namespace projectE
                     Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["watched"]) == false ? noWatchedImg:WatchedImg, Stretch = Stretch.Fill },
                     Tag = i
                 };
-                btw.Click += button_watched_Click;
+                btw.Click += button_watched_Click;*/
                 TextBlock tb = new TextBlock()
                 {
                     Name = "textBlock_middle_content" + i,
@@ -526,118 +532,121 @@ namespace projectE
                 Grid.SetRow(tb, index);
                 grid_list.Children.Add(tb);
 
-                Grid.SetColumn(btf, 2);
-                Grid.SetRow(btf, index);
-                grid_list.Children.Add(btf);
-
-                Grid.SetColumn(btw, 2);
-                Grid.SetRow(btw, index);
-                grid_list.Children.Add(btw);
-
                 Grid.SetColumn(date, 2);
                 Grid.SetRow(date, index);
                 grid_list.Children.Add(date);
-            }
-        }
-        private void watched_load()
-        {
-            grid_list.Children.Clear();
-            grid_list.RowDefinitions.Clear();
-            RowDefinition rd;
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                if (Convert.ToBoolean(dt.Rows[i]["watched"]) == false)
-                    continue;
-                rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
-                grid_list.RowDefinitions.Add(rd);
-                Button btf = new Button()
-                {
-                    Name = "button_favorite" + i,
-                    Height = 40,
-                    Width = 40,
-                    Background = null,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill },
-                    Tag = i
-                };
-                btf.Click += button_favorite_Click;
-                Button btw = new Button()
-                {
-                    Name = "button_watched" + i,
-                    Height = 40,
-                    Width = 40,
-                    Background = null,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    Content = new Image() { Source = WatchedImg, Stretch = Stretch.Fill },
-                    Tag = i
-                };
-                btw.Click += button_watched_Click;
-                TextBlock tb = new TextBlock()
-                {
-                    Name = "textBlock_middle_content" + i,
-                    TextWrapping = TextWrapping.Wrap,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    /*Text = "Люди в черном: Интернэшнл (2019)"+Environment.NewLine + "Men in Black International"+
-                    Environment.NewLine+ "США, реж. Ф. Гэри Грей 16+"+
-                    Environment.NewLine+ "фантастика, боевик, комедия ...",*/
-                    Text = dt.Rows[i]["name"].ToString() + " " + dt.Rows[i]["year"].ToString() + Environment.NewLine + dt.Rows[i]["nameEN"] + Environment.NewLine +
-
-                    dt.Rows[i]["country"].ToString() + " " + dt.Rows[i]["director"].ToString() + Environment.NewLine +
-                    dt.Rows[i]["genre"].ToString() + Environment.NewLine,
-                    //Margin = new Thickness(5,5,5,5),
-                    Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i
-                };
-                Image img = new Image()
-                {
-                    Source = imgmass[i],
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Stretch = Stretch.Uniform,
-                    Tag = i
-                };
-                TextBlock date = new TextBlock()
-                {
-                    Name = "textBlock_date" + i,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Text = dt.Rows[i]["date"].ToString().Replace(" ", Environment.NewLine),
-                    TextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(0, 40, 0, 0),
-                    Foreground = Brushes.Gray,
-                    Padding = new Thickness(5, 5, 5, 5),
-                    Tag = i
-                };
-
-                int index = grid_list.RowDefinitions.Count - 1;
-
-                Grid.SetColumn(img, 0);
-                Grid.SetRow(img, index);
-                grid_list.Children.Add(img);
-
-                Grid.SetColumn(tb, 1);
-                Grid.SetRow(tb, index);
-                grid_list.Children.Add(tb);
 
                 Grid.SetColumn(btf, 2);
                 Grid.SetRow(btf, index);
                 grid_list.Children.Add(btf);
 
-                Grid.SetColumn(btw, 2);
+                /*Grid.SetColumn(btw, 2);
                 Grid.SetRow(btw, index);
-                grid_list.Children.Add(btw);
+                grid_list.Children.Add(btw);*/
 
-                Grid.SetColumn(date, 2);
-                Grid.SetRow(date, index);
-                grid_list.Children.Add(date);
             }
         }
+        //private void watched_load()
+        //{
+        //    button_sctoll_top.IsEnabled = false;
+        //    button_sctoll_top.Visibility = Visibility.Hidden;
+        //    grid_list.Children.Clear();
+        //    grid_list.RowDefinitions.Clear();
+        //    RowDefinition rd;
+        //    for (int i = 0; i < dt.Rows.Count; i++)
+        //    {
+        //        if (Convert.ToBoolean(dt.Rows[i]["watched"]) == false)
+        //            continue;
+        //        rd = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+        //        grid_list.RowDefinitions.Add(rd);
+        //        Button btf = new Button()
+        //        {
+        //            Name = "button_favorite" + i,
+        //            Height = 40,
+        //            Width = 40,
+        //            Background = null,
+        //            VerticalAlignment = VerticalAlignment.Top,
+        //            HorizontalAlignment = HorizontalAlignment.Right,
+        //            BorderThickness = new Thickness(0, 0, 0, 0),
+        //            Content = new Image() { Source = Convert.ToBoolean(dt.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill },
+        //            Tag = i
+        //        };
+        //        btf.Click += button_favorite_Click;
+        //        /*Button btw = new Button()
+        //        {
+        //            Name = "button_watched" + i,
+        //            Height = 40,
+        //            Width = 40,
+        //            Background = null,
+        //            VerticalAlignment = VerticalAlignment.Top,
+        //            HorizontalAlignment = HorizontalAlignment.Left,
+        //            BorderThickness = new Thickness(0, 0, 0, 0),
+        //            Content = new Image() { Source = WatchedImg, Stretch = Stretch.Fill },
+        //            Tag = i
+        //        };
+        //        btw.Click += button_watched_Click;*/
+        //        TextBlock tb = new TextBlock()
+        //        {
+        //            Name = "textBlock_middle_content" + i,
+        //            TextWrapping = TextWrapping.Wrap,
+        //            HorizontalAlignment = HorizontalAlignment.Stretch,
+        //            VerticalAlignment = VerticalAlignment.Stretch,
+        //            /*Text = "Люди в черном: Интернэшнл (2019)"+Environment.NewLine + "Men in Black International"+
+        //            Environment.NewLine+ "США, реж. Ф. Гэри Грей 16+"+
+        //            Environment.NewLine+ "фантастика, боевик, комедия ...",*/
+        //            Text = dt.Rows[i]["name"].ToString() + " " + dt.Rows[i]["year"].ToString() + Environment.NewLine + dt.Rows[i]["nameEN"] + Environment.NewLine +
+
+        //            dt.Rows[i]["country"].ToString() + " " + dt.Rows[i]["director"].ToString() + Environment.NewLine +
+        //            dt.Rows[i]["genre"].ToString() + Environment.NewLine,
+        //            //Margin = new Thickness(5,5,5,5),
+        //            Foreground = Brushes.Gray,
+        //            Padding = new Thickness(5, 5, 5, 5),
+        //            Tag = i
+        //        };
+        //        Image img = new Image()
+        //        {
+        //            Source = imgmass[i],
+        //            HorizontalAlignment = HorizontalAlignment.Stretch,
+        //            VerticalAlignment = VerticalAlignment.Stretch,
+        //            Stretch = Stretch.Uniform,
+        //            Tag = i
+        //        };
+        //        TextBlock date = new TextBlock()
+        //        {
+        //            Name = "textBlock_date" + i,
+        //            HorizontalAlignment = HorizontalAlignment.Stretch,
+        //            VerticalAlignment = VerticalAlignment.Stretch,
+        //            Text = dt.Rows[i]["date"].ToString().Replace(" ", Environment.NewLine),
+        //            TextAlignment = TextAlignment.Center,
+        //            Margin = new Thickness(0, 40, 0, 0),
+        //            Foreground = Brushes.Gray,
+        //            Padding = new Thickness(5, 5, 5, 5),
+        //            Tag = i
+        //        };
+
+        //        int index = grid_list.RowDefinitions.Count - 1;
+
+        //        Grid.SetColumn(img, 0);
+        //        Grid.SetRow(img, index);
+        //        grid_list.Children.Add(img);
+
+        //        Grid.SetColumn(tb, 1);
+        //        Grid.SetRow(tb, index);
+        //        grid_list.Children.Add(tb);
+
+        //        Grid.SetColumn(btf, 2);
+        //        Grid.SetRow(btf, index);
+        //        grid_list.Children.Add(btf);
+
+        //        /*Grid.SetColumn(btw, 2);
+        //        Grid.SetRow(btw, index);
+        //        grid_list.Children.Add(btw);*/
+
+        //        Grid.SetColumn(date, 2);
+        //        Grid.SetRow(date, index);
+        //        grid_list.Children.Add(date);
+        //    }
+        //}
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
@@ -659,12 +668,6 @@ namespace projectE
         private void button_favorite_Click_1(object sender, RoutedEventArgs e)
         {
             favotite_load();
-            scroll_viewer_center.ScrollToTop();
-        }
-
-        private void button_watched_Click_1(object sender, RoutedEventArgs e)
-        {
-            watched_load();
             scroll_viewer_center.ScrollToTop();
         }
 
@@ -700,6 +703,27 @@ namespace projectE
                 stack_content.Visibility = Visibility.Hidden;*/
                 //Width = grid.ColumnDefinitions[1].ActualWidth + 40;
                 closePanel();
+            }
+        }
+
+        private void button_sctoll_top_Click(object sender, RoutedEventArgs e)
+        {
+            scroll_viewer_center.ScrollToTop();
+            button_sctoll_top.IsEnabled = false;
+            button_sctoll_top.Visibility = Visibility.Hidden;
+        }
+        
+        private void scroll_viewer_center_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            
+        }
+
+        private void stack_list_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta < 0)
+            {
+                button_sctoll_top.IsEnabled = true;
+                button_sctoll_top.Visibility = Visibility.Visible;
             }
         }
     }
