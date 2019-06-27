@@ -339,22 +339,20 @@ namespace projectE
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
-            //grid_content.RowDefinitions.Clear();
-            //grid_content.ColumnDefinitions.Clear();
-            ColumnDefinition cd = new ColumnDefinition();
-            RowDefinition rd3 = new RowDefinition();
-            RowDefinition rd4 = new RowDefinition();
-            RowDefinition rd5 = new RowDefinition();
-            RowDefinition rd6 = new RowDefinition();
-            RowDefinition rd7 = new RowDefinition();
-            RowDefinition rd8 = new RowDefinition();
-            grid_content.ColumnDefinitions.Add(cd);
-            grid_content.RowDefinitions.Add(rd3);
-            grid_content.RowDefinitions.Add(rd4);
-            grid_content.RowDefinitions.Add(rd5);
-            grid_content.RowDefinitions.Add(rd6);
-            grid_content.RowDefinitions.Add(rd7);
-            grid_content.RowDefinitions.Add(rd8);
+            grid_content.RowDefinitions.Clear();
+            grid_content.ColumnDefinitions.Clear();
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
             //grid_content.ShowGridLines = true;
             var foreColor = Brushes.WhiteSmoke;
             var backColor = Brushes.Cornsilk;
@@ -599,8 +597,7 @@ namespace projectE
             Grid.SetRow(otherSource, 7);
             Grid.SetColumnSpan(otherSource, 2);
             grid_content.Children.Add(otherSource);
-
-
+            
         }
 
         void save_my_butt_Click(object sender, RoutedEventArgs e)
