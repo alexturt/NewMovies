@@ -334,6 +334,12 @@ namespace projectE
             Title.Text = grid_content.RowDefinitions.Count.ToString();
         }
 
+
+
+
+
+        //Блок методов для меню настроек -->
+        
         private void settings_load()//Подгрузка настроек
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
@@ -344,7 +350,7 @@ namespace projectE
             grid_content.ColumnDefinitions.Add(new ColumnDefinition());
             grid_content.ColumnDefinitions.Add(new ColumnDefinition());
             grid_content.ColumnDefinitions.Add(new ColumnDefinition());
-            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            //grid_content.ColumnDefinitions.Add(new ColumnDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
@@ -352,8 +358,9 @@ namespace projectE
             grid_content.RowDefinitions.Add(new RowDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
-            grid_content.RowDefinitions.Add(new RowDefinition());
+            //grid_content.RowDefinitions.Add(new RowDefinition());
             //grid_content.ShowGridLines = true;
+
             var foreColor = Brushes.WhiteSmoke;
             var backColor = Brushes.Cornsilk;
             var fontSize = 14;
@@ -404,8 +411,10 @@ namespace projectE
                 Foreground = foreColor,
                 Padding = new Thickness(5, 5, 5, 5)
             };
-
-
+            notify.Checked += notify_Checked;
+            notify.Unchecked += notify_Unchecked;
+            age.Checked += age_Checked;
+            age.Unchecked += age_Unchecked;
 
 
             //------------//------------//
@@ -429,7 +438,7 @@ namespace projectE
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
-                Content = "NetFlix",
+                Content = "netflix.com",
                 VerticalContentAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Background = backColor,
@@ -451,15 +460,15 @@ namespace projectE
                 Foreground = foreColor,
                 Padding = new Thickness(5, 5, 5, 5)
             };
-            CheckBox megogo_net = new CheckBox()//Megogo
+            CheckBox lostfilm_tv = new CheckBox()//Lostfilm
             {
-                Name = "checkbox_in_settings_megogo_net",
+                Name = "checkbox_in_settings_lostfilm_tv",
                 IsThreeState = false,
                 IsChecked = true,
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
-                Content = "megogo.net",
+                Content = "lostfilm.tv",
                 VerticalContentAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Background = backColor,
@@ -513,36 +522,18 @@ namespace projectE
                 Padding = new Thickness(5, 5, 5, 5)
             };
             //------------
-            CheckBox lostfilm_tv = new CheckBox()//Lostfilm
-            {
-                Name = "checkbox_in_settings_lostfilm_tv",
-                IsThreeState = false,
-                IsChecked = true,
-                Height = 40,
-                FontSize = fontSize,
-                //Width = 100,
-                Content = "lostfilm.tv",
-                VerticalContentAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Background = backColor,
-                Foreground = foreColor,
-                Padding = new Thickness(5, 5, 5, 5)
-            };
-            CheckBox otherSource = new CheckBox()//Add other source
-            {
-                Name = "checkbox_in_settings_other",
-                IsThreeState = false,
-                IsChecked = false,
-                Height = 40,
-                FontSize = fontSize,
-                //Width = 100,
-                Content = "Другой источник...",
-                VerticalContentAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Background = backColor,
-                Foreground = foreColor,
-                Padding = new Thickness(5, 5, 5, 5)
-            };
+            netflix_com.Checked += netflix_com_Checked;
+            netflix_com.Unchecked += netflix_com_Unchecked;
+            ivi_ru.Checked += ivi_ru_Checked;
+            ivi_ru.Unchecked += ivi_ru_Unchecked;
+            lostfilm_tv.Checked += lostfilm_tv_Checked;
+            lostfilm_tv.Unchecked += lostfilm_tv_Unchecked;
+            kinokrad_co.Checked += kinokrad_co_Checked;
+            kinokrad_co.Unchecked += kinokrad_co_Unchecked;
+            filmzor_net.Checked += filmzor_net_Checked;
+            filmzor_net.Unchecked += filmzor_net_Unchecked;
+            hdkinozor_ru.Checked += hdkinozor_ru_Checked;
+            hdkinozor_ru.Unchecked += hdkinozor_ru_Unchecked;
             //------------//------------//
 
 
@@ -573,9 +564,9 @@ namespace projectE
             Grid.SetRow(ivi_ru, 5);
             grid_content.Children.Add(ivi_ru);
 
-            Grid.SetColumn(megogo_net, 2);
-            Grid.SetRow(megogo_net, 5);
-            grid_content.Children.Add(megogo_net);
+            Grid.SetColumn(lostfilm_tv, 2);
+            Grid.SetRow(lostfilm_tv, 5);
+            grid_content.Children.Add(lostfilm_tv);
 
             Grid.SetColumn(kinokrad_co, 0);
             Grid.SetRow(kinokrad_co, 6);
@@ -588,22 +579,112 @@ namespace projectE
             Grid.SetColumn(hdkinozor_ru, 2);
             Grid.SetRow(hdkinozor_ru, 6);
             grid_content.Children.Add(hdkinozor_ru);
-
-            Grid.SetColumn(lostfilm_tv, 0);
-            Grid.SetRow(lostfilm_tv, 7);
-            grid_content.Children.Add(lostfilm_tv);
-
-            Grid.SetColumn(otherSource, 1);
-            Grid.SetRow(otherSource, 7);
-            Grid.SetColumnSpan(otherSource, 2);
-            grid_content.Children.Add(otherSource);
+            
             
         }
 
+        //Export or Import
         void save_my_butt_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Not ready");
         }
+        
+        //Notification
+        void notify_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void notify_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //Age verification
+        void age_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void age_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
+        //Netflix
+        void netflix_com_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void netflix_com_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //Ivi
+        void ivi_ru_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void ivi_ru_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //Lostfilm
+        void lostfilm_tv_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void lostfilm_tv_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //Kinokrad
+        void kinokrad_co_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void kinokrad_co_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //Filmzor
+        void filmzor_net_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void filmzor_net_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //Hdkinozor
+        void hdkinozor_ru_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void hdkinozor_ru_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //<-- Блок методов для меню настроек
+
+
+
+
+
+
+
         //показать все фильмы
         private void list_load()
         {
