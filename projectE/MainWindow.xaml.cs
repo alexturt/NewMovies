@@ -278,7 +278,7 @@ namespace projectE
             e.Handled = true;
         }
         
-        private void content_load(int index)
+        private void content_load(int index)//Подгрузка контента
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
@@ -346,6 +346,71 @@ namespace projectE
                     "Дата\t" + dt.Rows[i]["date"].ToString() + Environment.NewLine +
                     "Возраст\t" + dt.Rows[i]["agelimit"].ToString(),*/
         }
+
+        private void content_load(string mode)//Подгрузка контента
+        {
+            if (mode == "settings")
+            {
+                if (!grid.ColumnDefinitions[2].IsEnabled)
+                    openPanel();
+                grid_content.Children.Clear();
+                RowDefinition rd = new RowDefinition();
+                grid_content.RowDefinitions.Add(rd);
+
+                Button butt = new Button()
+                {
+                    Name = "button_in_settings",
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Height = 30,
+                    //Width = 100,
+                    Background = Brushes.WhiteSmoke,
+                    Foreground = Brushes.Black,
+                    Content = "Export/Import",
+                    ClickMode = ClickMode.Press
+                };
+                CheckBox notify = new CheckBox()
+                {
+                    Name = "checkbox_in_settings_notify",
+                    IsThreeState = false,
+                    IsChecked = true,
+                    Height = 20,
+                    //Width = 100,
+                    Content = "Включить уведомления?",
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Background = Brushes.AntiqueWhite,
+                    Foreground = Brushes.Black
+                };
+                CheckBox age = new CheckBox()
+                {
+                    Name = "checkbox_in_settings_age",
+                    IsThreeState = false,
+                    IsChecked = false,
+                    Height = 20,
+                    //Width = 100,
+                    Content = "Включить детский режим?",
+                    VerticalContentAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Background = Brushes.AntiqueWhite,
+                    Foreground = Brushes.Black
+                };
+
+                Grid.SetColumn(notify, 0);
+                Grid.SetRow(notify, 0);
+                grid_content.Children.Add(notify);
+
+                Grid.SetColumn(butt, 1);
+                Grid.SetRow(butt, 0);
+                grid_content.Children.Add(butt);
+
+                Grid.SetColumn(age, 0);
+                Grid.SetRow(age, 1);
+                grid_content.Children.Add(age);
+
+            }
+        }
+
         private void list_load()
         {
             button_sctoll_top.IsEnabled = false;
@@ -444,7 +509,7 @@ namespace projectE
                 
             }
         }
-        private void favotite_load()
+        private void favorite_load()
         {
             button_sctoll_top.IsEnabled = false;
             button_sctoll_top.Visibility = Visibility.Hidden;
@@ -667,7 +732,7 @@ namespace projectE
 
         private void button_favorite_Click_1(object sender, RoutedEventArgs e)
         {
-            favotite_load();
+            favorite_load();
             scroll_viewer_center.ScrollToTop();
         }
 
@@ -725,6 +790,11 @@ namespace projectE
                 button_sctoll_top.IsEnabled = true;
                 button_sctoll_top.Visibility = Visibility.Visible;
             }
+        }
+
+        private void Button_settings_Click(object sender, RoutedEventArgs e)//Settings butt clicked
+        {
+            content_load("settings");
         }
     }
 }
