@@ -722,6 +722,7 @@ namespace projectE
             }
             list_load();//показывает все фильмы
             scroll_viewer_center.ScrollToTop();//проскролить вверх
+            thread.Abort();
         }
         //нажали кнопку избранное (меню)
         private void button_favorite_Click_1(object sender, RoutedEventArgs e)
