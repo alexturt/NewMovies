@@ -70,11 +70,11 @@ namespace projectE
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Все", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Рекомендовано", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за сегодня", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за неделю", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за месяц", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Все", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Рекомендовано", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за сегодня", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за неделю", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за месяц", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
             combobox_top_choose.SelectedIndex = 0;
             GetMoviesFromDB();
             //Image img = new Image() {  Source = (dt_movies.Rows[11]["poster"] as BitmapImage) };
@@ -884,6 +884,20 @@ namespace projectE
         private void checkBox_Checked(object sender, RoutedEventArgs e)
         {
             Title.Text += "1 ";
+        }
+
+        private void scroll_viewer_center_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (e.VerticalOffset == 0)
+            {
+                button_sctoll_top.IsEnabled = false;
+                button_sctoll_top.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                button_sctoll_top.IsEnabled = true;
+                button_sctoll_top.Visibility = Visibility.Visible;
+            }
         }
     }
 }
