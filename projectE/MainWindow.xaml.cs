@@ -31,7 +31,7 @@ namespace projectE
             //grid.ColumnDefinitions[2].IsEnabled = false;
             //Width = 450;
             //stack_content.Visibility = Visibility.Hidden;
-            columns_count = 4;
+            columns_count = 3;
         }
         DB db = new DB();
         DataTable dt_movies = new DataTable();
@@ -47,6 +47,8 @@ namespace projectE
         //открытие правой панели
         void openPanel()
         {//тут все работает ок
+            if (grid.ColumnDefinitions[2].IsEnabled)
+                return;
             if (Width > 800)
             {
                 grid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
@@ -60,12 +62,15 @@ namespace projectE
                 Width += grid.ColumnDefinitions[1].ActualWidth;
                 stack_content.Visibility = Visibility.Visible;
             }
+            recommends_load();
         }
         //закрытие правой панели
         void closePanel()
         {//тут все работает ок
+            if (!grid.ColumnDefinitions[2].IsEnabled)
+                return;
             double size = grid.ColumnDefinitions[2].ActualWidth;
-            grid_content.Children.Clear();
+            //grid_content.Children.Clear();
             grid.ColumnDefinitions[2].IsEnabled = false;
             grid.ColumnDefinitions[2].Width = new GridLength(0);
             Width -= size;
@@ -170,7 +175,8 @@ namespace projectE
                 Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                Stretch = Stretch.Uniform
+                Stretch = Stretch.Uniform,
+                Tag = index
             };
 
             TextBlock tb = new TextBlock()
@@ -187,8 +193,9 @@ namespace projectE
                     "Дата\t" + ConvertDate(dt_movies.Rows[index]["date"].ToString()) + Environment.NewLine +
                     "Возраст\t" + dt_movies.Rows[index]["agerating"].ToString(),//добавить ссылки (трейлер инфа просмотр)???
                 //Margin = new Thickness(5,5,5,5),
-                Foreground = Brushes.Gray,
-                Padding = new Thickness(5, 5, 5, 5)
+                Foreground = Brushes.LightGray,
+                Padding = new Thickness(5, 5, 5, 5),
+                Tag = index
             };
 
             TextBlock tb2 = new TextBlock()
@@ -200,8 +207,9 @@ namespace projectE
                 FontSize = 16,
                 Text = dt_movies.Rows[index]["description"].ToString(),
                 //Margin = new Thickness(5,5,5,5),
-                Foreground = Brushes.Gray,
-                Padding = new Thickness(5, 5, 5, 5)
+                Foreground = Brushes.LightGray,
+                Padding = new Thickness(5, 5, 5, 5),
+                Tag = index
             };
             
             Grid.SetColumn(img, 0);
@@ -726,9 +734,9 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Text = dt_movies.Rows[i]["name"].ToString(),
-                Foreground = Brushes.Gray,
+                Foreground = Brushes.LightGray,
                 FontSize = 14,
-                Padding = new Thickness(2,2,0,0),
+                Padding = new Thickness(5,5,5,5),
                 Tag = i//index (не id)
             };
             Image img = new Image()//постер
@@ -747,6 +755,7 @@ namespace projectE
             _grid_row.Children.Add(img);
 
             Grid.SetColumn(tb, i % columns_count * 2);
+            Grid.SetColumnSpan(tb, 2);
             Grid.SetRow(tb, 1);
             _grid_row.Children.Add(tb);
 
@@ -766,6 +775,11 @@ namespace projectE
             {
                 //stack_content.Visibility = Visibility.Hidden;
                 //Title.Text = grid_list.RowDefinitions.Count.ToString();
+                this.Resources.Remove("textColor");
+                SolidColorBrush solidColorBrush = new SolidColorBrush(Colors.Red);
+                Resources.Add("textColor", solidColorBrush);
+                Title.Foreground = Brushes.Red;
+                //this.UpdateLayout();
             }
         }
         bool isRun;

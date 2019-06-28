@@ -18,6 +18,7 @@
         >
         <!--начало стилей-->
     <Window.Resources>
+        <SolidColorBrush x:Key="redStyle" Color="BlanchedAlmond" />
         <!--<LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
@@ -146,7 +147,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightSlateGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
+            <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
             <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click">
                 <Image Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center" Source="Resources/hide.png"/>
             </Button>
@@ -173,7 +174,7 @@
                 <Button x:Name="button_home" Width="40" Height="40" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_home_Click">
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/домик2.png" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_Click_1">
+                <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" >
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/звезда2.png" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_watched" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_watched_Click_1" Visibility="Collapsed">
@@ -184,7 +185,7 @@
                 </Button>
             </Grid>
         </Border>
-        <!-- верхняя панель -->
+        <!-- верхняя центральная панель -->
         <Border  Grid.Row="1" Grid.Column="1" Name="border_search" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <Grid Name="grid_search" Grid.Column="1" Grid.Row="1" Background="#17212B">
                 <Grid.RowDefinitions>
@@ -202,8 +203,24 @@
                 <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
                     <Image Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Source="Resources/панель2.png" Stretch="Fill"/>
                 </Button>
-                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="#FF6C7883" MaxLength="255"/>
-                <ComboBox Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="#FF0E1621"></ComboBox>
+                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="LightGray" MaxLength="255"/>
+                <ComboBox Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="LightGray"></ComboBox>
+            </Grid>
+        </Border>
+        <!-- верхняя правая панель -->
+        <Border  Grid.Row="1" Grid.Column="2" Name="border_content_header" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_content_header" Grid.Column="1" Grid.Row="2" Background="#17212B">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="{Binding ElementName= button_panel, Path=ActualWidth}"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="textBox_content_headet" FontSize="14" Grid.Column="0" Background="{x:Null}" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Рекомендовано" VerticalAlignment="Stretch" Width="auto" Foreground="LightGray"/>
+                <Button x:Name="button_panel_close" Width="40" Height="40" Grid.Column="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
+                    <Image Height="auto" Margin="5" Width="auto" Source="Resources/arrow.png" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
             </Grid>
         </Border>
         <!-- центральная панель -->
@@ -212,8 +229,7 @@
                 <Grid Name="grid_list" Background="#0E1621"  ShowGridLines="False" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
                     
                 </Grid>
-                <!--<DataGrid Name="datagrid_list" ColumnWidth="*" Background="{x:Null}" Foreground="LightSlateGray" HeadersVisibility="None" IsReadOnly="True" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" ScrollViewer.CanContentScroll="True" AutoGeneratingColumn="datagrid_list_AutoGeneratingColumn">
-                </DataGrid>-->
+                
             </StackPanel>
         </ScrollViewer>
         <Button Name="button_sctoll_top" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
@@ -225,7 +241,7 @@
             <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Hidden">
 
                 <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B">
-                    <Grid Name="grid_content">
+                    <Grid Name="grid_content" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
