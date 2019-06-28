@@ -223,7 +223,7 @@ namespace projectE
 
 
 
-        //Блок методов для меню настроек -->
+        // Блок методов для меню настроек -->
         
         private void settings_load()//Подгрузка настроек
         {
@@ -472,6 +472,7 @@ namespace projectE
         void save_my_butt_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Not ready");
+            MessageBox.Show(db.getSettings("age"));
         }
         
         //Notification
@@ -568,7 +569,7 @@ namespace projectE
             settings_load();
         }
 
-        //<-- Блок методов для меню настроек
+        // <-- Блок методов для меню настроек
 
 
 

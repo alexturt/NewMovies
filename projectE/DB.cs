@@ -34,8 +34,8 @@ namespace projectE
             // устанавливаем соединение с БД
             conn.Open();
         }
-        
-        
+
+
         // добавление фильма
         public void AddMovie(string name, int year, string date,
             string country, string genres, string agerating,
@@ -47,12 +47,12 @@ namespace projectE
             {
                 bytes = wb.DownloadData(poster);
             }
-            catch(Exception ex)
-            {            }
+            catch (Exception ex)
+            { }
             cmd = new SQLiteCommand(conn);
             //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
-            cmd.CommandText = @"insert into movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) "+
-                "select @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched "+
+            cmd.CommandText = @"insert into movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) " +
+                "select @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched " +
                 "where not exists(SELECT 1 from movies where name=@name and year=@year)";
             cmd.Parameters.Add("@name", DbType.String).Value = name;
             cmd.Parameters.Add("@year", DbType.Int32).Value = year;
@@ -69,6 +69,34 @@ namespace projectE
             cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
             cmd.ExecuteNonQuery();
         }
+        // 
+        
+
+
+        // Settings get/set methods -->
+
+        public string getSettings(string setting)
+        {
+            if (conn.State == ConnectionState.Closed)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings WHERE setting='"+setting+"'", conn);
+            dataAdapter.Fill(dt);
+            return dt.Rows[0].ItemArray[0].ToString();
+        }
+
+        public void setSettings()
+        {
+            if (conn.State == ConnectionState.Closed)
+                connect();
+            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings WHERE setting='" + setting + "'", conn);
+            //dataAdapter.ToString();
+        }
+
+        // <-- Settings get/set methods
+
+
+
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
         public DataTable GetMovies()
         {
