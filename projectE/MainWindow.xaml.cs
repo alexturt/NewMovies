@@ -548,6 +548,12 @@ namespace projectE
         {
 
         }
+        
+        //Settings butt clicked
+        private void Button_settings_Click(object sender, RoutedEventArgs e)
+        {
+            settings_load();
+        }
 
         //<-- Блок методов для меню настроек
 
@@ -768,11 +774,7 @@ namespace projectE
                 button_sctoll_top.Visibility = Visibility.Visible;//показать кнопку "вверх"
             }
         }
-        //Settings butt clicked
-        private void Button_settings_Click(object sender, RoutedEventArgs e)
-        {
-            settings_load();
-        }
+        
         //нажали кнопку просмотренное (меню)
         private void button_watched_Click_1(object sender, RoutedEventArgs e)
         {

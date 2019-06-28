@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Data.SQLite;
 using System.Data;
-using System.Windows.Controls;
+using System.Data.SQLite;
 using System.Net;
 
 namespace projectE
