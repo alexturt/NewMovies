@@ -37,7 +37,7 @@ namespace projectE
             string description, string poster, string urltrailer,
             string urlinfo, string urlwatch, bool favorite, bool watched)
         {
-            if (conn.State == ConnectionState.Closed)
+            if (conn == null)
                 connect();
             byte[] bytes = null;
             try
@@ -69,7 +69,7 @@ namespace projectE
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
         public DataTable GetMovies()
         {
-            if (conn.State == ConnectionState.Closed)
+            if (conn == null)
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date desc", conn);
@@ -79,7 +79,7 @@ namespace projectE
         //выгрузка всго избранного, сортировка по дате(сначала свежие)
         public DataTable GetFavorites()
         {
-            if (conn.State == ConnectionState.Closed)
+            if (conn == null)
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=true order by date desc", conn);
@@ -89,7 +89,7 @@ namespace projectE
         //выгрузка всго просмотренного, сортировка по дате(сначала свежие)
         public DataTable GetWatched()
         {
-            if (conn.State == ConnectionState.Closed)
+            if (conn == null)
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where watched=true order by date desc", conn);
@@ -99,21 +99,21 @@ namespace projectE
         //устанавливаем/снимаем избранное
         public void SetFavorite(int index, bool favorite)
         {
-            if (conn.State == ConnectionState.Closed)
+            if (conn == null)
                 connect();
             ExecuteQuery("update movies set favorite=" + favorite + " where id=" + index);
         }
         //устанавливаем/снимаем просмотренное
         public void SetWatched(int index, bool watched)
         {
-            if (conn.State == ConnectionState.Closed)
+            if (conn == null)
                 connect();
             ExecuteQuery("update movies set watched=" + watched + " where id=" + index);
         }
         //для удаления удаленных записей из файла БД
         public void Vacuum()
         {
-            if (conn.State == ConnectionState.Closed)
+            if (conn == null)
                 connect();
             ExecuteQuery("vacuum;");
             close();

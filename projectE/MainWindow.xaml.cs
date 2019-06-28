@@ -720,6 +720,7 @@ namespace projectE
             isRun = true;
             Parser parser = new Parser();
             parser.UpdateList();
+            
             isRun = false;
         }
         //нажали кнопку домой
@@ -732,7 +733,7 @@ namespace projectE
             }
             list_load();//показывает все фильмы
             scroll_viewer_center.ScrollToTop();//проскролить вверх
-            thread.Abort();
+      //      thread.Abort();
         }
         //нажали кнопку избранное (меню)
         private void button_favorite_Click_1(object sender, RoutedEventArgs e)
