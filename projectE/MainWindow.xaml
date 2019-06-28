@@ -123,8 +123,8 @@
         </Style>
     </Window.Resources>
         <!--конец стилей-->
-    
-    <Grid Name="grid" Width="auto">
+
+    <Grid Name="grid" Width="auto" Background="#17212B">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
@@ -171,16 +171,16 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="button_home" Width="40" Height="40" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_home_Click">
-                    <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/домик2.png" Stretch="Fill"/>
+                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/домик2.png" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_Click_1">
-                    <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/звезда2.png" Stretch="Fill"/>
+                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/звезда2.png" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_watched" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_watched_Click_1" >
-                    <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/глаз2.png" Stretch="Fill"/>
+                <Button x:Name="button_watched" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_watched_Click_1" Visibility="Collapsed">
+                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/глаз2.png" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click">
-                    <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/шестерня2.png" Stretch="Fill"/>
+                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/шестерня2.png" Stretch="Fill"/>
                 </Button>
             </Grid>
         </Border>
@@ -197,35 +197,31 @@
                     <ColumnDefinition Width="{Binding ElementName= button_panel, Path=ActualWidth}"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="button_search" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black">
-                    <Image Height="40" Margin="0,0,0,0" Width="40" Source="Resources/лупа2.png" Stretch="Fill" VerticalAlignment="Top"/>
+                    <Image Height="auto" Margin="5" Width="auto" Source="Resources/лупа2.png" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
                 <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
-                    <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Top" Width="40" Source="Resources/панель2.png" Stretch="Fill"/>
+                    <Image Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Source="Resources/панель2.png" Stretch="Fill"/>
                 </Button>
-                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8,8,8,8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="#FF6C7883" MaxLength="255"/>
-                <ComboBox Name="combobox_top_choose" Width="auto" Height="auto" Margin="8,8,8,8" Background="#FF0E1621" Foreground="#FF0E1621"></ComboBox>
+                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="#FF6C7883" MaxLength="255"/>
+                <ComboBox Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="#FF0E1621"></ComboBox>
             </Grid>
         </Border>
         <!-- центральная панель -->
-        <ScrollViewer Name="scroll_viewer_center" Grid.Column="1"  HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer Name="scroll_viewer_center" Grid.Column="1"  HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Visible" ScrollChanged="scroll_viewer_center_ScrollChanged">
             <StackPanel Name="stack_list" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" HorizontalAlignment="Stretch" Background="#0E1621" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" CanVerticallyScroll="True" CanHorizontallyScroll="True" MouseWheel="stack_list_MouseWheel">
                 <Grid Name="grid_list" Background="#0E1621"  ShowGridLines="False" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" MaxWidth="250"></ColumnDefinition>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
-                        <ColumnDefinition Width="80"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                    
                 </Grid>
                 <!--<DataGrid Name="datagrid_list" ColumnWidth="*" Background="{x:Null}" Foreground="LightSlateGray" HeadersVisibility="None" IsReadOnly="True" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" ScrollViewer.CanContentScroll="True" AutoGeneratingColumn="datagrid_list_AutoGeneratingColumn">
                 </DataGrid>-->
             </StackPanel>
         </ScrollViewer>
-        <Button Name="button_sctoll_top" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0">
+        <Button Name="button_sctoll_top" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
             <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Source="Resources/up.png" Stretch="Fill"/>
         </Button>
 
         <!-- правая панель -->
-        <Border  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+        <Border  Grid.Row="2" Grid.Column="2"  Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Hidden">
 
                 <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B">

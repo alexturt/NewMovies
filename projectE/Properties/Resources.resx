@@ -130,30 +130,6 @@
   <data name="nowatched" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\nowatched.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="poster1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\poster1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poster2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\poster2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poster3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\poster3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poster4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\poster4.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poster5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\poster5.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poster6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\poster6.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poster7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\poster7.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="posterTEST" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\posterTEST.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="poster_none" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\poster_none.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
