@@ -472,7 +472,7 @@ namespace projectE
         void save_my_butt_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Not ready");
-            MessageBox.Show(db.getSettings("age"));
+ //           MessageBox.Show(db.getSettings("age"));
         }
         
         //Notification
@@ -786,7 +786,7 @@ namespace projectE
             }
             new_movies_load();//показывает все фильмы
             scroll_viewer_center.ScrollToTop();//проскролить вверх
-            thread.Abort();
+       //     thread.Abort();
             GC.Collect();
         }
         //нажали кнопку избранное (меню)
