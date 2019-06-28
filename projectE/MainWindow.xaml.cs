@@ -70,6 +70,12 @@ namespace projectE
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            combobox_top_choose.Items.Add(new TextBlock() { Text = "Все", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { Text = "Рекомендовано", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за сегодня", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за неделю", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за месяц", Foreground = Brushes.LightSlateGray, Background = Brushes.Transparent });
+            combobox_top_choose.SelectedIndex = 0;
             GetMoviesFromDB();
             //Image img = new Image() {  Source = (dt_movies.Rows[11]["poster"] as BitmapImage) };
             //grid_content.Children.Add(img);
