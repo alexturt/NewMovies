@@ -13,6 +13,11 @@ namespace projectE
         private string path = "Data Source="+ Environment.CurrentDirectory + "\\newMovies.db;New=False;Version=3";
         private WebClient wb = new WebClient();
 
+        public DB()
+        {
+            connect();
+        }
+
         public void connect()
         {
             // создаём объект для подключения к БД
@@ -37,8 +42,6 @@ namespace projectE
             string description, string poster, string urltrailer,
             string urlinfo, string urlwatch, bool favorite, bool watched)
         {
-            if (conn.State == ConnectionState.Closed)
-                connect();
             byte[] bytes = null;
             try
             {
@@ -69,8 +72,6 @@ namespace projectE
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
         public DataTable GetMovies()
         {
-            if (conn.State == ConnectionState.Closed)
-                connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date desc", conn);
             dataAdapter.Fill(dt);
@@ -79,8 +80,6 @@ namespace projectE
         //выгрузка всго избранного, сортировка по дате(сначала свежие)
         public DataTable GetFavorites()
         {
-            if (conn.State == ConnectionState.Closed)
-                connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=true order by date desc", conn);
             dataAdapter.Fill(dt);
@@ -89,8 +88,6 @@ namespace projectE
         //выгрузка всго просмотренного, сортировка по дате(сначала свежие)
         public DataTable GetWatched()
         {
-            if (conn.State == ConnectionState.Closed)
-                connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where watched=true order by date desc", conn);
             dataAdapter.Fill(dt);
@@ -99,22 +96,16 @@ namespace projectE
         //устанавливаем/снимаем избранное
         public void SetFavorite(int index, bool favorite)
         {
-            if (conn.State == ConnectionState.Closed)
-                connect();
             ExecuteQuery("update movies set favorite=" + favorite + " where id=" + index);
         }
         //устанавливаем/снимаем просмотренное
         public void SetWatched(int index, bool watched)
         {
-            if (conn.State == ConnectionState.Closed)
-                connect();
             ExecuteQuery("update movies set watched=" + watched + " where id=" + index);
         }
         //для удаления удаленных записей из файла БД
         public void Vacuum()
         {
-            if (conn.State == ConnectionState.Closed)
-                connect();
             ExecuteQuery("vacuum;");
             close();
         }
