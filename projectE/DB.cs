@@ -47,7 +47,10 @@ namespace projectE
             catch(Exception ex)
             {            }
             cmd = new SQLiteCommand(conn);
-            cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
+            //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
+            cmd.CommandText = @"insert into movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) "+
+                "select @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched "+
+                "where not exists(SELECT 1 from movies where name=@name and year=@year)";
             cmd.Parameters.Add("@name", DbType.String).Value = name;
             cmd.Parameters.Add("@year", DbType.Int32).Value = year;
             cmd.Parameters.Add("@date", DbType.Date).Value = date;
@@ -63,13 +66,33 @@ namespace projectE
             cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
             cmd.ExecuteNonQuery();
         }
-        //выгрузка всех фильмов
+        //выгрузка всех фильмов, сортировка по дате(сначала свежие)
         public DataTable GetMovies()
         {
             if (conn.State == ConnectionState.Closed)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date desc", conn);
+            dataAdapter.Fill(dt);
+            return dt;
+        }
+        //выгрузка всго избранного, сортировка по дате(сначала свежие)
+        public DataTable GetFavorites()
+        {
+            if (conn.State == ConnectionState.Closed)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=true order by date desc", conn);
+            dataAdapter.Fill(dt);
+            return dt;
+        }
+        //выгрузка всго просмотренного, сортировка по дате(сначала свежие)
+        public DataTable GetWatched()
+        {
+            if (conn.State == ConnectionState.Closed)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where watched=true order by date desc", conn);
             dataAdapter.Fill(dt);
             return dt;
         }

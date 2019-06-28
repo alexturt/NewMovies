@@ -62,14 +62,13 @@ namespace projectE
         }
         //тестовые данные
         DataTable dt = new DataTable();
-        BitmapImage noFavoriteImg = new BitmapImage(new Uri("/Resources/пустаязвезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage FavoriteImg = new BitmapImage(new Uri("/Resources/звезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage noFavoriteImg = new BitmapImage(new Uri("/Resources/пустаязвезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage FavoriteImg = new BitmapImage(new Uri("/Resources/звезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage posterNONE = new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
 
-
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+    private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             GetMoviesFromDB();
             //Image img = new Image() {  Source = (dt_movies.Rows[11]["poster"] as BitmapImage) };
@@ -85,9 +84,9 @@ namespace projectE
         //нажатие на кнопку добавить/удалить из избранного
         private void button_favorite_Click(object sender, RoutedEventArgs e)
         {
-            int index = Convert.ToInt32((sender as Button).Tag);//получить id фильма
+            int index = Convert.ToInt32((sender as Button).Tag);//получить номер строки
             bool favorite = Convert.ToBoolean(dt_movies.Rows[index]["favorite"]);
-            db.SetFavorite(Convert.ToInt32(dt_movies.Rows[index]["id"]),!favorite);
+            db.SetFavorite(Convert.ToInt32(dt_movies.Rows[index]["id"]),!favorite);//изменяем в бд
             if (favorite)
             {
                 (sender as Button).Content = new Image() { Source = noFavoriteImg };
@@ -102,9 +101,9 @@ namespace projectE
         //нажатие на кнопку добавить/удалить из просмотренного
         private void button_watched_Click(object sender, RoutedEventArgs e)
         {
-            int index = Convert.ToInt32((sender as Button).Tag);//получить id фильма
-            //тут добавить запрос на редактирования в БД
+            int index = Convert.ToInt32((sender as Button).Tag);//получить номер строки
             bool watched = Convert.ToBoolean(dt_movies.Rows[index]["watched"]);
+            db.SetWatched(Convert.ToInt32(dt_movies.Rows[index]["id"]), !watched);//изменяем в бд
             if (watched)
             {
                 (sender as Button).Content = new Image() { Source = noWatchedImg };
@@ -135,26 +134,22 @@ namespace projectE
             }
             e.Handled = true;//это чтобы родительские элементы ничего не натворили
         }
-        
-        private void content_load(int index)//Подгрузка контента
+        //Подгрузка контента справа
+        private void content_load(int index)
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
             grid_content.RowDefinitions.Clear();
             grid_content.ColumnDefinitions.Clear();
-            RowDefinition rd = new RowDefinition();
             grid_content.ColumnDefinitions.Add(new ColumnDefinition());
             grid_content.ColumnDefinitions.Add(new ColumnDefinition());
-            grid_content.RowDefinitions.Add(rd);
+            grid_content.RowDefinitions.Add(new RowDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
             Image img = new Image()
             {
                 Name = "image_right_content",
-                Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative))
-                {
-                    CreateOptions = BitmapCreateOptions.IgnoreImageCache
-                } : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
+                Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Stretch = Stretch.Uniform
@@ -570,6 +565,9 @@ namespace projectE
             button_sctoll_top.Visibility = Visibility.Hidden;//скрыть кнопку "вверх"
             grid_list.Children.Clear();//очистить элементы из центрального грида
             grid_list.RowDefinitions.Clear();//удалить все строки из центрального грида
+            db.connect();
+            db.GetMovies();
+            db.close();
             for (int i = 0; i < dt_movies.Rows.Count; i++)//цикл по всем фильмам
             {
                 create_and_add_elements(i);
@@ -582,6 +580,9 @@ namespace projectE
             button_sctoll_top.Visibility = Visibility.Hidden;//скрываем кнопку "вверх"
             grid_list.Children.Clear();//очищаем центральную панель от элементов
             grid_list.RowDefinitions.Clear();//удаляем все строки в центральном гриде
+            db.connect();
+            db.GetFavorites();
+            db.close();
             for (int i = 0; i < dt_movies.Rows.Count; i++)//цикл по всем фильмам
             {
                 if (Convert.ToBoolean(dt_movies.Rows[i]["favorite"]) == false)//если фильм отмечен избранным
@@ -596,6 +597,9 @@ namespace projectE
             button_sctoll_top.Visibility = Visibility.Hidden;//скрываем кнопку "вверх"
             grid_list.Children.Clear();//очищаем элементы в центральной панели
             grid_list.RowDefinitions.Clear();//удаляем все строки в центральной панели
+            db.connect();
+            db.GetWatched();
+            db.close();
             for (int i = 0; i < dt_movies.Rows.Count; i++)//цикл по всем фильмам
             {
                 if (Convert.ToBoolean(dt_movies.Rows[i]["watched"]) == false)//если фильм не просмотренный
@@ -655,7 +659,7 @@ namespace projectE
             };
             Image img = new Image()//постер
             {
-                Source = dt_movies.Rows[i]["poster"].GetType()==typeof(DBNull)? new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }:LoadImage((byte[])dt_movies.Rows[i]["poster"]),//картинка из массива по id
+                Source = dt_movies.Rows[i]["poster"].GetType()==typeof(DBNull)? posterNONE :LoadImage((byte[])dt_movies.Rows[i]["poster"]),//картинка из массива по id
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Stretch = Stretch.Uniform,
@@ -701,7 +705,7 @@ namespace projectE
             if(e.Key == Key.Space)//если нажали пробел
             {
                 //stack_content.Visibility = Visibility.Hidden;
-                Title.Text = grid_list.RowDefinitions.Count.ToString();
+                //Title.Text = grid_list.RowDefinitions.Count.ToString();
             }
         }
         bool isRun;
@@ -739,9 +743,15 @@ namespace projectE
         private void button_maximazing_Click(object sender, RoutedEventArgs e)
         {
             if (WindowState == WindowState.Maximized)//если сейчас максимальный
+            {
                 WindowState = WindowState.Normal;//то возвращаем к нормальному
+            }
             else
+            {
+                if (!grid.ColumnDefinitions[2].IsEnabled)
+                    openPanel();
                 WindowState = WindowState.Maximized;//иначе делаем во весь экран
+            }
         }
         //нажали кнопку скрыть в трей
         private void button_hide_Click(object sender, RoutedEventArgs e)
@@ -816,7 +826,7 @@ namespace projectE
         //конвертирует дату из "гггг.мм.дд 00:00:00" в "20 июня 2019"
         private string ConvertDate(string str)
         {
-            if (str != null || str != "")
+            if (str != null && str != "")
             {
                 string[] temp = str.Remove(10).Split('.');
                 switch (temp[1])
@@ -863,6 +873,11 @@ namespace projectE
             else
                 str = "Скоро";
             return str;
+        }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Title.Text += "1 ";
         }
     }
 }
