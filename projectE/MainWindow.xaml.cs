@@ -736,7 +736,7 @@ namespace projectE
                 Text = dt_movies.Rows[i]["name"].ToString(),
                 Foreground = Brushes.LightGray,
                 FontSize = 14,
-                Padding = new Thickness(5,5,5,5),
+                Padding = new Thickness(5,5,5,25),
                 Tag = i//index (не id)
             };
             Image img = new Image()//постер

@@ -4,23 +4,23 @@
              xmlns:local="clr-namespace:projectE"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <SolidColorBrush x:Key="StandardBorderBrush" Color="#888" />
-        <SolidColorBrush x:Key="StandardBackgroundBrush" Color="#FFF" />
+        <SolidColorBrush x:Key="StandardBorderBrush" Color="Red" />
+        <SolidColorBrush x:Key="StandardBackgroundBrush" Color="Red" />
             <SolidColorBrush x:Key="HoverBorderBrush" Color="#DDD" />
-            <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="DarkSlateGray" />
-            <SolidColorBrush x:Key="SelectedForegroundBrush" Color="Black" />
-            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
-        <SolidColorBrush x:Key="NormalBrush" Color="#888" />
+            <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Red" />
+            <SolidColorBrush x:Key="SelectedForegroundBrush" Color="Red" />
+            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="Red" />
+        <SolidColorBrush x:Key="NormalBrush" Color="Red" />
                 <SolidColorBrush x:Key="NormalBorderBrush" Color="#888" />
-        <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#888" />
-                    <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#888" />
+        <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#283949" />
+        <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#283949" />
         <LinearGradientBrush x:Key="ListBoxBackgroundBrush"
 
             StartPoint="0,0" EndPoint="1,0.001">
                         <GradientBrush.GradientStops>
                             <GradientStopCollection>
-                                <GradientStop Color="White" Offset="0.0" />
-                    <GradientStop Color="White" Offset="0.6" />
+                                <GradientStop Color="Red" Offset="0.0" />
+                    <GradientStop Color="Red" Offset="0.6" />
                                     <GradientStop Color="#DDDDDD" Offset="1.2"/>
                 </GradientStopCollection>
             </GradientBrush.GradientStops>
@@ -30,8 +30,8 @@
             StartPoint="0,0" EndPoint="0,1">
                                         <GradientBrush.GradientStops>
                                             <GradientStopCollection>
-                                                <GradientStop Color="#FFF" Offset="0.0"/>
-                    <GradientStop Color="#CCC" Offset="1.0"/>
+                                                <GradientStop Color="Red" Offset="0.0"/>
+                    <GradientStop Color="Red" Offset="1.0"/>
                                             </GradientStopCollection>
                                         </GradientBrush.GradientStops>
                                         </LinearGradientBrush>
@@ -61,13 +61,13 @@
           Name="Border"
 
           Margin="1"
-          CornerRadius="2"
+          CornerRadius="0"
 
           Background="#283949"
 
           BorderBrush="{StaticResource NormalBorderBrush}"
 
-          BorderThickness="1">
+          BorderThickness="10">
                                                                 <Path
             HorizontalAlignment="Center"
 
@@ -98,7 +98,7 @@
                                                 <Setter Property="SnapsToDevicePixels" Value="True"/>
                                                 <Setter Property="OverridesDefaultStyle" Value="true"/>
                                                 <Setter Property="IsTabStop" Value="false"/>
-                                                <Setter Property="Focusable" Value="false"/>
+                                                <Setter Property="Visibility" Value="Collapsed"/>
                                                 <Setter Property="Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -118,12 +118,12 @@
                                                         <ControlTemplate TargetType="{x:Type Thumb}">
                                                             <Border
 
-          CornerRadius="2"
+          CornerRadius="0"
           Background="{TemplateBinding Background}"
 
           BorderBrush="{TemplateBinding BorderBrush}"
 
-          BorderThickness="1" />
+          BorderThickness="0" />
                                                         </ControlTemplate>
                                                     </Setter.Value>
                                                 </Setter>
@@ -141,14 +141,14 @@
                 <Border
       Grid.RowSpan="3"
 
-      CornerRadius="2"
-      Background="#F0F0F0" />
+      CornerRadius="0"
+      Background="#0E1621" />
                                                                 <RepeatButton
 
       Grid.Row="0"
       Style="{StaticResource ScrollBarLineButton}"
 
-      Height="18"
+      Height="0"
       Command="ScrollBar.LineUpCommand"
 
       Content="M 0 4 L 8 4 L 4 0 Z" />
@@ -156,7 +156,8 @@
 
       Name="PART_Track"
 
-      Grid.Row="1"
+      Grid.Row="0"
+                                                                        Grid.RowSpan="3"
       IsDirectionReversed="true">
                     <Track.DecreaseRepeatButton>
                         <RepeatButton
@@ -170,7 +171,7 @@
 
           Style="{StaticResource ScrollBarThumb}"
 
-          Margin="1,0,1,0"
+          Margin="0,0,0,0"
           Background="{StaticResource HorizontalNormalBrush}"
 
           BorderBrush="{StaticResource HorizontalNormalBorderBrush}" />
@@ -188,7 +189,7 @@
       Grid.Row="3"
       Style="{StaticResource ScrollBarLineButton}"
 
-      Height="18"
+      Height="0"
       Command="ScrollBar.LineDownCommand"
 
       Content="M 0 0 L 4 4 L 8 0 Z"/>
@@ -245,15 +246,15 @@
                                                                             <RepeatButton
 
           Style="{StaticResource ScrollBarPageButton}"
-
+        Visibility="Collapsed"
           Command="ScrollBar.PageRightCommand" />
                                                                         </Track.IncreaseRepeatButton>
                                                                     </Track>
                                                                     <RepeatButton
 
       Grid.Column="3"
-      Style="{StaticResource ScrollBarLineButton}"
-
+      Style="{StaticResource ScrollBarLineButton}"  
+      Visibility="Collapsed"
       Width="18"
       Command="ScrollBar.LineRightCommand"
 
