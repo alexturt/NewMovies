@@ -224,7 +224,7 @@ namespace projectE
             Grid.SetColumnSpan(tb2, 2);
             Grid.SetRow(tb2, 1);
             grid_content.Children.Add(tb2);
-            Title.Text = grid_content.RowDefinitions.Count.ToString();
+            //Title.Text = grid_content.RowDefinitions.Count.ToString();
         }
 
 
@@ -232,7 +232,11 @@ namespace projectE
 
 
         // Блок методов для меню настроек -->
-        
+
+        bool[] IsChecked;//Settings 
+        // 0 - notify; 1 - age; 2 - netflix_com; 3 - ivi_ru;
+        // 4 - lostfilm_tv; 5 - kinokrad_co; 6 - filmzor_net; 7 - hdkinozor_ru;
+
         private void settings_load()//Подгрузка настроек
         {
             if (!grid.ColumnDefinitions[2].IsEnabled)
@@ -309,7 +313,16 @@ namespace projectE
             age.Checked += age_Checked;
             age.Unchecked += age_Unchecked;
 
-
+            ComboBox Sources = new ComboBox()
+            {
+                Name = "combobox_in_settings",
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = 40,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
             //------------//------------//
             Label lbl = new Label()//Лейбл для выбора источников
             {
@@ -428,7 +441,7 @@ namespace projectE
             hdkinozor_ru.Checked += hdkinozor_ru_Checked;
             hdkinozor_ru.Unchecked += hdkinozor_ru_Unchecked;
             //------------//------------//
-
+            
 
             Grid.SetColumn(notify, 0);
             Grid.SetRow(notify, 0);
@@ -444,6 +457,10 @@ namespace projectE
             Grid.SetRow(save_my_butt, 0);
             Grid.SetRowSpan(save_my_butt, 2);
             grid_content.Children.Add(save_my_butt);
+
+            Grid.SetColumn(Sources, 0);
+            Grid.SetRow(Sources, 2);
+            grid_content.Children.Add(Sources);
 
             Grid.SetColumn(lbl, 0);
             Grid.SetRow(lbl, 4);
@@ -486,7 +503,7 @@ namespace projectE
         //Notification
         void notify_Checked(object sender, RoutedEventArgs e)
         {
-
+            //notify
         }
 
         void notify_Unchecked(object sender, RoutedEventArgs e)
