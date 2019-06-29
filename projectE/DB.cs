@@ -66,6 +66,33 @@ namespace projectE
             cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
             cmd.ExecuteNonQuery();
         }
+        // 
+
+
+
+        // Settings get/set methods -->
+        // (НЕ УДАЛЯЙТЕ)
+        public string GetSettings(string setting)
+        {
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings WHERE setting='" + setting + "'", conn);
+            dataAdapter.Fill(dt);
+            return dt.Rows[0].ItemArray[0].ToString();
+        }
+
+        public void SetSettings(string setting, bool check)
+        {
+            if (conn == null)
+                connect();
+            ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE setting=" + setting);
+        }
+        // (НЕ УДАЛЯЙТЕ)
+        // <-- Settings get/set methods
+
+
+            
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
         public DataTable GetMovies()
         {

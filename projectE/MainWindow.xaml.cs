@@ -479,8 +479,8 @@ namespace projectE
         //Export or Import
         void save_my_butt_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Not ready");
- //           MessageBox.Show(db.getSettings("age"));
+            //MessageBox.Show("Not ready");
+            MessageBox.Show(db.GetSettings("age"));
         }
         
         //Notification
@@ -568,7 +568,7 @@ namespace projectE
 
         void hdkinozor_ru_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            
         }
         
         //Settings butt clicked
