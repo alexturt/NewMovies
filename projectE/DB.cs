@@ -45,7 +45,7 @@ namespace projectE
                 bytes = wb.DownloadData(poster);
             }
             catch(Exception ex)
-            {            }
+            { System.Windows.MessageBox.Show(ex.ToString()); }
             cmd = new SQLiteCommand(conn);
             //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
             cmd.CommandText = @"insert into movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) "+
@@ -72,14 +72,15 @@ namespace projectE
 
         // Settings get/set methods -->
         // (НЕ УДАЛЯЙТЕ)
-        public string GetSettings(string setting)
+        public DataTable GetSettings()//string setting)
         {
             if (conn == null)
                 connect();
+            System.Windows.MessageBox.Show("GetSettings()");
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings WHERE setting='" + setting + "'", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings", conn);
             dataAdapter.Fill(dt);
-            return dt.Rows[0].ItemArray[0].ToString();
+            return dt;
         }
 
         public void SetSettings(string setting, bool check)

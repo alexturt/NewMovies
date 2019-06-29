@@ -232,13 +232,18 @@ namespace projectE
 
 
         // Блок методов для меню настроек -->
-
-        bool[] IsChecked;//Settings 
+        const int settings_amount = 8;
+        bool[] IsChecked = new bool[settings_amount];//Settings 
         // 0 - notify; 1 - age; 2 - netflix_com; 3 - ivi_ru;
         // 4 - lostfilm_tv; 5 - kinokrad_co; 6 - filmzor_net; 7 - hdkinozor_ru;
 
         private void settings_load()//Подгрузка настроек
         {
+            DataTable dt = db.GetSettings();
+            for (int i = 0; i < settings_amount; i++)
+            {
+                IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
+            }
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
@@ -282,7 +287,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_notify",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[0],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -297,7 +302,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_age",
                 IsThreeState = false,
-                IsChecked = false,
+                IsChecked = IsChecked[1],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -312,7 +317,7 @@ namespace projectE
             notify.Unchecked += notify_Unchecked;
             age.Checked += age_Checked;
             age.Unchecked += age_Unchecked;
-
+            //notify.IsChecked = true;
             ComboBox Sources = new ComboBox()
             {
                 Name = "combobox_in_settings",
@@ -340,7 +345,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_netflix_com",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[2],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -355,7 +360,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_ivi_ru",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[3],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -370,7 +375,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_lostfilm_tv",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[4],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -386,7 +391,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_kinokrad_co",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[5],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -401,7 +406,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_filmzor_net",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[6],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -416,7 +421,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_hdkinozor_ru",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[7],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -496,8 +501,8 @@ namespace projectE
         //Export or Import
         void save_my_butt_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("Not ready");
-            MessageBox.Show(db.GetSettings("age"));
+            MessageBox.Show("Not ready");
+            //MessageBox.Show(db.GetSettings());
         }
         
         //Notification
