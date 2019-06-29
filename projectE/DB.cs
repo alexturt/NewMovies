@@ -104,7 +104,7 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date asc limit 3", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date asc limit 25", conn);
             dataAdapter.Fill(dt);
             return dt;
         }
