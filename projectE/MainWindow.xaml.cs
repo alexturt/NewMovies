@@ -572,6 +572,7 @@ namespace projectE
                 temp++;
             }
             settings_load();
+            MessageBox.Show("Импорт настроек прошёл успешно!");
         }
 
         //Export
@@ -938,7 +939,8 @@ namespace projectE
         //нажали кнопку закрыть окно
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            //Close();
+            Process.GetCurrentProcess().Kill();
         }
         //нажали кнопку "во весь экран" или "вернуть к нормальному размеру"
         private void button_maximazing_Click(object sender, RoutedEventArgs e)
