@@ -141,11 +141,15 @@ namespace projectE
                 return;
             if (e.Source.GetType() == typeof(TextBlock))
             {
-                Title.Text = (e.Source as TextBlock).Tag.ToString();
-                grid_content.MouseLeftButtonUp -= grid_list_MouseLeftButtonUp_1;
-                //GC.Collect();
-                dt_movies = db.GetMovie(Convert.ToInt32((e.Source as TextBlock).Tag));
-                content_load(0);//показать инфу о фильме в правой вкладке
+                try
+                {
+                    Title.Text = (e.Source as TextBlock).Tag.ToString();
+                    grid_content.MouseLeftButtonUp -= grid_list_MouseLeftButtonUp_1;
+                    //GC.Collect();
+                    dt_movies = db.GetMovie(Convert.ToInt32((e.Source as TextBlock).Tag));
+                    content_load(0);//показать инфу о фильме в правой вкладке
+                }
+                catch { }
             }
             else
             if (e.Source.GetType() == typeof(Image))
@@ -172,16 +176,17 @@ namespace projectE
             grid_content.ColumnDefinitions.Add(new ColumnDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
-            Image img = new Image()
-            {
-                Name = "image_right_content",
-                Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                Stretch = Stretch.Uniform,
-                Tag = index
-            };
 
+                Image img = new Image()
+                {
+                    Name = "image_right_content",
+                    Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Stretch = Stretch.Uniform,
+                    Tag = index
+                };
+            
             TextBlock tb = new TextBlock();
             tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), dt_movies.Rows[index]["name"].ToString(), 22, Brushes.AliceBlue));
             Run run = new Run()
