@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using System.Data;
 using System.IO;
 using System.Threading;
+using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace projectE
 {
@@ -32,8 +34,13 @@ namespace projectE
             columns_count = 3;
             limit = columns_count * 8;
             offset = 0;
-            //db.GetMoviesWeek();
-            //allmoviesCount = int.Parse(db.GetMoviesCount().Rows[0][0].ToString());
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Все", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Рекомендовано", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Избранное", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за сегодня", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за неделю", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
+            combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за месяц", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
+            combobox_top_choose.SelectedIndex = 0;
         }
         DB db = new DB();
         DataTable dt_movies = new DataTable();
@@ -90,12 +97,7 @@ namespace projectE
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Все", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
-            //combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Рекомендовано", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
-            //combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за сегодня", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
-            //combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за неделю", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
-            //combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за месяц", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
-            //combobox_top_choose.SelectedIndex = 0;
+            
             //GetMoviesFromDB();
             //Image img = new Image() {  Source = (dt_movies.Rows[11]["poster"] as BitmapImage) };
             //grid_content.Children.Add(img);
@@ -108,11 +110,12 @@ namespace projectE
             //new_movies_load();
             //recommends_load();
             offset = 0;
+            update_movies("Все", limit, offset);
+            show_movies(grid_list, button_sctoll_top);
             update_movies("Рекомендовано", limit, offset);
             show_movies(grid_content, button_sctoll_top);
 
-            update_movies("Все", limit, offset);
-            show_movies(grid_list, button_sctoll_top);
+            
         }
         //тут одни костыли
         //нажатие на кнопку добавить/удалить из избранного
@@ -179,6 +182,7 @@ namespace projectE
         //Подгрузка контента справа
         private void content_load(int index)
         {
+            textBox_content_headet.Text = "Подробное описание";
             scroll_viewer_content.ScrollToTop();
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
@@ -297,11 +301,16 @@ namespace projectE
                 Process.Start(e.Uri.ToString());
             } catch { }
         }
-
         // Блок методов для меню настроек -->
-        
+        const int settings_amount = 8;
+        bool[] IsChecked = new bool[settings_amount];//Settings 
+        // 0 - notify; 1 - age; 2 - netflix_com; 3 - ivi_ru;
+        // 4 - lostfilm_tv; 5 - kinokrad_co; 6 - filmzor_net; 7 - hdkinozor_ru;
+        // Блок методов для меню настроек -->
+
         private void settings_load()//Подгрузка настроек
         {
+            textBox_content_headet.Text = "Настройки";
             DataTable dt = db.GetSettings();
             for (int i = 0; i < settings_amount; i++)
             {
@@ -753,13 +762,14 @@ namespace projectE
             //Title.Text = limit.ToString() + " " + offset.ToString();
             switch (movies)
             {
-                case "Всe":
+                case "Все":
                     dt_movies = db.GetMovies(limit, offset);
                     allmoviesCount = db.GetMoviesCount();
                     break;
                 case "Рекомендовано":
-                    dt_movies = db.GetMovies();
-                    allmoviesCount = db.GetMoviesCount();
+                    dt_movies = db.GetRecommends();
+                    //allmoviesCount = db.GetMoviesCount();
+                    textBox_content_headet.Text = "Рекомендовано";
                     grid_content.MouseLeftButtonUp += grid_list_MouseLeftButtonUp_1;
                     break;
                 case "Новинки за сегодня":
@@ -817,6 +827,20 @@ namespace projectE
                     _grid.Children.Add(grid_row);
                 }
                 create_and_add_elements(grid_row, i);
+            }
+            if (dt_movies.Rows.Count == 0)
+            {
+                _grid.RowDefinitions.Add(new RowDefinition());
+                TextBlock tb = new TextBlock()
+                {
+                    Text = ((TextBlock)combobox_top_choose.SelectedItem).Text + " нет",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    FontSize = 18,
+                    Foreground = Brushes.LightGray
+                };
+                Grid.SetRow(tb, 0);
+                _grid.Children.Add(tb);
             }
         }
         
@@ -1002,7 +1026,7 @@ namespace projectE
 
             update_movies("Все", limit, offset);
             show_movies(grid_list, button_sctoll_top);
-            //openPanel();
+            openPanel();
             scroll_viewer_center.ScrollToTop();//проскролить вверх
             scroll_viewer_content.ScrollToTop();
        //     thread.Abort();
@@ -1011,10 +1035,11 @@ namespace projectE
         //нажали кнопку избранное (меню)
         private void button_favorite_list_Click_1(object sender, RoutedEventArgs e)
         {
-            /*update_movies("Избранное", limit, offset);//показывает избранные фильмы
-            show_movies(grid_list, button_sctoll_top);
-            scroll_viewer_center.ScrollToTop();//проскролить вверх*/
+            offset = 0;
             combobox_top_choose.SelectedIndex = 2;
+            update_movies("Избранное", limit, offset);//показывает избранные фильмы
+            show_movies(grid_list, button_sctoll_top);
+            scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
         //нажали кнопку закрыть окно
         private void button_exit_Click(object sender, RoutedEventArgs e)
@@ -1092,12 +1117,7 @@ namespace projectE
             watched_load();//показывает просмотренные фильмы
             scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
-        //выгрузка всех фильмов из БД
-        private void GetMoviesFromDB()
-        {
-            dt_movies = db.GetMovies();
-        }
-
+        
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {//удаление удаленных записей из файла БД
             db.Vacuum();

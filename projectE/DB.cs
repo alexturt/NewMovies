@@ -99,12 +99,12 @@ namespace projectE
 
             
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
-        public DataTable GetMovies()
+        public DataTable GetRecommends()
         {
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date desc limit 24", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date asc limit 3", conn);
             dataAdapter.Fill(dt);
             return dt;
         }
