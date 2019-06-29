@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:projectE"
         mc:Ignorable="d"
         BorderBrush="{x:Null}"
-        BorderThickness="5"
+        BorderThickness="0"
         Title="NewMovies" Height="650" Width="1000"
         MinWidth="460"
         MinHeight="450"
@@ -14,7 +14,7 @@
         AllowsTransparency="True"
         
         MaxHeight="{DynamicResource {x:Static SystemParameters.VirtualScreenHeight}}"
-        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged" Closing="Window_Closing"
+        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged" Closing="Window_Closing" Margin="0" Padding="0"
         >
         <!--начало стилей-->
     <Window.Resources>
@@ -175,7 +175,7 @@
                 <Button x:Name="button_home" Width="40" Height="40" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_home_Click">
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/домик2.png" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" >
+                <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_list_Click_1">
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/звезда2.png" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_watched" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_watched_Click_1" Visibility="Collapsed">
@@ -205,7 +205,14 @@
                     <Image Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Source="Resources/панель2.png" Stretch="Fill"/>
                 </Button>
                 <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="LightGray" MaxLength="255"/>
-                <ComboBox Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="LightGray"></ComboBox>
+                <ComboBox Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="LightGray" SelectionChanged="combobox_top_choose_SelectionChanged" SelectedIndex="0">
+                    <TextBlock Name="combobox_textboxs1" Text="Вс" IsEnabled = "false" Foreground = "LightGray" Background="Transparent">e</TextBlock>
+                    <TextBlock Name="combobox_textboxs2" Text="Рекомендован" IsEnabled = "false" Foreground = "LightGray" Background="Transparent">о</TextBlock>
+                    <TextBlock Name="combobox_textboxs0" Text="Избранно" IsEnabled = "false" Foreground = "LightGray" Background="Transparent">е</TextBlock>
+                    <TextBlock Name="combobox_textboxs3" Text="Новинки за сегодн" IsEnabled = "false" Foreground = "LightGray" Background="Transparent">я</TextBlock>
+                    <TextBlock Name="combobox_textboxs4" Text="Новинки за недел" IsEnabled = "false" Foreground = "LightGray" Background="Transparent">ю</TextBlock>
+                    <TextBlock Name="combobox_textboxs5" Text="Новинки за меся" IsEnabled = "false" Foreground = "LightGray" Background="Transparent">ц</TextBlock>
+                </ComboBox>
             </Grid>
         </Border>
         <!-- верхняя правая панель -->
@@ -218,7 +225,7 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="{Binding ElementName= button_panel, Path=ActualWidth}"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="textBox_content_headet" FontSize="14" Grid.Column="0" Background="{x:Null}" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Рекомендовано" VerticalAlignment="Stretch" Width="auto" Foreground="LightGray"/>
+                <TextBlock x:Name="textBox_content_headet" FontSize="14" Grid.Column="0" Background="{x:Null}" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Рекомендовано" VerticalAlignment="Stretch" Width="auto" Foreground="LightGray" TextAlignment="Center"/>
                 <Button x:Name="button_panel_close" Width="40" Height="40" Grid.Column="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
                     <Image Height="auto" Margin="5" Width="auto" Source="Resources/arrow.png" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
@@ -239,10 +246,10 @@
 
         <!-- правая панель -->
         <Border  Grid.Row="2" Grid.Column="2"  Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
-            <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_content_ScrollChanged">
 
-                <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B">
-                    <Grid Name="grid_content" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
+                <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B" MouseWheel="stack_content_MouseWheel">
+                    <Grid Name="grid_content">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -256,6 +263,9 @@
                 </StackPanel>
             </ScrollViewer>
         </Border>
+        <Button Name="button_content_sctoll_top" Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_content_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
+            <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Source="Resources/up.png" Stretch="Fill"/>
+        </Button>
     </Grid>
 
 
