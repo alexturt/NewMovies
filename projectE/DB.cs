@@ -7,7 +7,6 @@ namespace projectE
 {
     public class DB
     {
-
         private SQLiteConnection conn;
         private SQLiteCommand cmd;
         private string path = "Data Source="+ Environment.CurrentDirectory + "\\newMovies.db;New=False;Version=3";
@@ -45,7 +44,9 @@ namespace projectE
                 bytes = wb.DownloadData(poster);
             }
             catch(Exception ex)
-            { System.Windows.MessageBox.Show(ex.ToString()); }
+            {
+                Console.WriteLine(ex.ToString());
+            }
             cmd = new SQLiteCommand(conn);
             //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
             cmd.CommandText = @"insert into movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) "+
@@ -87,7 +88,7 @@ namespace projectE
         {
             if (conn == null)
                 connect();
-            ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE setting=" + setting);
+            ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE setting='" + setting + "'");
         }
         // (НЕ УДАЛЯЙТЕ)
         // <-- Settings get/set methods
