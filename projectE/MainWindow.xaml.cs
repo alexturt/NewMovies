@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.IO;
+using Microsoft.Win32;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,7 +13,6 @@ using System.Windows.Shapes;
 using System.Data;
 using System.IO;
 using System.Threading;
-using System.Diagnostics;
 
 namespace projectE
 {
@@ -275,7 +272,7 @@ namespace projectE
             Grid.SetColumnSpan(tb2, 2);
             Grid.SetRow(tb2, 1);
             grid_content.Children.Add(tb2);
-            textBox_content_headet.Text = "Подробное описание";
+            Title.Text = grid_content.RowDefinitions.Count.ToString();
         }
         //для вкладки подробнее создание гиперссылок
         private Hyperlink createURL(string url,string name, int size, Brush brush)
@@ -302,9 +299,14 @@ namespace projectE
         }
 
         // Блок методов для меню настроек -->
-
+        
         private void settings_load()//Подгрузка настроек
         {
+            DataTable dt = db.GetSettings();
+            for (int i = 0; i < settings_amount; i++)
+            {
+                IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
+            }
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
@@ -328,27 +330,42 @@ namespace projectE
             var backColor = Brushes.Cornsilk;
             var fontSize = 14;
 
-            Button save_my_butt = new Button()//Импорт и экспорт
+            Button export_my_butt = new Button()//Экспорт
             {
                 Name = "button_in_settings",
                 VerticalContentAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Height = 50,
+                Height = 30,
                 FontSize = fontSize,
                 Width = 100,
                 Background = Brushes.Black,
                 Foreground = foreColor,
-                Content = "Export/Import",
+                Content = "Экспорт",
                 ClickMode = ClickMode.Press,
                 //Padding = new Thickness(50, 50, 50, 50)
             };
-            save_my_butt.Click += save_my_butt_Click;
+            Button import_my_butt = new Button()//Импорт
+            {
+                Name = "button_in_settings",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Height = 30,
+                FontSize = fontSize,
+                Width = 100,
+                Background = Brushes.Black,
+                Foreground = foreColor,
+                Content = "Импорт",
+                ClickMode = ClickMode.Press,
+                //Padding = new Thickness(50, 50, 50, 50)
+            };
+            export_my_butt.Click += export_my_butt_Click;
+            import_my_butt.Click += import_my_butt_Click;
 
             CheckBox notify = new CheckBox()//Уведомления
             {
                 Name = "checkbox_in_settings_notify",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[0],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -363,7 +380,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_age",
                 IsThreeState = false,
-                IsChecked = false,
+                IsChecked = IsChecked[1],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -378,8 +395,17 @@ namespace projectE
             notify.Unchecked += notify_Unchecked;
             age.Checked += age_Checked;
             age.Unchecked += age_Unchecked;
-
-
+            //notify.IsChecked = true;
+            ComboBox Sources = new ComboBox()
+            {
+                Name = "combobox_in_settings",
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = 40,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
             //------------//------------//
             Label lbl = new Label()//Лейбл для выбора источников
             {
@@ -397,7 +423,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_netflix_com",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[2],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -412,7 +438,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_ivi_ru",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[3],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -427,7 +453,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_lostfilm_tv",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[4],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -443,7 +469,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_kinokrad_co",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[5],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -458,7 +484,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_filmzor_net",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[6],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -473,7 +499,7 @@ namespace projectE
             {
                 Name = "checkbox_in_settings_hdkinozor_ru",
                 IsThreeState = false,
-                IsChecked = true,
+                IsChecked = IsChecked[7],
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
@@ -498,7 +524,7 @@ namespace projectE
             hdkinozor_ru.Checked += hdkinozor_ru_Checked;
             hdkinozor_ru.Unchecked += hdkinozor_ru_Unchecked;
             //------------//------------//
-
+            
 
             Grid.SetColumn(notify, 0);
             Grid.SetRow(notify, 0);
@@ -510,10 +536,17 @@ namespace projectE
             Grid.SetColumnSpan(age, 2);
             grid_content.Children.Add(age);
 
-            Grid.SetColumn(save_my_butt, 3);
-            Grid.SetRow(save_my_butt, 0);
-            Grid.SetRowSpan(save_my_butt, 2);
-            grid_content.Children.Add(save_my_butt);
+            Grid.SetColumn(import_my_butt, 3);
+            Grid.SetRow(import_my_butt, 0);
+            grid_content.Children.Add(import_my_butt);
+
+            Grid.SetColumn(export_my_butt, 3);
+            Grid.SetRow(export_my_butt, 1);
+            grid_content.Children.Add(export_my_butt);
+
+            Grid.SetColumn(Sources, 0);
+            Grid.SetRow(Sources, 2);
+            grid_content.Children.Add(Sources);
 
             Grid.SetColumn(lbl, 0);
             Grid.SetRow(lbl, 4);
@@ -542,103 +575,163 @@ namespace projectE
             Grid.SetColumn(hdkinozor_ru, 2);
             Grid.SetRow(hdkinozor_ru, 6);
             grid_content.Children.Add(hdkinozor_ru);
-            textBox_content_headet.Text = "Настройки";
-
+            
+            
         }
 
-        //Export or Import
-        void save_my_butt_Click(object sender, RoutedEventArgs e)
+        //Export and Import
+        void import_my_butt_Click(object sender, RoutedEventArgs e)
+        {
+            string[] lines = new string[16];
+            string filename = "";//Полный адрес файла
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);//Начальная директория
+            openFileDialog.Filter = "Only settings file (*.settings)|*.settings";//Фильтр по расширению файла
+
+            if (openFileDialog.ShowDialog() == true)//Выбор файла *.settings
+            {
+                filename = openFileDialog.FileName;
+            }
+            else//Если файл не был выбран
+            {
+                return;//Выход из обработчика события
+            }
+            using (StreamReader sr = new StreamReader(filename))
+            {
+                lines = sr.ReadLine().Split('=',';');
+            }
+            int temp = 0;
+            for (int j = 1; j < lines.Length; j += 2)
+            {
+                IsChecked[temp] = Convert.ToBoolean(lines[j]);
+                db.SetSettings(temp.ToString(), IsChecked[temp], true);
+                temp++;
+            }
+            settings_load();
+        }
+        void export_my_butt_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Not ready");
- //           MessageBox.Show(db.getSettings("age"));
+            //MessageBox.Show(db.GetSettings());
         }
-        
-        //Notification
+
+        //Notification (0)
         void notify_Checked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[0] = true;
+            db.SetSettings("notify", IsChecked[0]);
+            settings_load();
         }
 
         void notify_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[0] = false;
+            db.SetSettings("notify", IsChecked[0]);
+            settings_load();
         }
 
-        //Age verification
+        //Age verification (1)
         void age_Checked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[1] = true;
+            db.SetSettings("age", IsChecked[1]);
+            settings_load();
         }
 
         void age_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[1] = false;
+            db.SetSettings("age", IsChecked[1]);
+            settings_load();
         }
         
-        //Netflix
+        //Netflix (2)
         void netflix_com_Checked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[2] = true;
+            db.SetSettings("netflix_com", IsChecked[2]);
+            settings_load();
         }
 
         void netflix_com_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[2] = false;
+            db.SetSettings("netflix_com", IsChecked[2]);
+            settings_load();
         }
 
-        //Ivi
+        //Ivi (3)
         void ivi_ru_Checked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[3] = true;
+            db.SetSettings("ivi_ru", IsChecked[3]);
+            settings_load();
         }
 
         void ivi_ru_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[3] = false;
+            db.SetSettings("ivi_ru", IsChecked[3]);
+            settings_load();
         }
 
-        //Lostfilm
+        //Lostfilm (4)
         void lostfilm_tv_Checked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[4] = true;
+            db.SetSettings("lostfilm_tv", IsChecked[4]);
+            settings_load();
         }
 
         void lostfilm_tv_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[4] = false;
+            db.SetSettings("lostfilm_tv", IsChecked[4]);
+            settings_load();
         }
 
-        //Kinokrad
+        //Kinokrad (5)
         void kinokrad_co_Checked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[5] = true;
+            db.SetSettings("kinokrad_co", IsChecked[5]);
+            settings_load();
         }
 
         void kinokrad_co_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[5] = false;
+            db.SetSettings("kinokrad_co", IsChecked[5]);
+            settings_load();
         }
 
-        //Filmzor
+        //Filmzor (6)
         void filmzor_net_Checked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[6] = true;
+            db.SetSettings("filmzor_net", IsChecked[6]);
+            settings_load();
         }
 
         void filmzor_net_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[6] = false;
+            db.SetSettings("filmzor_net", IsChecked[6]);
+            settings_load();
         }
 
-        //Hdkinozor
+        //Hdkinozor (7)
         void hdkinozor_ru_Checked(object sender, RoutedEventArgs e)
         {
-
+            IsChecked[7] = true;
+            settings_load();
         }
 
         void hdkinozor_ru_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show("Нельзя убрать основной источник!");
+            IsChecked[7] = true;
+            settings_load();
         }
         
         //Settings butt clicked

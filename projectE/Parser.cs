@@ -460,8 +460,25 @@ namespace projectE
                         films[countElem, 2] = year; //Год
                                                     //        films[countElem, 3] = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(5) > div > div.finfo-text > a").Text(); //Жанр
                         foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(12) > span > span")) //Жанр
-                        {
+                        { //#dle-content > div:nth-child(5) > dl > dd:nth-child(8) > span > span:nth-child(1) > a > span
                             films[countElem, 3] += obj.FirstChild.FirstChild.NodeValue.Trim() + " ";
+                        }
+                        if (films[countElem, 3] == null)
+                        {
+                            try
+                            {
+                                foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(8) > span > span")) //Жанр
+                                { //#dle-content > div:nth-child(5) > dl > dd:nth-child(6) > span > span
+                                    films[countElem, 3] += obj.FirstChild.FirstChild.NodeValue.Trim() + " ";
+                                }
+                            }
+                            catch
+                            {
+                                foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(6) > span > a")) //Жанр
+                                { //#dle-content > div:nth-child(5) > dl > dd:nth-child(6) > span > span
+                                    films[countElem, 3] += obj.FirstChild.NodeValue.Trim() + " ";
+                                }
+                            }
                         }
                         foreach (IDomObject obj in film.Find("#dle-content > div.kikos > div")) //Описание
                         {
@@ -481,6 +498,13 @@ namespace projectE
                         foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(8) > span > a")) //Страна
                         {
                             films[countElem, 9] += obj.FirstChild.NodeValue.Trim() + " ";
+                        }
+                        if (films[countElem, 9] == null)
+                        {
+                            foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(6) > span > a")) //Страна
+                            { //
+                                films[countElem, 9] += obj.FirstChild.NodeValue.Trim() + " ";
+                            }
                         }
                         films[countElem, 10] = Html; //Сам фильм
                         countElem++;

@@ -7,7 +7,6 @@ namespace projectE
 {
     public class DB
     {
-
         private SQLiteConnection conn;
         private SQLiteCommand cmd;
         private string path = "Data Source="+ Environment.CurrentDirectory + "\\newMovies.db;New=False;Version=3";
@@ -44,7 +43,7 @@ namespace projectE
             {
                 bytes = wb.DownloadData(poster);
             }
-            catch
+            catch(Exception ex)
             {            }
             cmd = new SQLiteCommand(conn);
             //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
@@ -66,6 +65,39 @@ namespace projectE
             cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
             cmd.ExecuteNonQuery();
         }
+        // 
+
+
+
+        // Settings get/set methods -->
+        // (НЕ УДАЛЯЙТЕ)
+        public DataTable GetSettings()//string setting)
+        {
+            if (conn == null)
+                connect();
+            //System.Windows.MessageBox.Show("GetSettings()");
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings", conn);
+            dataAdapter.Fill(dt);
+            return dt;
+        }
+
+        public void SetSettings(string setting, bool check, bool import = false)
+        {
+            if (conn == null)
+                connect();
+            if (import)
+            {
+                ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE \"index\"=" + setting);
+                return;
+            }
+            ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE setting='" + setting + "'");
+        }
+        // (НЕ УДАЛЯЙТЕ)
+        // <-- Settings get/set methods
+
+
+            
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
         public DataTable GetMovies()
         {
