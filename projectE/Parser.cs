@@ -12,85 +12,59 @@ namespace projectE
         string[,] films = new string[500, 11];
         int countElem = 0;
 
-        //MainWindow mainWindow = new MainWindow();
 
-        public void UpdateList()//
+        public void UpdateList()
         {
             TimeSpan FullTime = TimeSpan.Zero;
-            TimeSpan Start;
-            TimeSpan Stop;
+            TimeSpan Start = DateTime.Now.TimeOfDay;
+            //Console.WriteLine("Парсим Кинопоиск. Начало: " + Start);
+            //UpdateListKinopoisk(@"https://www.kinopoisk.ru/top/lists/222/");
+            TimeSpan Stop = DateTime.Now.TimeOfDay;
+            //FullTime += Stop.Subtract(Start);
+            //Console.WriteLine("Было выгружено: "+ countElem +"Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
-            /*
             Start = DateTime.Now.TimeOfDay;
-            Console.WriteLine("Парсим Кинопоиск. Начало: " + Start);
-            UpdateListKinopoisk(@"https://www.kinopoisk.ru/top/lists/222/");
+            Console.WriteLine("Парсим Фильмзор. Начало: " + Start);
+            UpdateListFilmzor(@"https://filmzor.net/filter/fy2019-t2");
             Stop = DateTime.Now.TimeOfDay;
             FullTime += Stop.Subtract(Start);
-            Console.WriteLine("Было выгружено: "+ countElem +"Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
-            */
+            Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
-            bool[] IsChecked = { true, true, true, true, true, true, true, true };
+            Start = DateTime.Now.TimeOfDay;
+            Console.WriteLine("Парсим Иви. Начало: " + Start);
+            UpdateListIvi(@"https://www.ivi.ru/movies/2019/page3");
+            Stop = DateTime.Now.TimeOfDay;
+            FullTime += Stop.Subtract(Start);
+            Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
-            if (IsChecked[6])
-            {
-                Start = DateTime.Now.TimeOfDay;
-                Console.WriteLine("Парсим Фильмзор. Начало: " + Start);
-                UpdateListFilmzor(@"https://filmzor.net/filter/fy2019-t2");
-                Stop = DateTime.Now.TimeOfDay;
-                FullTime += Stop.Subtract(Start);
-                Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
-            }
+            Start = DateTime.Now.TimeOfDay;
+            Console.WriteLine("Парсим Кинокрад. Начало: " + Start);
+            UpdateListKinokrad(@"https://kino50.top/filmy-online/browse/1/all/all/2019?sort_by=field_weight_value");
+            Stop = DateTime.Now.TimeOfDay;
+            FullTime += Stop.Subtract(Start);
+            Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
-            if (IsChecked[3])
-            {
-                Start = DateTime.Now.TimeOfDay;
-                Console.WriteLine("Парсим Иви. Начало: " + Start);
-                UpdateListIvi(@"https://www.ivi.ru/movies/2019/page3");
-                Stop = DateTime.Now.TimeOfDay;
-                FullTime += Stop.Subtract(Start);
-                Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
-            }
-                
-            if (IsChecked[5])
-            {
-                Start = DateTime.Now.TimeOfDay;
-                Console.WriteLine("Парсим Кинокрад. Начало: " + Start);
-                UpdateListKinokrad(@"https://kino50.top/filmy-online/browse/1/all/all/2019?sort_by=field_weight_value");
-                Stop = DateTime.Now.TimeOfDay;
-                FullTime += Stop.Subtract(Start);
-                Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
-            }
+            Start = DateTime.Now.TimeOfDay;
+            Console.WriteLine("Парсим Нетфликс. Начало: " + Start);
+            UpdateListNetflix(@"http://netflix.kinoyou.com/god/2019/");
+            Stop = DateTime.Now.TimeOfDay;
+            FullTime += Stop.Subtract(Start);
+            Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
 
-            if (IsChecked[2])
-            {
-                Start = DateTime.Now.TimeOfDay;
-                Console.WriteLine("Парсим Нетфликс. Начало: " + Start);
-                UpdateListNetflix(@"http://netflix.kinoyou.com/god/2019/");
-                Stop = DateTime.Now.TimeOfDay;
-                FullTime += Stop.Subtract(Start);
-                Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
-            }
-                
-            if (IsChecked[7])
-            {
-                Start = DateTime.Now.TimeOfDay;
-                Console.WriteLine("Парсим ХДКинозор. Начало: " + Start);
-                UpdateListHDKinozor(@"https://hdkinozor.ru/top2019.html");
-                Stop = DateTime.Now.TimeOfDay;
-                FullTime += Stop.Subtract(Start);
-                Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
-            }
-            
-            if (IsChecked[4])
-            {
-                Start = DateTime.Now.TimeOfDay;
-                Console.WriteLine("Парсим Лостфильм. Начало: " + Start);
-                UpdateListLostfilm(@"https://www.lostfilm.tv/series/?type=search&s=3&t=1");
-                Stop = DateTime.Now.TimeOfDay;
-                FullTime += Stop.Subtract(Start);
-                Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
-            }
-            
+            Start = DateTime.Now.TimeOfDay;
+            Console.WriteLine("Парсим ХДКинозор. Начало: " + Start);
+            UpdateListHDKinozor(@"https://hdkinozor.ru/top2019.html");
+            Stop = DateTime.Now.TimeOfDay;
+            FullTime += Stop.Subtract(Start);
+            Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
+
+            Start = DateTime.Now.TimeOfDay;
+            Console.WriteLine("Парсим Лостфильм. Начало: " + Start);
+            UpdateListLostfilm(@"https://www.lostfilm.tv/series/?type=search&s=3&t=1");
+            Stop = DateTime.Now.TimeOfDay;
+            FullTime += Stop.Subtract(Start);
+            Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
+
             Console.WriteLine("Было выгружено : " + countElem + ". Всего потрачено: " + FullTime);
 
             addBd();

@@ -1,16 +1,20 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
+using Microsoft.Win32;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Data;
+using System.IO;
+using System.Threading;
+using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace projectE
 {
@@ -257,18 +261,12 @@ namespace projectE
                 Process.Start(e.Uri.ToString());
             } catch { }
         }
-        //
-
-
-
         // Блок методов для меню настроек -->
-
-        public const int settings_amount = 8;
-        public bool[] IsChecked = new bool[settings_amount];
-
-        //Settings 
+        const int settings_amount = 8;
+        bool[] IsChecked = new bool[settings_amount];//Settings 
         // 0 - notify; 1 - age; 2 - netflix_com; 3 - ivi_ru;
         // 4 - lostfilm_tv; 5 - kinokrad_co; 6 - filmzor_net; 7 - hdkinozor_ru;
+        // Блок методов для меню настроек -->
 
         private void settings_load()//Подгрузка настроек
         {
@@ -719,7 +717,6 @@ namespace projectE
         void hdkinozor_ru_Checked(object sender, RoutedEventArgs e)
         {
             IsChecked[7] = true;
-            db.SetSettings("hdkinozor_ru", IsChecked[7]);
             settings_load();
         }
 
@@ -727,7 +724,6 @@ namespace projectE
         {
             MessageBox.Show("Нельзя убрать основной источник!");
             IsChecked[7] = true;
-            db.SetSettings("hdkinozor_ru", IsChecked[7]);
             settings_load();
         }
         
@@ -742,7 +738,7 @@ namespace projectE
 
 
             
-        //
+
         public void update_movies(string movies, int limit, int offset)
         {
             switch (movies)
@@ -931,7 +927,7 @@ namespace projectE
             openPanel();
             scroll_viewer_center.ScrollToTop();//проскролить вверх
             scroll_viewer_content.ScrollToTop();
-            //thread.Abort();
+       //     thread.Abort();
             GC.Collect();
         }
         //нажали кнопку избранное (меню)
