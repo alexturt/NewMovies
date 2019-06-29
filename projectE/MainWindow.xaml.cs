@@ -257,12 +257,19 @@ namespace projectE
                 Process.Start(e.Uri.ToString());
             } catch { }
         }
+        //
+
+
+
+
         // Блок методов для меню настроек -->
+
         const int settings_amount = 8;
-        bool[] IsChecked = new bool[settings_amount];//Settings 
+        bool[] IsChecked = new bool[settings_amount];
+        
+        //Settings 
         // 0 - notify; 1 - age; 2 - netflix_com; 3 - ivi_ru;
         // 4 - lostfilm_tv; 5 - kinokrad_co; 6 - filmzor_net; 7 - hdkinozor_ru;
-        // Блок методов для меню настроек -->
 
         private void settings_load()//Подгрузка настроек
         {
@@ -731,10 +738,10 @@ namespace projectE
 
         // <-- Блок методов для меню настроек
 
-
-
             
 
+            
+        //
         public void update_movies(string movies, int limit, int offset)
         {
             switch (movies)

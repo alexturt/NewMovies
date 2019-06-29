@@ -44,7 +44,9 @@ namespace projectE
                 bytes = wb.DownloadData(poster);
             }
             catch(Exception ex)
-            {            }
+            {
+                Console.WriteLine(ex.ToString());
+            }
             cmd = new SQLiteCommand(conn);
             //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
             cmd.CommandText = @"insert into movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) "+
@@ -71,7 +73,7 @@ namespace projectE
 
         // Settings get/set methods -->
         // (НЕ УДАЛЯЙТЕ)
-        public DataTable GetSettings()//string setting)
+        public DataTable GetSettings()
         {
             if (conn == null)
                 connect();
