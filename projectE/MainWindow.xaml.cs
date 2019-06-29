@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.IO;
+using Microsoft.Win32;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -504,15 +505,39 @@ namespace projectE
             Grid.SetColumn(hdkinozor_ru, 2);
             Grid.SetRow(hdkinozor_ru, 6);
             grid_content.Children.Add(hdkinozor_ru);
-            
-            
+
+
         }
 
         //Export and Import
         void import_my_butt_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Not ready");
-            //MessageBox.Show(db.GetSettings());
+            string[] lines = new string[16];
+            string filename = "";//Полный адрес файла
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);//Начальная директория
+            openFileDialog.Filter = "Only settings file (*.settings)|*.settings";//Фильтр по расширению файла
+
+            if (openFileDialog.ShowDialog() == true)//Выбор файла *.settings
+            {
+                filename = openFileDialog.FileName;
+            }
+            else//Если файл не был выбран
+            {
+                return;//Выход из обработчика события
+            }
+            using (StreamReader sr = new StreamReader(filename))
+            {
+                lines = sr.ReadLine().Split('=',';');
+            }
+            int temp = 0;
+            for (int j = 1; j < lines.Length; j += 2)
+            {
+                IsChecked[temp] = Convert.ToBoolean(lines[j]);
+                db.SetSettings(temp.ToString(), IsChecked[temp], true);
+                temp++;
+            }
+            settings_load();
         }
         void export_my_butt_Click(object sender, RoutedEventArgs e)
         {
@@ -525,12 +550,14 @@ namespace projectE
         {
             IsChecked[0] = true;
             db.SetSettings("notify", IsChecked[0]);
+            settings_load();
         }
 
         void notify_Unchecked(object sender, RoutedEventArgs e)
         {
             IsChecked[0] = false;
             db.SetSettings("notify", IsChecked[0]);
+            settings_load();
         }
 
         //Age verification (1)
@@ -538,12 +565,14 @@ namespace projectE
         {
             IsChecked[1] = true;
             db.SetSettings("age", IsChecked[1]);
+            settings_load();
         }
 
         void age_Unchecked(object sender, RoutedEventArgs e)
         {
             IsChecked[1] = false;
             db.SetSettings("age", IsChecked[1]);
+            settings_load();
         }
         
         //Netflix (2)
@@ -551,12 +580,14 @@ namespace projectE
         {
             IsChecked[2] = true;
             db.SetSettings("netflix_com", IsChecked[2]);
+            settings_load();
         }
 
         void netflix_com_Unchecked(object sender, RoutedEventArgs e)
         {
             IsChecked[2] = false;
             db.SetSettings("netflix_com", IsChecked[2]);
+            settings_load();
         }
 
         //Ivi (3)
@@ -564,12 +595,14 @@ namespace projectE
         {
             IsChecked[3] = true;
             db.SetSettings("ivi_ru", IsChecked[3]);
+            settings_load();
         }
 
         void ivi_ru_Unchecked(object sender, RoutedEventArgs e)
         {
             IsChecked[3] = false;
             db.SetSettings("ivi_ru", IsChecked[3]);
+            settings_load();
         }
 
         //Lostfilm (4)
@@ -577,12 +610,14 @@ namespace projectE
         {
             IsChecked[4] = true;
             db.SetSettings("lostfilm_tv", IsChecked[4]);
+            settings_load();
         }
 
         void lostfilm_tv_Unchecked(object sender, RoutedEventArgs e)
         {
             IsChecked[4] = false;
             db.SetSettings("lostfilm_tv", IsChecked[4]);
+            settings_load();
         }
 
         //Kinokrad (5)
@@ -590,12 +625,14 @@ namespace projectE
         {
             IsChecked[5] = true;
             db.SetSettings("kinokrad_co", IsChecked[5]);
+            settings_load();
         }
 
         void kinokrad_co_Unchecked(object sender, RoutedEventArgs e)
         {
             IsChecked[5] = false;
             db.SetSettings("kinokrad_co", IsChecked[5]);
+            settings_load();
         }
 
         //Filmzor (6)
@@ -603,12 +640,14 @@ namespace projectE
         {
             IsChecked[6] = true;
             db.SetSettings("filmzor_net", IsChecked[6]);
+            settings_load();
         }
 
         void filmzor_net_Unchecked(object sender, RoutedEventArgs e)
         {
             IsChecked[6] = false;
             db.SetSettings("filmzor_net", IsChecked[6]);
+            settings_load();
         }
 
         //Hdkinozor (7)

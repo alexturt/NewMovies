@@ -77,17 +77,22 @@ namespace projectE
         {
             if (conn == null)
                 connect();
-            System.Windows.MessageBox.Show("GetSettings()");
+            //System.Windows.MessageBox.Show("GetSettings()");
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings", conn);
             dataAdapter.Fill(dt);
             return dt;
         }
 
-        public void SetSettings(string setting, bool check)
+        public void SetSettings(string setting, bool check, bool import = false)
         {
             if (conn == null)
                 connect();
+            if (import)
+            {
+                ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE \"index\"=" + setting);
+                return;
+            }
             ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE setting='" + setting + "'");
         }
         // (НЕ УДАЛЯЙТЕ)
