@@ -9,10 +9,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Data;
-using System.IO;
-using System.Threading;
 using System.Windows.Documents;
 using System.Diagnostics;
 
