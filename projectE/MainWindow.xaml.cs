@@ -546,14 +546,14 @@ namespace projectE
             grid_content.Children.Add(hdkinozor_ru);
         }
 
-        //Export and Import
+        //Import
         void import_my_butt_Click(object sender, RoutedEventArgs e)
         {
             string[] lines = new string[16];
             string filename = "";//Полный адрес файла
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);//Начальная директория
-            openFileDialog.Filter = "Only settings file (*.settings)|*.settings";//Фильтр по расширению файла
+            openFileDialog.Filter = "Only NewMovies settings file (*.nmsettings)|*.nmsettings";//Фильтр по расширению файла
 
             if (openFileDialog.ShowDialog() == true)//Выбор файла *.settings
             {
@@ -576,10 +576,35 @@ namespace projectE
             }
             settings_load();
         }
+
+        //Export
         void export_my_butt_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Not ready");
-            //MessageBox.Show(db.GetSettings());
+            string line = "";
+            string path = "";
+
+            for (int i = 0; i < IsChecked.Length; i++)
+            {
+                line += i + "=" + IsChecked[i] + ";";
+            }
+
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderBrowserDialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);//Начальная директория
+            folderBrowserDialog.Description = "Выберите, куда сохранить файл с настройками:";
+            folderBrowserDialog.ShowNewFolderButton = false;
+
+            if (folderBrowserDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+
+            path = folderBrowserDialog.SelectedPath + "\\NewMovies_v" + System.Windows.Forms.Application.ProductVersion.ToString() + "_export_file.nmsettings";
+
+            using (StreamWriter sw = new StreamWriter(path, false))
+            {
+                sw.Write(line);
+            }
+            MessageBox.Show("Для восстановления настроек выберите впоследствии для импорта этот файл: " + path);
         }
 
         //Notification (0)
