@@ -110,6 +110,8 @@ namespace projectE
                 (sender as Button).Content = new Image() { Source = noFavoriteImg, Stretch = Stretch.Fill, Margin = new Thickness(5) };
                 //dt_movies.Rows[index]["favorite"] = false;
                 db.SetFavorite(index, false);
+                //if (combobox_top_choose.SelectedIndex == 2)
+                //    offset--;
             }
             else
             {

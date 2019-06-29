@@ -145,7 +145,7 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select count(*) from movies where date='" + date + "' and favorite=false", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select count(*) from movies where date='" + date + "' ", conn);
             dataAdapter.Fill(dt);
             return int.Parse(dt.Rows[0][0].ToString());
         }
@@ -176,7 +176,7 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date='"+date+"' and favorite=false", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date='"+date+"' ", conn);
             dataAdapter.Fill(dt);
             return dt;
         }
@@ -188,7 +188,7 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date>'" + date + "' and favorite=false  order by date desc", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date>'" + date + "'   order by date desc", conn);
             dataAdapter.Fill(dt);
             return dt;
         }
@@ -212,7 +212,7 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date>'" + date + "' and favorite=false  order by date desc", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date>'" + date + "'   order by date desc", conn);
             dataAdapter.Fill(dt);
             return dt;
         }
