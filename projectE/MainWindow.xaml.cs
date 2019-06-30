@@ -1036,7 +1036,7 @@ namespace projectE
             Grid.SetColumnSpan(Sources, 3);
             grid_content.Children.Add(Sources);
 
-            db.updateAgeRestriction(!IsChecked[1]);
+            db.updateAgeRestriction(IsChecked[1]);
             /*
             Grid.SetColumn(lbl, 0);
             Grid.SetRow(lbl, 4);

@@ -12,7 +12,6 @@ namespace projectE
         private string path = "Data Source="+ Environment.CurrentDirectory + "\\newMovies.db;New=False;Version=3";
         private WebClient wb = new WebClient();
 
-        private bool showRestricted = true;
 
         public void connect()
         {
@@ -83,6 +82,9 @@ namespace projectE
 
         // Settings get/set methods -->
         // (НЕ УДАЛЯЙТЕ)
+
+        private bool showRestricted = true;
+
         public DataTable GetSettings()
         {
             if (conn == null)
@@ -141,7 +143,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (showRestricted)
+            if (!showRestricted)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE NOT agerating='18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
             }
