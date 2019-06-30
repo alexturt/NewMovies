@@ -1207,7 +1207,7 @@ namespace projectE
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);//Начальная директория
             openFileDialog.Filter = "Only NewMovies settings file (*.nmsettings)|*.nmsettings";//Фильтр по расширению файла
 
-            if (openFileDialog.ShowDialog() == true)//Выбор файла *.settings
+            if (openFileDialog.ShowDialog() == true)//Выбор файла *.nmsettings
             {
                 filename = openFileDialog.FileName;
             }
