@@ -85,7 +85,7 @@ namespace projectE
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            CheckSettings();
             offset = 0;
             update_movies("Все", limit, offset);
             show_movies(grid_list, button_sctoll_top);
@@ -274,72 +274,45 @@ namespace projectE
         //Костыль 
         public void update_movies(string movies, int limit, int offset)
         {
-            if (IsChecked[1])//Проверка на возраст /18+ под запретом
+            switch (movies)
             {
-                switch (movies)
-                {
-                    case "Все":
+                case "Все":
+                    if (!IsChecked[1])//Проверка на возраст /18+ под запретом
+                    {
+                        dt_movies = db.GetMovies(limit, offset, true);
+                        allmoviesCount = db.GetMoviesCount();
+                        break;
+                    }
+                    else
+                    {
                         dt_movies = db.GetMovies(limit, offset);
                         allmoviesCount = db.GetMoviesCount();
                         break;
-                    case "Рекомендовано":
-                        dt_movies = db.GetRecommends();
-                        //allmoviesCount = db.GetMoviesCount();
-                        textBox_content_headet.Text = "Рекомендовано";
-                        grid_content.MouseLeftButtonUp += grid_list_MouseLeftButtonUp_1;
-                        break;
-                    case "Новинки за сегодня":
-                        dt_movies = db.GetMoviesToday();
-                        allmoviesCount = db.GetMoviesTodayCount();
-                        break;
-                    case "Новинки за неделю":
-                        dt_movies = db.GetMoviesWeek();
-                        allmoviesCount = db.GetMoviesWeekCount();
-                        break;
-                    case "Новинки за месяц":
-                        dt_movies = db.GetMoviesMonth();
-                        allmoviesCount = db.GetMoviesMonthCount();
-                        break;
-                    case "Избранное":
-                        dt_movies = db.GetFavorites(limit, offset);
-                        allmoviesCount = db.GetFavoritesCount();
-                        break;
-                }
-                GC.Collect();
+                    }
+                case "Рекомендовано":
+                    dt_movies = db.GetRecommends();
+                    //allmoviesCount = db.GetMoviesCount();
+                    textBox_content_headet.Text = "Рекомендовано";
+                    grid_content.MouseLeftButtonUp += grid_list_MouseLeftButtonUp_1;
+                    break;
+                case "Новинки за сегодня":
+                    dt_movies = db.GetMoviesToday();
+                    allmoviesCount = db.GetMoviesTodayCount();
+                    break;
+                case "Новинки за неделю":
+                    dt_movies = db.GetMoviesWeek();
+                    allmoviesCount = db.GetMoviesWeekCount();
+                    break;
+                case "Новинки за месяц":
+                    dt_movies = db.GetMoviesMonth();
+                    allmoviesCount = db.GetMoviesMonthCount();
+                    break;
+                case "Избранное":
+                    dt_movies = db.GetFavorites(limit, offset);
+                    allmoviesCount = db.GetFavoritesCount();
+                    break;
             }
-            else//Проверка на возраст /Можно всё
-            {
-                switch (movies)
-                {
-                    case "Все":
-                        dt_movies = db.GetMovies(limit, offset);
-                        allmoviesCount = db.GetMoviesCount();
-                        break;
-                    case "Рекомендовано":
-                        dt_movies = db.GetRecommends();
-                        //allmoviesCount = db.GetMoviesCount();
-                        textBox_content_headet.Text = "Рекомендовано";
-                        grid_content.MouseLeftButtonUp += grid_list_MouseLeftButtonUp_1;
-                        break;
-                    case "Новинки за сегодня":
-                        dt_movies = db.GetMoviesToday();
-                        allmoviesCount = db.GetMoviesTodayCount();
-                        break;
-                    case "Новинки за неделю":
-                        dt_movies = db.GetMoviesWeek();
-                        allmoviesCount = db.GetMoviesWeekCount();
-                        break;
-                    case "Новинки за месяц":
-                        dt_movies = db.GetMoviesMonth();
-                        allmoviesCount = db.GetMoviesMonthCount();
-                        break;
-                    case "Избранное":
-                        dt_movies = db.GetFavorites(limit, offset);
-                        allmoviesCount = db.GetFavoritesCount();
-                        break;
-                }
-                GC.Collect();
-            }
+            GC.Collect();
             GC.Collect();
         }
         /// <summary>
@@ -487,6 +460,8 @@ namespace projectE
             {
                 thread.Start();
             }
+            if (combobox_top_choose.SelectedIndex == 0 || textBox_content_headet.Text == "Рекомендовано")
+                return;
             combobox_top_choose.SelectedIndex = 0;
             offset = 0;
             update_movies("Рекомендовано", limit, offset);
@@ -503,6 +478,8 @@ namespace projectE
         //нажали кнопку избранное (меню)
         private void button_favorite_list_Click_1(object sender, RoutedEventArgs e)
         {
+            if (combobox_top_choose.SelectedIndex == 2)
+                return;
             offset = 0;
             combobox_top_choose.SelectedIndex = 2;
             update_movies("Избранное", limit, offset);//показывает избранные фильмы
@@ -815,7 +792,7 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Height = 30,
                 FontSize = fontSize,
-                Width = 170,
+                Width = 160,
                 Background = Brushes.Black,
                 Foreground = foreColor,
                 Content = "Экспорт настроек",
@@ -829,7 +806,7 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Height = 30,
                 FontSize = fontSize,
-                Width = 170,
+                Width = 160,
                 Background = Brushes.Black,
                 Foreground = foreColor,
                 Content = "Импорт настроек",
@@ -1238,8 +1215,10 @@ namespace projectE
         //Settings butt clicked
         private void Button_settings_Click(object sender, RoutedEventArgs e)
         {
+            if (textBox_content_headet.Text == "Настройки")
+                return;
             settings_load();
-            ShowNotification();
+            //ShowNotification();
         }
 
         // <-- Блок методов для меню настроек

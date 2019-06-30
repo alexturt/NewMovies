@@ -4,7 +4,6 @@
              xmlns:local="clr-namespace:projectE"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Image x:Key="projectIcon" Source="Resources\icon.ico" />
         <SolidColorBrush x:Key="StandardBorderBrush" Color="Red" />
         <SolidColorBrush x:Key="StandardBackgroundBrush" Color="Red" />
             <SolidColorBrush x:Key="HoverBorderBrush" Color="#DDD" />
@@ -332,4 +331,5 @@
                                                 </Setter>
                                             </Style>
     </Application.Resources>
+    
 </Application>
