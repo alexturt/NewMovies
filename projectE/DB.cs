@@ -32,8 +32,8 @@ namespace projectE
             // устанавливаем соединение с БД
             conn.Open();
         }
-        
-        
+
+
         // добавление фильма
         public void AddMovie(string name, int year, string date,
             string country, string genres, string agerating,
@@ -47,36 +47,28 @@ namespace projectE
             {
                 bytes = wb.DownloadData(poster);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-            //try
-            //{
-                cmd = new SQLiteCommand(conn);
-                //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
-                cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) " +
-                    "SELECT @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched " +
-                    "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
-                cmd.Parameters.Add("@name", DbType.String).Value = name;
-                cmd.Parameters.Add("@year", DbType.Int32).Value = year;
-                cmd.Parameters.Add("@date", DbType.Date).Value = date;
-                cmd.Parameters.Add("@country", DbType.String).Value = country;
-                cmd.Parameters.Add("@genres", DbType.String).Value = genres;
-                cmd.Parameters.Add("@agerating", DbType.String).Value = agerating;
-                cmd.Parameters.Add("@description", DbType.String).Value = description;
-                cmd.Parameters.Add("@poster", DbType.Binary).Value = bytes;
-                cmd.Parameters.Add("@URLtrailer", DbType.String).Value = urltrailer;
-                cmd.Parameters.Add("@URLinfo", DbType.String).Value = urlinfo;
-                cmd.Parameters.Add("@URLwatch", DbType.String).Value = urlwatch;
-                cmd.Parameters.Add("@favorite", DbType.Boolean).Value = favorite;
-                cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
-                cmd.ExecuteNonQuery();
-      //      }
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("Ошибка добавления в БД" + ex.Message + ". Date: " + date + ". Site: " + urlinfo);
-            //}
+            cmd = new SQLiteCommand(conn);
+            cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) " +
+                "SELECT @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched " +
+                "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
+            cmd.Parameters.Add("@name", DbType.String).Value = name;
+            cmd.Parameters.Add("@year", DbType.Int32).Value = year;
+            cmd.Parameters.Add("@date", DbType.Date).Value = date;
+            cmd.Parameters.Add("@country", DbType.String).Value = country;
+            cmd.Parameters.Add("@genres", DbType.String).Value = genres;
+            cmd.Parameters.Add("@agerating", DbType.String).Value = agerating;
+            cmd.Parameters.Add("@description", DbType.String).Value = description;
+            cmd.Parameters.Add("@poster", DbType.Binary).Value = bytes;
+            cmd.Parameters.Add("@URLtrailer", DbType.String).Value = urltrailer;
+            cmd.Parameters.Add("@URLinfo", DbType.String).Value = urlinfo;
+            cmd.Parameters.Add("@URLwatch", DbType.String).Value = urlwatch;
+            cmd.Parameters.Add("@favorite", DbType.Boolean).Value = favorite;
+            cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
+            cmd.ExecuteNonQuery();
         }
         // 
 
@@ -92,7 +84,6 @@ namespace projectE
         {
             if (conn == null)
                 connect();
-            //System.Windows.MessageBox.Show("GetSettings()");
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings", conn);
             dataAdapter.Fill(dt);
@@ -120,6 +111,7 @@ namespace projectE
         {
             showRestricted = _showRestricted;
         }
+
         // (НЕ УДАЛЯЙТЕ)
         // <-- Settings get/set methods
 
@@ -215,7 +207,6 @@ namespace projectE
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
             }
-            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true and agerating<>'18+' ORDER BY date DESC LIMIT " + limit+" OFFSET "+offset, conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
@@ -247,7 +238,6 @@ namespace projectE
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date + "' ", conn);
             }
-            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date+"' ", conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
@@ -268,9 +258,8 @@ namespace projectE
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' ORDER BY date DESC", conn);
             }
-            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'"+today+"' ORDER BY date DESC", conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
@@ -306,7 +295,6 @@ namespace projectE
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' ORDER BY date DESC", conn);
             }
-            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' ORDER BY date DESC", conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
