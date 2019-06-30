@@ -274,18 +274,9 @@ namespace projectE
             switch (movies)
             {
                 case "Все":
-                    if (!IsChecked[1])//Проверка на возраст /18+ под запретом
-                    {
-                        dt_movies = db.GetMovies(limit, offset, true);
-                        allmoviesCount = db.GetMoviesCount();
-                        break;
-                    }
-                    else
-                    {
-                        dt_movies = db.GetMovies(limit, offset);
-                        allmoviesCount = db.GetMoviesCount();
-                        break;
-                    }
+                    dt_movies = db.GetMovies(limit, offset);
+                    allmoviesCount = db.GetMoviesCount();
+                    break;
                 case "Рекомендовано":
                     dt_movies = db.GetRecommends();
                     //allmoviesCount = db.GetMoviesCount();

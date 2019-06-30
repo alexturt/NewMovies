@@ -11,7 +11,7 @@ namespace projectE
         private SQLiteCommand cmd;
         private string path = "Data Source="+ Environment.CurrentDirectory + "\\newMovies.db;New=False;Version=3";
         private WebClient wb = new WebClient();
-
+        private bool ageRating = false;
         public void connect()
         {
             // создаём объект для подключения к БД
@@ -122,26 +122,29 @@ namespace projectE
             dataAdapter.Dispose();
             return dt;
         }
+
+        public void updateAgeRating(bool _ageRating)
+        {
+            ageRating = _ageRating;
+        }
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
-        public DataTable GetMovies(int limit, int offset, bool restricted = false)
+        public DataTable GetMovies(int limit, int offset)
         {
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            if (restricted)
+            SQLiteDataAdapter dataAdapter;
+            if (ageRating)
             {
-                SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE NOT \"agerating\"=\"18+\" ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
-                dataAdapter.Fill(dt);
-                dataAdapter.Dispose();
-                return dt;
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE NOT ageratin='18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
             }
             else
             {
-                SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
-                dataAdapter.Fill(dt);
-                dataAdapter.Dispose();
-                return dt;
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
             }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return dt;
         }
         //выгрузка фильма по id
         public DataTable GetMovie(int index)
@@ -183,7 +186,16 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true ORDER BY date DESC LIMIT " + limit+" OFFSET "+offset, conn);
+            SQLiteDataAdapter dataAdapter;
+            if (ageRating)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true and agerating<>'18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
+            }
+            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true and agerating<>'18+' ORDER BY date DESC LIMIT " + limit+" OFFSET "+offset, conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
@@ -206,7 +218,16 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date+"' ", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (ageRating)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date + "' and agerating<>'18+' ", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date + "' ", conn);
+            }
+            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date+"' ", conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
@@ -220,7 +241,16 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'"+today+"' ORDER BY date DESC", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (ageRating)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' and agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' ORDER BY date DESC", conn);
+            }
+            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'"+today+"' ORDER BY date DESC", conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
@@ -247,7 +277,16 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' ORDER BY date DESC", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (ageRating)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' and agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' ORDER BY date DESC", conn);
+            }
+            //SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' ORDER BY date DESC", conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
@@ -266,16 +305,16 @@ namespace projectE
             return int.Parse(dt.Rows[0][0].ToString());
         }
         //выгрузка всго просмотренного, сортировка по дате(сначала свежие)
-        public DataTable GetWatched()
-        {
-            if (conn == null)
-                connect();
-            DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE watched=true ORDER BY date DESC", conn);
-            dataAdapter.Fill(dt);
-            dataAdapter.Dispose();
-            return dt;
-        }
+        //public DataTable GetWatched()
+        //{
+        //    if (conn == null)
+        //        connect();
+        //    DataTable dt = new DataTable();
+        //    SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE watched=true ORDER BY date DESC", conn);
+        //    dataAdapter.Fill(dt);
+        //    dataAdapter.Dispose();
+        //    return dt;
+        //}
         //устанавливаем/снимаем избранное
         public void SetFavorite(int index, bool favorite)
         {
