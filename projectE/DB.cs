@@ -12,7 +12,10 @@ namespace projectE
         private string path = "Data Source="+ Environment.CurrentDirectory + "\\newMovies.db;New=False;Version=3";
         private WebClient wb = new WebClient();
 
-
+        public DB()
+        {
+            connect();
+        }
         public void connect()
         {
             // создаём объект для подключения к БД
@@ -130,7 +133,15 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date ASC LIMIT 25", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE agerating<>'18+' ORDER BY date ASC LIMIT 25", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date ASC LIMIT 25", conn);
+            }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
