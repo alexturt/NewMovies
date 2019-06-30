@@ -18,18 +18,8 @@
         >
         <!--начало стилей-->
     <Window.Resources>
-        
-        <SolidColorBrush x:Key="redStyle" Color="BlanchedAlmond" />
-        <!--<LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
-            <GradientBrush.GradientStops>
-                <GradientStopCollection>
-                    <GradientStop Color="#FFDC3939" Offset="0.0"/>
-                    <GradientStop Color="#FFE80E0E" Offset="1.0"/>
-                </GradientStopCollection>
-            </GradientBrush.GradientStops>
-        </LinearGradientBrush>-->
 
-        <!--<SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFFBE618" />-->
+        <SolidColorBrush x:Key="redStyle" Color="BlanchedAlmond" />
 
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
             <Grid>
@@ -58,9 +48,7 @@
 
         <ControlTemplate x:Key="ComboBoxTextBox" TargetType="TextBox">
             <Border x:Name="PART_ContentHost" Focusable="False" Background="#283949" />
-            
         </ControlTemplate>
-
 
         <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
             <Setter Property="Template">
@@ -137,6 +125,7 @@
             <ColumnDefinition MinWidth="400" Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        
         <!-- заголовок окна -->
         <Grid Background="#283949" Name="grid_top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Width="auto">
             <Grid.ColumnDefinitions>
@@ -160,6 +149,7 @@
                 <Image Height="20" Width="20" Stretch="Uniform" Source="Resources/exit.png"/>
             </Button>
         </Grid>
+        
         <!-- левая панель -->
         <Border  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Name="border_menu" BorderBrush="#0A121B" BorderThickness="0,0,1,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <Grid Name="grid_menu" Background="#17212B" HorizontalAlignment="Stretch">
@@ -187,6 +177,7 @@
                 </Button>
             </Grid>
         </Border>
+        
         <!-- верхняя центральная панель -->
         <Border  Grid.Row="1" Grid.Column="1" Name="border_search" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <Grid Name="grid_search" Grid.Column="1" Grid.Row="1" Background="#17212B">
@@ -210,6 +201,7 @@
                 </ComboBox>
             </Grid>
         </Border>
+        
         <!-- верхняя правая панель -->
         <Border  Grid.Row="1" Grid.Column="2" Name="border_content_header" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <Grid Name="grid_content_header" Grid.Column="1" Grid.Row="2" Background="#17212B">
@@ -226,13 +218,12 @@
                 </Button>
             </Grid>
         </Border>
+        
         <!-- центральная панель -->
         <ScrollViewer Name="scroll_viewer_center" Grid.Column="1"  HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_center_ScrollChanged">
             <StackPanel Name="stack_list" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" HorizontalAlignment="Stretch" Background="#0E1621" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" CanVerticallyScroll="True" CanHorizontallyScroll="True" MouseWheel="stack_list_MouseWheel">
                 <Grid Name="grid_list" Background="#0E1621"  ShowGridLines="False" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
-                    
                 </Grid>
-                
             </StackPanel>
         </ScrollViewer>
         <Button Name="button_sctoll_top" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
@@ -242,7 +233,6 @@
         <!-- правая панель -->
         <Border  Grid.Row="2" Grid.Column="2"  Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_content_ScrollChanged">
-
                 <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B" MouseWheel="stack_content_MouseWheel">
                     <Grid Name="grid_content">
                         <Grid.ColumnDefinitions>
@@ -254,7 +244,6 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                     </Grid>
-
                 </StackPanel>
             </ScrollViewer>
         </Border>
@@ -262,7 +251,4 @@
             <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Source="Resources/up.png" Stretch="Fill"/>
         </Button>
     </Grid>
-
-
-
 </Window>

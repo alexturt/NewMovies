@@ -869,11 +869,17 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
                 Height = 40,
+                Width = 200,
+                Cursor = Cursors.Cross,
+                Text = "Выбор источников:",
                 Background = backColor,
                 Foreground = foreColor,
                 Padding = new Thickness(5, 5, 5, 5)
             };
+            //Sources.SelectionChanged+=
             //------------//------------//
+
+            /*
             Label lbl = new Label()//Лейбл для выбора источников
             {
                 Name = "label_parser",
@@ -885,6 +891,8 @@ namespace projectE
                 Foreground = foreColor,
                 Padding = new Thickness(5, 5, 5, 5)
             };
+            */
+
             //------------
             CheckBox netflix_com = new CheckBox()//NetFlix
             {
@@ -975,7 +983,8 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Background = backColor,
                 Foreground = foreColor,
-                Padding = new Thickness(5, 5, 5, 5)
+                Padding = new Thickness(5, 5, 5, 5),
+                IsEnabled = false
             };
             //------------
             netflix_com.Checked += netflix_com_Checked;
@@ -992,29 +1001,40 @@ namespace projectE
             hdkinozor_ru.Unchecked += hdkinozor_ru_Unchecked;
             //------------//------------//
 
+            Sources.Items.Add(hdkinozor_ru);
+            Sources.Items.Add(netflix_com);
+            Sources.Items.Add(ivi_ru);
+            Sources.Items.Add(lostfilm_tv);
+            Sources.Items.Add(kinokrad_co);
+            Sources.Items.Add(filmzor_net);
 
+            
             Grid.SetColumn(notify, 0);
-            Grid.SetRow(notify, 0);
-            Grid.SetColumnSpan(notify, 2);
+            Grid.SetRow(notify, 2);
+            Grid.SetColumnSpan(notify, 3);
             grid_content.Children.Add(notify);
 
             Grid.SetColumn(age, 0);
-            Grid.SetRow(age, 1);
-            Grid.SetColumnSpan(age, 2);
+            Grid.SetRow(age, 3);
+            Grid.SetColumnSpan(age, 3);
             grid_content.Children.Add(age);
 
-            Grid.SetColumn(import_my_butt, 3);
+            Grid.SetColumn(import_my_butt, 0);
             Grid.SetRow(import_my_butt, 0);
+            Grid.SetColumnSpan(import_my_butt, 3);
             grid_content.Children.Add(import_my_butt);
 
-            Grid.SetColumn(export_my_butt, 3);
+            Grid.SetColumn(export_my_butt, 0);
             Grid.SetRow(export_my_butt, 1);
+            Grid.SetColumnSpan(export_my_butt, 3);
             grid_content.Children.Add(export_my_butt);
-
+            
             Grid.SetColumn(Sources, 0);
-            Grid.SetRow(Sources, 2);
+            Grid.SetRow(Sources, 4);
+            Grid.SetColumnSpan(Sources, 3);
             grid_content.Children.Add(Sources);
 
+            /*
             Grid.SetColumn(lbl, 0);
             Grid.SetRow(lbl, 4);
             grid_content.Children.Add(lbl);
@@ -1042,6 +1062,7 @@ namespace projectE
             Grid.SetColumn(hdkinozor_ru, 2);
             Grid.SetRow(hdkinozor_ru, 6);
             grid_content.Children.Add(hdkinozor_ru);
+            */
         }
 
         //Import
