@@ -768,6 +768,7 @@ namespace projectE
             {
                 IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
             }
+            db.updateAgeRestriction(IsChecked[1]);
         }
 
         private void settings_load()//Подгрузка настроек
@@ -1235,14 +1236,12 @@ namespace projectE
         //Hdkinozor (7)
         void hdkinozor_ru_Checked(object sender, RoutedEventArgs e)
         {
-            IsChecked[7] = true;
-            settings_load();
+            db.SetSettings("hdkinozor_ru", true);
         }
 
         void hdkinozor_ru_Unchecked(object sender, RoutedEventArgs e)
         {
-            IsChecked[7] = true;
-            settings_load();
+            db.SetSettings("hdkinozor_ru", true);
         }
 
         //Settings butt clicked

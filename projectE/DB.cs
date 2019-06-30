@@ -11,7 +11,7 @@ namespace projectE
         private SQLiteCommand cmd;
         private string path = "Data Source="+ Environment.CurrentDirectory + "\\newMovies.db;New=False;Version=3";
         private WebClient wb = new WebClient();
-        private bool ageRating = false;
+        private bool ageRestriction = false;
         public void connect()
         {
             // создаём объект для подключения к БД
@@ -96,6 +96,7 @@ namespace projectE
         {
             if (conn == null)
                 connect();
+            if (setting == "age" || setting == "1") updateAgeRestriction(check);
             if (import)
             {
                 ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE \"index\"=" + setting);
@@ -123,9 +124,9 @@ namespace projectE
             return dt;
         }
 
-        public void updateAgeRating(bool _ageRating)
+        public void updateAgeRestriction(bool _ageRestriction)
         {
-            ageRating = _ageRating;
+            ageRestriction = _ageRestriction;
         }
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
         public DataTable GetMovies(int limit, int offset)
@@ -134,9 +135,9 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (ageRating)
+            if (ageRestriction)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE NOT ageratin='18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE NOT agerating='18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
             }
             else
             {
@@ -187,7 +188,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (ageRating)
+            if (ageRestriction)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true and agerating<>'18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
             }
@@ -219,7 +220,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (ageRating)
+            if (ageRestriction)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date + "' and agerating<>'18+' ", conn);
             }
@@ -242,7 +243,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (ageRating)
+            if (ageRestriction)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' and agerating<>'18+' ORDER BY date DESC", conn);
             }
@@ -278,7 +279,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (ageRating)
+            if (ageRestriction)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' and agerating<>'18+' ORDER BY date DESC", conn);
             }
