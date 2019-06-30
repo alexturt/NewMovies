@@ -770,7 +770,7 @@ namespace projectE
             {
                 IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
             }
-            db.updateAgeRating(!IsChecked[1]);
+            db.updateAgeRestriction(IsChecked[1]);
         }
 
         private void settings_load()//Подгрузка настроек
@@ -1181,7 +1181,6 @@ namespace projectE
             IsChecked[3] = true;
             db.SetSettings("ivi_ru", IsChecked[3]);
             settings_load();
-            e.Handled = true;
         }
 
         void ivi_ru_Unchecked(object sender, RoutedEventArgs e)
@@ -1189,7 +1188,6 @@ namespace projectE
             IsChecked[3] = false;
             db.SetSettings("ivi_ru", IsChecked[3]);
             settings_load();
-            e.Handled = true;
         }
 
         //Lostfilm (4)
@@ -1240,14 +1238,12 @@ namespace projectE
         //Hdkinozor (7)
         void hdkinozor_ru_Checked(object sender, RoutedEventArgs e)
         {
-            IsChecked[7] = true;
-            settings_load();
+            db.SetSettings("hdkinozor_ru", true);
         }
 
         void hdkinozor_ru_Unchecked(object sender, RoutedEventArgs e)
         {
-            IsChecked[7] = true;
-            settings_load();
+            db.SetSettings("hdkinozor_ru", true);
         }
 
         //Settings butt clicked
@@ -1279,13 +1275,7 @@ namespace projectE
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
             }
         }
-
-        private void combobox_top_choose_DropDownClosed(object sender, EventArgs e)
-        {
-            
-            //combobox_top_choose.IsDropDownOpen = true;
-        }
-
+        
         // <-- Блок методов для уведомлений
     }
 }
