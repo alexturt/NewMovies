@@ -23,7 +23,8 @@ namespace projectE
         {
             InitializeComponent();
             CheckSettings();
-            columns_count = 4;
+            columns_count = 2;
+            columns_count_recommends = 4;
             limit = columns_count * 8;
             //limit = 0;
             offset = 0;
@@ -38,9 +39,11 @@ namespace projectE
         DB db = new DB();
         DataTable dt_movies = new DataTable();
         int columns_count;
+        int columns_count_recommends;
         int limit;
         int offset;
         int allmoviesCount;
+        double scroll_viewer_right_last_height;
         static BitmapImage noFavoriteImg = new BitmapImage(new Uri("/Resources/пустаязвезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         static BitmapImage FavoriteImg = new BitmapImage(new Uri("/Resources/звезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
@@ -62,16 +65,31 @@ namespace projectE
                 return;
             if (Width > 800)
             {
-                grid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+                grid.ColumnDefinitions[2].Width = new GridLength(2, GridUnitType.Star);
                 grid.ColumnDefinitions[2].IsEnabled = true;
             }
             else
             {
-                grid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+                grid.ColumnDefinitions[2].Width = new GridLength(2, GridUnitType.Star);
                 grid.ColumnDefinitions[2].IsEnabled = true;
-                Width += grid.ColumnDefinitions[1].ActualWidth;
+                Width += grid.ColumnDefinitions[1].ActualWidth*2;
             }
-            //recommends_load();
+        }
+        void openPanel_withoutSizeChange()
+        {//тут все работает ок
+            if (grid.ColumnDefinitions[2].IsEnabled)
+                return;
+            if (Width > 800)
+            {
+                grid.ColumnDefinitions[2].Width = new GridLength(2, GridUnitType.Star);
+                grid.ColumnDefinitions[2].IsEnabled = true;
+            }
+            else
+            {
+                grid.ColumnDefinitions[2].Width = new GridLength(2, GridUnitType.Star);
+                grid.ColumnDefinitions[2].IsEnabled = true;
+                //Width += grid.ColumnDefinitions[1].ActualWidth * 2;
+            }
         }
         //закрытие правой панели
         void closePanel()
@@ -89,9 +107,9 @@ namespace projectE
             CheckSettings();
             offset = 0;
             update_movies("Все", limit, offset);
-            show_movies(grid_list, button_sctoll_top);
+            show_movies(grid_list, button_sctoll_top, columns_count);
             update_movies("Рекомендовано", limit, offset);
-            show_movies(grid_content, button_sctoll_top);
+            show_movies(grid_recommends, button_sctoll_top, columns_count_recommends);
 
 
         }
@@ -166,10 +184,13 @@ namespace projectE
             scroll_viewer_content.ScrollToTop();
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
+            grid_recommends.Visibility = Visibility.Collapsed;
+            grid_content.Visibility = Visibility.Visible;
+            button_panel_close.Visibility = Visibility.Visible;
             grid_content.Children.Clear();
             grid_content.RowDefinitions.Clear();
             grid_content.ColumnDefinitions.Clear();
-            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition() { MaxWidth=300});
             grid_content.ColumnDefinitions.Add(new ColumnDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
@@ -178,10 +199,11 @@ namespace projectE
             {
                 Name = "image_right_content",
                 Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Stretch = Stretch.Uniform,
-                Tag = index
+                Tag = index,
+                MaxWidth = 300
             };
 
             TextBlock tb = new TextBlock();
@@ -309,10 +331,11 @@ namespace projectE
         /// <param name="_scrollViewer">скролл в котором находится грид</param>
         /// <param name="_button_scroll">кнопка скролла вверх</param>
         /// <param name="_dt">команда бд или таблица с фильмами</param>
-        private void show_movies(Grid _grid, Button _button_scroll)
+        private void show_movies(Grid _grid, Button _button_scroll, int _columns_count)
         {
             _button_scroll.IsEnabled = false;//выключение кнопки "вверх"
             _button_scroll.Visibility = Visibility.Hidden;//скрыть кнопку "вверх"
+            _grid.Visibility = Visibility.Visible;
             _grid.Children.Clear();//очистить элементы из центрального грида
             _grid.RowDefinitions.Clear();//удалить все строки из центрального грида
             _grid.ColumnDefinitions.Clear();
@@ -320,22 +343,22 @@ namespace projectE
             Grid grid_row = null;
             for (int i = 0; i < dt_movies.Rows.Count; i++)//цикл по всем фильмам
             {
-                if (i % columns_count == 0)
+                if (i % _columns_count == 0)
                 {
                     _grid.RowDefinitions.Add(new RowDefinition());
                     grid_row = new Grid();
                     Grid.SetColumn(grid_row, 0);
-                    Grid.SetRow(grid_row, i / columns_count);
-                    for (int j = 0; j < columns_count; j++)
+                    Grid.SetRow(grid_row, i / _columns_count);
+                    for (int j = 0; j < _columns_count; j++)
                     {
                         grid_row.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                         grid_row.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
                     }
-                    grid_row.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
+                    grid_row.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
                     grid_row.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
                     _grid.Children.Add(grid_row);
                 }
-                create_and_add_elements(grid_row, i);
+                create_and_add_elements(grid_row, i, _columns_count);
             }
             string str = "Пусто";
             switch (((TextBlock)combobox_top_choose.SelectedItem).Text)
@@ -376,7 +399,7 @@ namespace projectE
             }
         }
 
-        private void create_and_add_elements(Grid _grid_row, int i)
+        private void create_and_add_elements(Grid _grid_row, int i, int _columns_count)
         {
             Button btf = new Button()//кнопка добавления/удаления из избранного
             {
@@ -428,12 +451,12 @@ namespace projectE
             };
             //расстановка и добавление элементов в грид
 
-            Grid.SetColumn(img, i % columns_count * 2);
+            Grid.SetColumn(img, i % _columns_count * 2);
             Grid.SetColumnSpan(img, 2);
             Grid.SetRow(img, 0);
             _grid_row.Children.Add(img);
 
-            Grid.SetColumn(tb, i % columns_count * 2);
+            Grid.SetColumn(tb, i % _columns_count * 2);
             Grid.SetColumnSpan(tb, 2);
             Grid.SetRow(tb, 1);
             _grid_row.Children.Add(tb);
@@ -443,7 +466,7 @@ namespace projectE
             //_grid_row.Children.Add(btf);
 
             //кнопка на постере //в методах сверху убрать лишние колонки
-            Grid.SetColumn(btf, i % columns_count * 2 + 1);
+            Grid.SetColumn(btf, i % _columns_count * 2 + 1);
             Grid.SetRow(btf, 0);
             _grid_row.Children.Add(btf);
         }
@@ -474,12 +497,15 @@ namespace projectE
                 return;
             combobox_top_choose.SelectedIndex = 0;
             offset = 0;
+            button_panel_close.Visibility = Visibility.Collapsed;
+            grid_content.Visibility = Visibility.Collapsed;
+            grid_recommends.Visibility = Visibility.Visible;
             textBox_content_headet.Text = "Рекомендовано";
             update_movies("Рекомендовано", limit, offset);
-            show_movies(grid_content, button_sctoll_top);
+            show_movies(grid_recommends, button_sctoll_top, columns_count_recommends);
 
             update_movies("Все", limit, offset);
-            show_movies(grid_list, button_sctoll_top);
+            show_movies(grid_list, button_sctoll_top, columns_count);
             openPanel();
             scroll_viewer_center.ScrollToTop();//проскролить вверх
             scroll_viewer_content.ScrollToTop();
@@ -494,7 +520,7 @@ namespace projectE
             offset = 0;
             combobox_top_choose.SelectedIndex = 2;
             update_movies("Избранное", limit, offset);//показывает избранные фильмы
-            show_movies(grid_list, button_sctoll_top);
+            show_movies(grid_list, button_sctoll_top, columns_count);
             scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
         //нажали кнопку закрыть окно
@@ -530,8 +556,10 @@ namespace projectE
         //при изменении размера окна
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (Width < 800 && grid.ColumnDefinitions[2].IsEnabled)//если ширина окна меньше 700
+            if (Width < 645 && grid.ColumnDefinitions[2].IsEnabled)//если ширина окна меньше 700
                 closePanel(); // закрываем правую панель
+            if (Width > 644 && !grid.ColumnDefinitions[2].IsEnabled)
+                openPanel_withoutSizeChange();
             if (WindowState == WindowState.Maximized)
                 BorderThickness = new Thickness(7);
             else
@@ -543,7 +571,7 @@ namespace projectE
             offset = 0;
             string str = ((TextBlock)combobox_top_choose.SelectedValue).Text;
             update_movies(str, limit, offset);
-            show_movies(grid_list, button_sctoll_top);
+            show_movies(grid_list, button_sctoll_top, columns_count);
             scroll_viewer_center.ScrollToTop();//проскролить вверх
             button_sctoll_top.IsEnabled = false;//выключить кнопку
             button_sctoll_top.Visibility = Visibility.Hidden;//спрятать кнопку
@@ -663,7 +691,7 @@ namespace projectE
                 offset += limit;
                 string str = ((TextBlock)combobox_top_choose.SelectedValue).Text;
                 update_movies(str, limit, offset);
-                show_movies(grid_list, button_sctoll_top);
+                show_movies(grid_list, button_sctoll_top, columns_count);
                 scroll_viewer_center.ScrollToVerticalOffset(10);
             }
             if (e.VerticalOffset == 0 && combobox_top_choose.SelectedIndex != -1)
@@ -673,7 +701,7 @@ namespace projectE
                     offset -= limit;
                     string str = ((TextBlock)combobox_top_choose.SelectedValue).Text;
                     update_movies(str, limit, offset);
-                    show_movies(grid_list, button_sctoll_top);
+                    show_movies(grid_list, button_sctoll_top, columns_count);
                     scroll_viewer_center.ScrollToVerticalOffset(kostil - 10);
                 }
                 button_sctoll_top.IsEnabled = false;
@@ -689,6 +717,8 @@ namespace projectE
 
         private void scroll_viewer_content_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
+            if (grid_recommends.Visibility == Visibility.Visible)
+                scroll_viewer_right_last_height = e.VerticalOffset;
             if (e.VerticalOffset == 0)
             {
                 button_content_sctoll_top.IsEnabled = false;
@@ -714,32 +744,35 @@ namespace projectE
             {
                 case "Все":
                     update_movies(((TextBlock)e.AddedItems[0]).Text, limit, offset);
-                    show_movies(grid_list, button_sctoll_top);
+                    show_movies(grid_list, button_sctoll_top, columns_count);
                     scroll_viewer_center.ScrollToTop();
                     break;
                 case "Новинки за сегодня":
                     update_movies(((TextBlock)e.AddedItems[0]).Text, limit, offset);
-                    show_movies(grid_list, button_sctoll_top);
+                    show_movies(grid_list, button_sctoll_top, columns_count);
                     scroll_viewer_center.ScrollToTop();
                     break;
                 case "Новинки за неделю":
                     update_movies(((TextBlock)e.AddedItems[0]).Text, limit, offset);
-                    show_movies(grid_list, button_sctoll_top);
+                    show_movies(grid_list, button_sctoll_top, columns_count);
                     scroll_viewer_center.ScrollToTop();
                     break;
                 case "Новинки за месяц":
                     update_movies(((TextBlock)e.AddedItems[0]).Text, limit, offset);
-                    show_movies(grid_list, button_sctoll_top);
+                    show_movies(grid_list, button_sctoll_top, columns_count);
                     scroll_viewer_center.ScrollToTop();
                     break;
                 case "Рекомендовано":
+                    button_panel_close.Visibility = Visibility.Collapsed;
+                    grid_content.Visibility = Visibility.Collapsed;
+                    grid_recommends.Visibility = Visibility.Visible;
                     update_movies(((TextBlock)e.AddedItems[0]).Text, limit, offset);
-                    show_movies(grid_content, button_content_sctoll_top);
+                    show_movies(grid_recommends, button_content_sctoll_top, columns_count_recommends);
                     scroll_viewer_content.ScrollToTop();
                     break;
                 case "Избранное":
                     update_movies(((TextBlock)e.AddedItems[0]).Text, limit, offset);
-                    show_movies(grid_list, button_content_sctoll_top);
+                    show_movies(grid_list, button_content_sctoll_top, columns_count);
                     scroll_viewer_center.ScrollToTop();
                     break;
             }
@@ -1253,6 +1286,9 @@ namespace projectE
         {
             if (textBox_content_headet.Text == "Настройки")
                 return;
+            button_panel_close.Visibility = Visibility.Visible;
+            grid_content.Visibility = Visibility.Visible;
+            grid_recommends.Visibility = Visibility.Collapsed;
             settings_load();
             //ShowNotification();
         }
@@ -1277,7 +1313,16 @@ namespace projectE
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
             }
         }
-        
+        //content close
+        private void button_panel_close_Click(object sender, RoutedEventArgs e)
+        {
+            button_panel_close.Visibility = Visibility.Collapsed;
+            grid_content.Visibility = Visibility.Collapsed;
+            grid_recommends.Visibility = Visibility.Visible;
+            textBox_content_headet.Text = "Рекомендовано";
+            scroll_viewer_content.ScrollToVerticalOffset(scroll_viewer_right_last_height);
+        }
+
         // <-- Блок методов для уведомлений
     }
 }
