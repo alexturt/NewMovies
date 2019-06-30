@@ -825,7 +825,7 @@ namespace projectE
                 Height = 40,
                 FontSize = fontSize,
                 //Width = 100,
-                Content = "Включить детский режим?",
+                Content = "Показывать 18+?",
                 VerticalContentAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Background = backColor,
@@ -1077,7 +1077,7 @@ namespace projectE
             {
                 sw.Write(line);
             }
-            MessageBox.Show("Для восстановления настроек выберите впоследствии для импорта этот файл: " + path);
+            MessageBox.Show("Для восстановления настроек выберите для импорта этот файл: " + path);
         }
 
         //Notification (0)
