@@ -47,8 +47,8 @@ namespace projectE
             {
                 Console.WriteLine(ex.ToString());
             }
-            try
-            {
+            //try
+            //{
                 cmd = new SQLiteCommand(conn);
                 //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
                 cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) " +
@@ -68,11 +68,11 @@ namespace projectE
                 cmd.Parameters.Add("@favorite", DbType.Boolean).Value = favorite;
                 cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
                 cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Ошибка добавления в БД" + ex.Message + ". Date: " + date + ". Site: " + urlinfo);
-            }
+      //      }
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("Ошибка добавления в БД" + ex.Message + ". Date: " + date + ". Site: " + urlinfo);
+            //}
         }
         // 
 
