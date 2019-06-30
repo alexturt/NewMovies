@@ -301,7 +301,6 @@ namespace projectE
                     break;
             }
             GC.Collect();
-            GC.Collect();
         }
         /// <summary>
         /// выгрузка фильмов из БД и вывод их в _grid
