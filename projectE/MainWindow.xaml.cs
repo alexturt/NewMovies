@@ -1010,7 +1010,7 @@ namespace projectE
             Sources.Items.Add(kinokrad_co);
             Sources.Items.Add(filmzor_net);
 
-            
+
             Grid.SetColumn(notify, 0);
             Grid.SetRow(notify, 2);
             Grid.SetColumnSpan(notify, 3);
@@ -1030,7 +1030,7 @@ namespace projectE
             Grid.SetRow(export_my_butt, 1);
             Grid.SetColumnSpan(export_my_butt, 3);
             grid_content.Children.Add(export_my_butt);
-            
+
             Grid.SetColumn(Sources, 0);
             Grid.SetRow(Sources, 4);
             Grid.SetColumnSpan(Sources, 3);
@@ -1041,27 +1041,21 @@ namespace projectE
             Grid.SetColumn(lbl, 0);
             Grid.SetRow(lbl, 4);
             grid_content.Children.Add(lbl);
-
             Grid.SetColumn(netflix_com, 0);
             Grid.SetRow(netflix_com, 5);
             grid_content.Children.Add(netflix_com);
-
             Grid.SetColumn(ivi_ru, 1);
             Grid.SetRow(ivi_ru, 5);
             grid_content.Children.Add(ivi_ru);
-
             Grid.SetColumn(lostfilm_tv, 2);
             Grid.SetRow(lostfilm_tv, 5);
             grid_content.Children.Add(lostfilm_tv);
-
             Grid.SetColumn(kinokrad_co, 0);
             Grid.SetRow(kinokrad_co, 6);
             grid_content.Children.Add(kinokrad_co);
-
             Grid.SetColumn(filmzor_net, 1);
             Grid.SetRow(filmzor_net, 6);
             grid_content.Children.Add(filmzor_net);
-
             Grid.SetColumn(hdkinozor_ru, 2);
             Grid.SetRow(hdkinozor_ru, 6);
             grid_content.Children.Add(hdkinozor_ru);
@@ -1256,6 +1250,535 @@ namespace projectE
         }
 
         // <-- Блок методов для меню настроек
+
+
+
+        /*(Не работающий участок кода далее-->)
+        // Блок методов для меню настроек -->
+
+        static Brush foreColorEnabled = Brushes.Green;
+        static Brush foreColor = Brushes.WhiteSmoke;
+        static Brush foreColorDisabled = Brushes.Red;
+        static Brush backColor = null;
+        static Thickness borderThickness = new Thickness(0, 0, 0, 0);
+        static int fontSize = 14;
+
+        //Костыль для настроек
+        public int getIsCheckedIndex(string setting)
+        {
+            switch (setting)
+            {
+                case "notify":
+                    return 0;
+                case "age":
+                    return 1;
+                case "netflix_com":
+                    return 2;
+                case "ivi_ru":
+                    return 3;
+                case "lostfilm_tv":
+                    return 4;
+                case "kinokrad_co":
+                    return 5;
+                case "filmzor_net":
+                    return 6;
+                case "hdkinozor_ru":
+                    return 7;
+            }
+            return -1;
+        }
+
+        ListBox Sources = new ListBox()
+        {
+            Name = "combobox_in_settings",
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Height = 500,
+            Width = 400,
+            FontSize = fontSize,
+            Cursor = Cursors.Cross,
+            ItemsSource = listBoxSources,
+            //Text = "Выбор источников:",
+            Background = backColor,
+            Foreground = backColor,
+            Padding = new Thickness(5, 5, 5, 5),
+            //IsEditable = true,
+            //IsReadOnly = true
+        };
+
+
+        static TextBlock netflix_com = new TextBlock()//NetFlix
+        {
+            Name = "checkbox_in_settings_netflix_com",
+            Height = 40,
+            FontSize = fontSize,
+            //Width = 100,
+            Text = "netflix.com",
+            //VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = backColor,
+            Foreground = foreColor,
+            Padding = new Thickness(5, 5, 5, 5),
+            //BorderThickness = borderThickness,
+        };
+        static TextBlock ivi_ru = new TextBlock()//Ivi
+        {
+            Name = "checkbox_in_settings_ivi_ru",
+            Height = 40,
+            FontSize = fontSize,
+            //Width = 100,
+            Text = "ivi.ru",
+            //VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = backColor,
+            Foreground = foreColor,
+            Padding = new Thickness(5, 5, 5, 5),
+            //BorderThickness = borderThickness,
+        };
+        static TextBlock lostfilm_tv = new TextBlock()//Lostfilm
+        {
+            Name = "checkbox_in_settings_lostfilm_tv",
+            Height = 40,
+            FontSize = fontSize,
+            //Width = 100,
+            Text = "lostfilm.tv",
+            //VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = backColor,
+            Foreground = foreColor,
+            Padding = new Thickness(5, 5, 5, 5),
+            //BorderThickness = borderThickness,
+        };
+        //------------
+        static TextBlock kinokrad_co = new TextBlock()//Kinokrad
+        {
+            Name = "checkbox_in_settings_kinokrad_co",
+            Height = 40,
+            FontSize = fontSize,
+            //Width = TextBox.,
+            Text = "kinokrad.co",
+            //VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = backColor,
+            Foreground = foreColor,
+            Padding = new Thickness(5, 5, 5, 5),
+            //BorderThickness = borderThickness,
+        };
+        static TextBlock filmzor_net = new TextBlock()//Filmzor
+        {
+            Name = "checkbox_in_settings_filmzor_net",
+            Height = 40,
+            FontSize = fontSize,
+            //Width = 100,
+            Text = "filmzor.net",
+            //VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = backColor,
+            Foreground = foreColor,
+            Padding = new Thickness(5, 5, 5, 5),
+            //BorderThickness = borderThickness,
+        };
+        static TextBlock hdkinozor_ru = new TextBlock()//HDKinozor
+        {
+            Name = "checkbox_in_settings_hdkinozor_ru",
+            Height = 40,
+            FontSize = fontSize,
+            //Width = 100,
+            Text = "hdkinozor.ru",
+            //VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = backColor,
+            Foreground = foreColor,
+            Padding = new Thickness(5, 5, 5, 5),
+            //BorderThickness = borderThickness,
+            IsEnabled = false
+        };
+
+        const int settings_amount = 8;
+        bool[] IsChecked = new bool[settings_amount];
+
+        //Settings 
+        // 0 - notify; 1 - age; 2 - netflix_com; 3 - ivi_ru;
+        // 4 - lostfilm_tv; 5 - kinokrad_co; 6 - filmzor_net; 7 - hdkinozor_ru;
+
+        public void CheckSettings()
+        {
+            DataTable dt = db.GetSettings();
+            for (int i = 0; i < settings_amount; i++)
+            {
+                IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
+            }
+            db.updateAgeRestriction(IsChecked[1]);
+        }
+
+        private void settings_load()//Подгрузка настроек
+        {
+            textBox_content_headet.Text = "Настройки";
+            CheckSettings();
+            if (!grid.ColumnDefinitions[2].IsEnabled)
+                openPanel();
+            grid_content.Children.Clear();
+            grid_content.RowDefinitions.Clear();
+            grid_content.ColumnDefinitions.Clear();
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            //grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            //grid_content.RowDefinitions.Add(new RowDefinition());
+            //grid_content.ShowGridLines = true;
+
+            Button export_my_butt = new Button()//Экспорт
+            {
+                Name = "button_in_settings",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Height = 30,
+                FontSize = fontSize,
+                Width = 160,
+                Background = Brushes.Black,
+                Foreground = foreColor,
+                Content = "Экспорт настроек",
+                ClickMode = ClickMode.Press,
+                //Padding = new Thickness(50, 50, 50, 50)
+            };
+            Button import_my_butt = new Button()//Импорт
+            {
+                Name = "button_in_settings",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Height = 30,
+                FontSize = fontSize,
+                Width = 160,
+                Background = Brushes.Black,
+                Foreground = foreColor,
+                Content = "Импорт настроек",
+                ClickMode = ClickMode.Press,
+                //Padding = new Thickness(50, 50, 50, 50)
+            };
+            export_my_butt.Click += export_my_butt_Click;
+            import_my_butt.Click += import_my_butt_Click;
+
+            CheckBox notify = new CheckBox()//Уведомления
+            {
+                Name = "checkbox_in_settings_notify",
+                IsThreeState = false,
+                IsChecked = IsChecked[0],
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "Включить уведомления?",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            CheckBox age = new CheckBox()//18+ защита
+            {
+                Name = "checkbox_in_settings_age",
+                IsThreeState = false,
+                IsChecked = IsChecked[1],
+                Height = 40,
+                FontSize = fontSize,
+                //Width = 100,
+                Content = "Показывать 18+?",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = backColor,
+                Foreground = foreColor,
+                Padding = new Thickness(5, 5, 5, 5)
+            };
+            notify.Checked += notify_Checked;
+            notify.Unchecked += notify_Unchecked;
+            age.Checked += age_Checked;
+            age.Unchecked += age_Unchecked;
+            //notify.IsChecked = true;
+
+            //Sources
+            Sources.SelectionChanged += Sources_SelectionChanged;
+            //------------//------------//
+            Sources.Items.Refresh();
+            //Sources.ItemsSource = listBoxSources;
+            
+            Sources.Items.Add(hdkinozor_ru);
+            Sources.Items.Add(netflix_com);
+            Sources.Items.Add(ivi_ru);
+            Sources.Items.Add(lostfilm_tv);
+            Sources.Items.Add(kinokrad_co);
+            Sources.Items.Add(filmzor_net);
+            
+            //------------//------------//
+
+            if (IsChecked[2])
+                netflix_com.Foreground = foreColorEnabled;
+            else
+                netflix_com.Foreground = foreColorDisabled;
+
+            if (IsChecked[3])
+                ivi_ru.Foreground = foreColorEnabled;
+            else
+                ivi_ru.Foreground = foreColorDisabled;
+
+            if (IsChecked[4])
+                lostfilm_tv.Foreground = foreColorEnabled;
+            else
+                lostfilm_tv.Foreground = foreColorDisabled;
+
+            if (IsChecked[5])
+                kinokrad_co.Foreground = foreColorEnabled;
+            else
+                kinokrad_co.Foreground = foreColorDisabled;
+
+            if (IsChecked[6])
+                filmzor_net.Foreground = foreColorEnabled;
+            else
+                filmzor_net.Foreground = foreColorDisabled;
+
+            if (IsChecked[7])
+                hdkinozor_ru.Foreground = foreColorEnabled;
+            else
+                hdkinozor_ru.Foreground = foreColorDisabled;
+
+            //------------//------------//
+
+            Grid.SetColumn(notify, 0);
+            Grid.SetRow(notify, 2);
+            Grid.SetColumnSpan(notify, 3);
+            grid_content.Children.Add(notify);
+
+            Grid.SetColumn(age, 0);
+            Grid.SetRow(age, 3);
+            Grid.SetColumnSpan(age, 3);
+            grid_content.Children.Add(age);
+
+            Grid.SetColumn(import_my_butt, 0);
+            Grid.SetRow(import_my_butt, 0);
+            Grid.SetColumnSpan(import_my_butt, 3);
+            grid_content.Children.Add(import_my_butt);
+
+            Grid.SetColumn(export_my_butt, 0);
+            Grid.SetRow(export_my_butt, 1);
+            Grid.SetColumnSpan(export_my_butt, 3);
+            grid_content.Children.Add(export_my_butt);
+            
+            Grid.SetColumn(Sources, 0);
+            Grid.SetRow(Sources, 4);
+            Grid.SetColumnSpan(Sources, 3);
+            grid_content.Children.Add(Sources);
+
+            db.updateAgeRestriction(IsChecked[getIsCheckedIndex("age")]);
+            
+        }
+
+        public static System.Collections.Generic.List<TextBlock> listBoxSources = new System.Collections.Generic.List<TextBlock>() { hdkinozor_ru, netflix_com, ivi_ru, lostfilm_tv, kinokrad_co, filmzor_net };
+
+        //Import
+        void import_my_butt_Click(object sender, RoutedEventArgs e)
+        {
+            string[] lines = new string[16];
+            string filename = "";//Полный адрес файла
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);//Начальная директория
+            openFileDialog.Filter = "Only NewMovies settings file (*.nmsettings)|*.nmsettings";//Фильтр по расширению файла
+
+            if (openFileDialog.ShowDialog() == true)//Выбор файла *.settings
+            {
+                filename = openFileDialog.FileName;
+            }
+            else//Если файл не был выбран
+            {
+                return;//Выход из обработчика события
+            }
+            using (StreamReader sr = new StreamReader(filename))
+            {
+                lines = sr.ReadLine().Split('=', ';');
+            }
+            int temp = 0;
+            for (int j = 1; j < lines.Length; j += 2)
+            {
+                IsChecked[temp] = Convert.ToBoolean(lines[j]);
+                db.SetSettings(temp.ToString(), IsChecked[temp], true);
+                temp++;
+            }
+            settings_load();
+            MessageBox.Show("Импорт настроек прошёл успешно!");
+        }
+        
+        //Export
+        void export_my_butt_Click(object sender, RoutedEventArgs e)
+        {
+            string line = "";
+            string path = "";
+
+            for (int i = 0; i < IsChecked.Length; i++)
+            {
+                line += i + "=" + IsChecked[i] + ";";
+            }
+
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderBrowserDialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);//Начальная директория
+            folderBrowserDialog.Description = "Выберите, куда сохранить файл с настройками:";
+            folderBrowserDialog.ShowNewFolderButton = false;
+
+            if (folderBrowserDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+
+            path = folderBrowserDialog.SelectedPath + "\\NewMovies_v" + System.Windows.Forms.Application.ProductVersion.ToString() + "_export_file.nmsettings";
+
+            using (StreamWriter sw = new StreamWriter(path, false))
+            {
+                sw.Write(line);
+            }
+            MessageBox.Show("Для восстановления настроек выберите для импорта этот файл: " + path);
+        }
+
+        //Sources
+        void Sources_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            var temp = Sources.SelectedIndex;
+            if (temp == 0)
+                db.SetSettings((temp + 7).ToString(), !IsChecked[temp + 7], true);
+            else
+                db.SetSettings((temp + 1).ToString(), !IsChecked[temp + 1], true);
+            settings_load();
+        }
+
+        //Notification (0)
+        void notify_Checked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[0] = true;
+            db.SetSettings("notify", IsChecked[0]);
+            settings_load();
+        }
+
+        void notify_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[0] = false;
+            db.SetSettings("notify", IsChecked[0]);
+            settings_load();
+        }
+
+        //Age verification (1)
+        void age_Checked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[1] = true;
+            db.SetSettings("age", IsChecked[1]);
+            settings_load();
+        }
+
+        void age_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[1] = false;
+            db.SetSettings("age", IsChecked[1]);
+            settings_load();
+        }
+
+        //Netflix (2)
+        void netflix_com_Checked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[2] = true;
+            db.SetSettings("netflix_com", IsChecked[2]);
+            settings_load();
+        }
+
+        void netflix_com_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[2] = false;
+            db.SetSettings("netflix_com", IsChecked[2]);
+            settings_load();
+        }
+
+        //Ivi (3)
+        void ivi_ru_Checked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[3] = true;
+            db.SetSettings("ivi_ru", IsChecked[3]);
+            settings_load();
+        }
+
+        void ivi_ru_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[3] = false;
+            db.SetSettings("ivi_ru", IsChecked[3]);
+            settings_load();
+        }
+
+        //Lostfilm (4)
+        void lostfilm_tv_Checked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[4] = true;
+            db.SetSettings("lostfilm_tv", IsChecked[4]);
+            settings_load();
+        }
+
+        void lostfilm_tv_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[4] = false;
+            db.SetSettings("lostfilm_tv", IsChecked[4]);
+            settings_load();
+        }
+
+        //Kinokrad (5)
+        void kinokrad_co_Checked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[5] = true;
+            db.SetSettings("kinokrad_co", IsChecked[5]);
+            settings_load();
+        }
+
+        void kinokrad_co_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[5] = false;
+            db.SetSettings("kinokrad_co", IsChecked[5]);
+            settings_load();
+        }
+
+        //Filmzor (6)
+        void filmzor_net_Checked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[6] = true;
+            db.SetSettings("filmzor_net", IsChecked[6]);
+            settings_load();
+        }
+
+        void filmzor_net_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsChecked[6] = false;
+            db.SetSettings("filmzor_net", IsChecked[6]);
+            settings_load();
+        }
+
+        //Hdkinozor (7)
+        void hdkinozor_ru_Checked(object sender, RoutedEventArgs e)
+        {
+            db.SetSettings("hdkinozor_ru", true);
+        }
+
+        void hdkinozor_ru_Unchecked(object sender, RoutedEventArgs e)
+        {
+            db.SetSettings("hdkinozor_ru", true);
+        }
+
+        //Settings butt clicked
+        private void Button_settings_Click(object sender, RoutedEventArgs e)
+        {
+            if (textBox_content_headet.Text == "Настройки")
+                return;
+            settings_load();
+            //ShowNotification();
+        }
+
+        // <-- Блок методов для меню настроек
+        */
 
 
 
