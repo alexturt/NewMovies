@@ -460,6 +460,8 @@ namespace projectE
             {
                 thread.Start();
             }
+            if (combobox_top_choose.SelectedIndex == 0 || textBox_content_headet.Text == "Рекомендовано")
+                return;
             combobox_top_choose.SelectedIndex = 0;
             offset = 0;
             update_movies("Рекомендовано", limit, offset);
@@ -476,6 +478,8 @@ namespace projectE
         //нажали кнопку избранное (меню)
         private void button_favorite_list_Click_1(object sender, RoutedEventArgs e)
         {
+            if (combobox_top_choose.SelectedIndex == 2)
+                return;
             offset = 0;
             combobox_top_choose.SelectedIndex = 2;
             update_movies("Избранное", limit, offset);//показывает избранные фильмы
@@ -1211,6 +1215,8 @@ namespace projectE
         //Settings butt clicked
         private void Button_settings_Click(object sender, RoutedEventArgs e)
         {
+            if (textBox_content_headet.Text == "Настройки")
+                return;
             settings_load();
             ShowNotification();
         }
