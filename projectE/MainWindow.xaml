@@ -18,6 +18,7 @@
         >
         <!--начало стилей-->
     <Window.Resources>
+        
         <SolidColorBrush x:Key="redStyle" Color="BlanchedAlmond" />
         <!--<LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
