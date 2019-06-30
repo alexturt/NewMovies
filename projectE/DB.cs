@@ -207,7 +207,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (showRestricted)
+            if (!showRestricted)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true and agerating<>'18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
             }
@@ -239,7 +239,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (showRestricted)
+            if (!showRestricted)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date + "' and agerating<>'18+' ", conn);
             }
@@ -262,7 +262,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (showRestricted)
+            if (!showRestricted)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' and agerating<>'18+' ORDER BY date DESC", conn);
             }
@@ -298,7 +298,7 @@ namespace projectE
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (showRestricted)
+            if (!showRestricted)
             {
                 dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' and date<'" + today + "' and agerating<>'18+' ORDER BY date DESC", conn);
             }
