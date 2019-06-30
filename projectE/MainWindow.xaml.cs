@@ -23,8 +23,9 @@ namespace projectE
         {
             InitializeComponent();
             CheckSettings();
-            columns_count = 3;
+            columns_count = 2;
             limit = columns_count * 8;
+            //limit = 0;
             offset = 0;
             combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Все", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
             combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Рекомендовано", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
@@ -141,15 +142,11 @@ namespace projectE
                 return;
             if (e.Source.GetType() == typeof(TextBlock))
             {
-                try
-                {
                     Title.Text = (e.Source as TextBlock).Tag.ToString();
                     grid_content.MouseLeftButtonUp -= grid_list_MouseLeftButtonUp_1;
                     //GC.Collect();
                     dt_movies = db.GetMovie(Convert.ToInt32((e.Source as TextBlock).Tag));
                     content_load(0);//показать инфу о фильме в правой вкладке
-                }
-                catch { }
             }
             else
             if (e.Source.GetType() == typeof(Image))
@@ -350,16 +347,39 @@ namespace projectE
                 }
                 create_and_add_elements(grid_row, i);
             }
+            string str = "Пусто";
+            switch (((TextBlock)combobox_top_choose.SelectedItem).Text)
+            {
+                case "Все":
+                    str = "Фильмов в базе данных нет";
+                    break;
+                case "Рекомендовано":
+                    str = "Рекомендованных фильмов нет";
+                    break;
+                case "Избранное":
+                    str = "Список избранного пуст";
+                    break;
+                case "Новинки за сегодня":
+                    str = "Новинок за сегодня нет";
+                    break;
+                case "Новинки за неделю":
+                    str = "Новинок за неделю нет";
+                    break;
+                case "Новинки за месяц":
+                    str = "Новинок за месяц нет";
+                    break;
+            }
             if (dt_movies.Rows.Count == 0)
             {
                 _grid.RowDefinitions.Add(new RowDefinition());
                 TextBlock tb = new TextBlock()
                 {
-                    Text = ((TextBlock)combobox_top_choose.SelectedItem).Text + " нет",
+                    Text = str,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
                     FontSize = 18,
-                    Foreground = Brushes.LightGray
+                    Foreground = Brushes.LightGray,
+                    IsEnabled = false
                 };
                 Grid.SetRow(tb, 0);
                 _grid.Children.Add(tb);
@@ -460,10 +480,11 @@ namespace projectE
             {
                 thread.Start();
             }
-            if (combobox_top_choose.SelectedIndex == 0 || textBox_content_headet.Text == "Рекомендовано")
+            if (combobox_top_choose.SelectedIndex == 0 && textBox_content_headet.Text == "Рекомендовано")
                 return;
             combobox_top_choose.SelectedIndex = 0;
             offset = 0;
+            textBox_content_headet.Text = "Рекомендовано";
             update_movies("Рекомендовано", limit, offset);
             show_movies(grid_content, button_sctoll_top);
 
