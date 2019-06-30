@@ -274,47 +274,45 @@ namespace projectE
         //Костыль 
         public void update_movies(string movies, int limit, int offset)
         {
-            if (IsChecked[1])//Проверка на возраст /18+ под запретом
+            switch (movies)
             {
-                
-            }
-            else//Проверка на возраст /Можно всё
-            {
-                switch (movies)
-                {
-                    case "Все":
-                        if (IsChecked[1])//Проверка на возраст /18+ под запретом
-                        {
-
-                        }
+                case "Все":
+                    if (!IsChecked[1])//Проверка на возраст /18+ под запретом
+                    {
+                        dt_movies = db.GetMovies(limit, offset, true);
+                        allmoviesCount = db.GetMoviesCount();
+                        break;
+                    }
+                    else
+                    {
                         dt_movies = db.GetMovies(limit, offset);
                         allmoviesCount = db.GetMoviesCount();
                         break;
-                    case "Рекомендовано":
-                        dt_movies = db.GetRecommends();
-                        //allmoviesCount = db.GetMoviesCount();
-                        textBox_content_headet.Text = "Рекомендовано";
-                        grid_content.MouseLeftButtonUp += grid_list_MouseLeftButtonUp_1;
-                        break;
-                    case "Новинки за сегодня":
-                        dt_movies = db.GetMoviesToday();
-                        allmoviesCount = db.GetMoviesTodayCount();
-                        break;
-                    case "Новинки за неделю":
-                        dt_movies = db.GetMoviesWeek();
-                        allmoviesCount = db.GetMoviesWeekCount();
-                        break;
-                    case "Новинки за месяц":
-                        dt_movies = db.GetMoviesMonth();
-                        allmoviesCount = db.GetMoviesMonthCount();
-                        break;
-                    case "Избранное":
-                        dt_movies = db.GetFavorites(limit, offset);
-                        allmoviesCount = db.GetFavoritesCount();
-                        break;
-                }
-                GC.Collect();
+                    }
+                case "Рекомендовано":
+                    dt_movies = db.GetRecommends();
+                    //allmoviesCount = db.GetMoviesCount();
+                    textBox_content_headet.Text = "Рекомендовано";
+                    grid_content.MouseLeftButtonUp += grid_list_MouseLeftButtonUp_1;
+                    break;
+                case "Новинки за сегодня":
+                    dt_movies = db.GetMoviesToday();
+                    allmoviesCount = db.GetMoviesTodayCount();
+                    break;
+                case "Новинки за неделю":
+                    dt_movies = db.GetMoviesWeek();
+                    allmoviesCount = db.GetMoviesWeekCount();
+                    break;
+                case "Новинки за месяц":
+                    dt_movies = db.GetMoviesMonth();
+                    allmoviesCount = db.GetMoviesMonthCount();
+                    break;
+                case "Избранное":
+                    dt_movies = db.GetFavorites(limit, offset);
+                    allmoviesCount = db.GetFavoritesCount();
+                    break;
             }
+            GC.Collect();
             GC.Collect();
         }
         /// <summary>
