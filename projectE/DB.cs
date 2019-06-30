@@ -136,7 +136,7 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (ageRating)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE NOT ageratin='18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE NOT agerating='18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
             }
             else
             {

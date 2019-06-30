@@ -744,6 +744,8 @@ namespace projectE
                     scroll_viewer_center.ScrollToTop();
                     break;
             }
+
+            
         }
         //
 
@@ -768,6 +770,7 @@ namespace projectE
             {
                 IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
             }
+            db.updateAgeRating(!IsChecked[1]);
         }
 
         private void settings_load()//Подгрузка настроек
@@ -1033,7 +1036,7 @@ namespace projectE
             Grid.SetRow(Sources, 4);
             Grid.SetColumnSpan(Sources, 3);
             grid_content.Children.Add(Sources);
-
+            db.updateAgeRating(!IsChecked[1]);
             /*
             Grid.SetColumn(lbl, 0);
             Grid.SetRow(lbl, 4);
@@ -1178,6 +1181,7 @@ namespace projectE
             IsChecked[3] = true;
             db.SetSettings("ivi_ru", IsChecked[3]);
             settings_load();
+            e.Handled = true;
         }
 
         void ivi_ru_Unchecked(object sender, RoutedEventArgs e)
@@ -1185,6 +1189,7 @@ namespace projectE
             IsChecked[3] = false;
             db.SetSettings("ivi_ru", IsChecked[3]);
             settings_load();
+            e.Handled = true;
         }
 
         //Lostfilm (4)
@@ -1274,7 +1279,13 @@ namespace projectE
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
             }
         }
-        
+
+        private void combobox_top_choose_DropDownClosed(object sender, EventArgs e)
+        {
+            
+            //combobox_top_choose.IsDropDownOpen = true;
+        }
+
         // <-- Блок методов для уведомлений
     }
 }
