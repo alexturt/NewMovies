@@ -1212,7 +1212,7 @@ namespace projectE
         private void Button_settings_Click(object sender, RoutedEventArgs e)
         {
             settings_load();
-            ShowNotification();
+            //ShowNotification();
         }
 
         // <-- Блок методов для меню настроек
