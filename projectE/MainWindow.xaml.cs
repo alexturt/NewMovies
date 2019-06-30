@@ -23,7 +23,7 @@ namespace projectE
         {
             InitializeComponent();
             CheckSettings();
-            columns_count = 2;
+            columns_count = 4;
             limit = columns_count * 8;
             //limit = 0;
             offset = 0;
@@ -770,7 +770,7 @@ namespace projectE
             {
                 IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
             }
-            db.updateAgeRestriction(IsChecked[1]);
+            db.updateAgeRestriction(!IsChecked[1]);
         }
 
         private void settings_load()//Подгрузка настроек
@@ -1036,7 +1036,7 @@ namespace projectE
             Grid.SetRow(Sources, 4);
             Grid.SetColumnSpan(Sources, 3);
             grid_content.Children.Add(Sources);
-            db.updateAgeRating(!IsChecked[1]);
+            db.updateAgeRestriction(!IsChecked[1]);
             /*
             Grid.SetColumn(lbl, 0);
             Grid.SetRow(lbl, 4);
@@ -1137,7 +1137,10 @@ namespace projectE
             db.SetSettings("notify", IsChecked[0]);
             settings_load();
         }
-
+        void test(object _object)
+        {
+            ((ComboBox)_object).IsDropDownOpen = true;
+        }
         void notify_Unchecked(object sender, RoutedEventArgs e)
         {
             IsChecked[0] = false;
