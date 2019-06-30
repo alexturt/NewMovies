@@ -22,7 +22,7 @@ namespace projectE
         public MainWindow()
         {
             InitializeComponent();
-            
+            CheckSettings();
             columns_count = 3;
             limit = columns_count * 8;
             offset = 0;
@@ -271,19 +271,24 @@ namespace projectE
 
         const int settings_amount = 8;
         bool[] IsChecked = new bool[settings_amount];
-        
+
         //Settings 
         // 0 - notify; 1 - age; 2 - netflix_com; 3 - ivi_ru;
         // 4 - lostfilm_tv; 5 - kinokrad_co; 6 - filmzor_net; 7 - hdkinozor_ru;
 
-        private void settings_load()//Подгрузка настроек
+        public void CheckSettings()
         {
-            textBox_content_headet.Text = "Настройки";
             DataTable dt = db.GetSettings();
             for (int i = 0; i < settings_amount; i++)
             {
                 IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
             }
+        }
+
+        private void settings_load()//Подгрузка настроек
+        {
+            textBox_content_headet.Text = "Настройки";
+            CheckSettings();
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
@@ -730,7 +735,6 @@ namespace projectE
 
         void hdkinozor_ru_Unchecked(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Нельзя убрать основной источник!");
             IsChecked[7] = true;
             settings_load();
         }
@@ -935,7 +939,7 @@ namespace projectE
             openPanel();
             scroll_viewer_center.ScrollToTop();//проскролить вверх
             scroll_viewer_content.ScrollToTop();
-       //     thread.Abort();
+            //thread.Abort();
             GC.Collect();
         }
         //нажали кнопку избранное (меню)
