@@ -956,6 +956,7 @@ namespace projectE
                 Background = backColorNULL,
                 Foreground = foreColor,
                 Padding = new Thickness(5, 5, 5, 5),
+                MaxDropDownHeight = 1000
             };
             Sources.SelectionChanged += Sources_SelectionChanged;
 
