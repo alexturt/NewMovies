@@ -812,6 +812,7 @@ namespace projectE
                 IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
             }
             db.updateAgeRestriction(IsChecked[1]);
+            dt.Dispose();
         }
 
         //Sources
@@ -833,6 +834,7 @@ namespace projectE
         {
             textBox_content_headet.Text = "Настройки";
             CheckSettings();
+            GC.Collect();
             if (!grid.ColumnDefinitions[2].IsEnabled)
                 openPanel();
             grid_content.Children.Clear();
