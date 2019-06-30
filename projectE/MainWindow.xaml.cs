@@ -85,7 +85,7 @@ namespace projectE
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            CheckSettings();
             offset = 0;
             update_movies("Все", limit, offset);
             show_movies(grid_list, button_sctoll_top);
@@ -792,7 +792,7 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Height = 30,
                 FontSize = fontSize,
-                Width = 170,
+                Width = 160,
                 Background = Brushes.Black,
                 Foreground = foreColor,
                 Content = "Экспорт настроек",
@@ -806,7 +806,7 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Height = 30,
                 FontSize = fontSize,
-                Width = 170,
+                Width = 160,
                 Background = Brushes.Black,
                 Foreground = foreColor,
                 Content = "Импорт настроек",
@@ -1218,7 +1218,7 @@ namespace projectE
             if (textBox_content_headet.Text == "Настройки")
                 return;
             settings_load();
-            ShowNotification();
+            //ShowNotification();
         }
 
         // <-- Блок методов для меню настроек

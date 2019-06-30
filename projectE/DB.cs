@@ -123,7 +123,7 @@ namespace projectE
             return dt;
         }
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
-        public DataTable GetMovies(int limit, int offset, bool restricted = true)
+        public DataTable GetMovies(int limit, int offset, bool restricted = false)
         {
             if (conn == null)
                 connect();
