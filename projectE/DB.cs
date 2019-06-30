@@ -88,6 +88,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
 
@@ -115,17 +116,29 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date asc limit 25", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
-        public DataTable GetMovies(int limit, int offset)
+        public DataTable GetMovies(int limit, int offset, bool restricted = false)
         {
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date desc limit "+ limit +" offset " + offset, conn);
-            dataAdapter.Fill(dt);
-            return dt;
+            if (restricted)
+            {
+                SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date desc limit " + limit + " offset " + offset, conn);
+                dataAdapter.Fill(dt);
+                dataAdapter.Dispose();
+                return dt;
+            }
+            else
+            {
+                SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date desc limit " + limit + " offset " + offset, conn);
+                dataAdapter.Fill(dt);
+                dataAdapter.Dispose();
+                return dt;
+            }
         }
         //выгрузка фильма по id
         public DataTable GetMovie(int index)
@@ -135,6 +148,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where id="+index, conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
         //выгрузка кол-ва фильмов
@@ -145,6 +159,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select count(*) from movies", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
         }
         //выгрузка кол-ва фильмов
@@ -156,6 +171,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select count(*) from movies where date='" + date + "' ", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
         }
         //выгрузка всго избранного, сортировка по дате(сначала свежие)
@@ -166,6 +182,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=true order by date desc limit " + limit+" offset "+offset, conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
         //выгрузка кол-ва избранного, сортировка по дате(сначала свежие)
@@ -176,6 +193,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select count(*) from movies where favorite=true order by date desc", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
         }
         //выгрузка сегодняшних фильмов
@@ -187,6 +205,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date='"+date+"' ", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
         //выгрузка фильмов за неделю
@@ -199,6 +218,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date>'" + date + "'   order by date desc", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
         //выгрузка кол-ва фильмов за неделю
@@ -211,6 +231,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select count(*) from movies where date>'" + date + "' and favorite=false", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
         }
         //выгрузка фильмов за месяц
@@ -223,6 +244,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where date>'" + date + "'   order by date desc", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
         //выгрузка кол-ва фильмов за месяц
@@ -235,6 +257,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select count(*) from movies where date>'" + date + "' and favorite=false  order by date desc", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
         }
         //выгрузка всго просмотренного, сортировка по дате(сначала свежие)
@@ -245,6 +268,7 @@ namespace projectE
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where watched=true order by date desc", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
         //устанавливаем/снимаем избранное
