@@ -1212,7 +1212,7 @@ namespace projectE
 
         // Блок методов для уведомлений -->
 
-        public void ShowNotification()
+        public void ShowNotification(int time = 10000, string header = "Notification", string text = "All is Okay!")
         {
             if (IsChecked[0])
             {
@@ -1222,7 +1222,7 @@ namespace projectE
                 {
                     notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                 }
-                notifyIcon.ShowBalloonTip(100000, "Notification", "All is Okay!", notifyIcon.BalloonTipIcon);
+                notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
             }
         }
         
