@@ -435,20 +435,6 @@ namespace projectE
                 Tag = dt_movies.Rows[i]["id"]//index
             };
             btf.Click += button_favorite_Click;//привязывание события клика
-            //Button btw = new Button()//кнопка добавления/удаления из просмотренного
-            //{
-            //    Name = "button_watched" + i,
-            //    Height = 40,
-            //    Width = 40,
-            //    Background = null,
-            //    VerticalAlignment = VerticalAlignment.Top,
-            //    HorizontalAlignment = HorizontalAlignment.Left,
-            //    BorderThickness = new Thickness(0, 0, 0, 0),
-            //    //присвоение соответсвтующей картинки
-            //    Content = new Image() { Source = Convert.ToBoolean(dt_movies.Rows[i]["watched"]) == false ? noWatchedImg : WatchedImg, Stretch = Stretch.Fill, Margin = new Thickness(5) },
-            //    Tag = i//id фильма
-            //};
-            //btw.Click += button_watched_Click;//привязывание события клика
             TextBlock tb = new TextBlock()//текст справа от постера
             {
                 Name = "textBlock_middle_content" + i,
@@ -481,10 +467,6 @@ namespace projectE
             Grid.SetRow(tb, 1);
             _grid_row.Children.Add(tb);
 
-            //Grid.SetColumn(btf, i % columns_count * 2 + 1);
-            //Grid.SetRow(btf, 1);
-            //_grid_row.Children.Add(btf);
-
             //кнопка на постере //в методах сверху убрать лишние колонки
             Grid.SetColumn(btf, i % _columns_count * 2 + 1);
             Grid.SetRow(btf, 0);
@@ -505,6 +487,7 @@ namespace projectE
             Parser parser = new Parser();
             parser.UpdateList();
             isRun = false;
+            GC.Collect();
         }
         Thread thread;
         //нажали кнопку домой
@@ -550,7 +533,7 @@ namespace projectE
         //нажали кнопку закрыть окно
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
-            //Close();
+            GC.Collect();
             Process.GetCurrentProcess().Kill();
         }
         //нажали кнопку "во весь экран" или "вернуть к нормальному размеру"
@@ -624,14 +607,10 @@ namespace projectE
         //нажали кнопку просмотренное (меню)
         private void button_watched_Click_1(object sender, RoutedEventArgs e)
         {
-            //watched_load();//показывает просмотренные фильмы
-            //scroll_viewer_center.ScrollToTop();//проскролить вверх
         }
-
+        //удаление удаленных записей из файла БД
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {//удаление удаленных записей из файла БД
-            //notifyIcon = null;
-            //notifyIcon.Dispose();
+        {
             db.Vacuum();
             
         }
@@ -712,7 +691,6 @@ namespace projectE
         int lists = 1;
         private void scroll_viewer_center_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            //Title.Text = lists.ToString() + " " + offset.ToString();
             if (e.VerticalOffset == scroll_viewer_center.ScrollableHeight
                 && combobox_top_choose.SelectedIndex != -1 && offset + limit < allmoviesCount
                 && dt_movies.Rows.Count > 0)
@@ -724,7 +702,6 @@ namespace projectE
                 update_movies(str, limit, offset - columns_count* columns_count*lists);
                 show_movies(grid_list, button_sctoll_top, columns_count);
                 scroll_viewer_center.ScrollToVerticalOffset(10);
-                //lists++;
             }
             if (e.VerticalOffset == 0 && combobox_top_choose.SelectedIndex != -1)
             {
@@ -928,9 +905,24 @@ namespace projectE
                 ClickMode = ClickMode.Press,
                 //Padding = new Thickness(50, 50, 50, 50)
             };
+            Button kiss_my_butt = new Button()//Auth
+            {
+                Name = "button_in_settings",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Height = 30,
+                FontSize = fontSize,
+                Width = 100,
+                Background = backColorButt,
+                Foreground = foreColor,
+                Content = "Auth",
+                ClickMode = ClickMode.Press,
+                //Padding = new Thickness(50, 50, 50, 50)
+            };
             export_my_butt.Click += export_my_butt_Click;
             import_my_butt.Click += import_my_butt_Click;
             kick_my_butt.Click += kick_my_butt_Click;
+            kiss_my_butt.Click += kiss_my_butt_Click;
 
             CheckBox notify = new CheckBox()//Уведомления
             {
@@ -1205,7 +1197,7 @@ namespace projectE
 
             Grid.SetColumn(age, 0);
             Grid.SetRow(age, 3);
-            Grid.SetColumnSpan(age, 3);
+            Grid.SetColumnSpan(age, 1);//3
             grid_content.Children.Add(age);
 
             Grid.SetColumn(import_my_butt, 0);
@@ -1217,6 +1209,11 @@ namespace projectE
             Grid.SetRow(export_my_butt, 1);
             Grid.SetColumnSpan(export_my_butt, 3);
             grid_content.Children.Add(export_my_butt);
+
+            Grid.SetColumn(kiss_my_butt, 1);
+            Grid.SetRow(kiss_my_butt, 3);
+            Grid.SetColumnSpan(kiss_my_butt, 2);
+            grid_content.Children.Add(kiss_my_butt);
 
             Grid.SetColumn(lbl, 0);
             Grid.SetRow(lbl, 4);
@@ -1295,6 +1292,13 @@ namespace projectE
                 sw.Write(line);
             }
             MessageBox.Show("Для восстановления настроек выберите для импорта этот файл: " + path);
+        }
+
+        //Auth
+        void kiss_my_butt_Click(object sender, RoutedEventArgs e)
+        {
+            UserControlAuth AuthWindow = new UserControlAuth();
+            AuthWindow.ShowDialog();
         }
 
         //Reset

@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:projectE"
         mc:Ignorable="d"
         Title="UserControlAuth" 
-        Height="200" 
-        Width="300"
+        Height="300" 
+        Width="250"
         ResizeMode="NoResize"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen" 
@@ -18,17 +18,17 @@
         Topmost="True" 
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
         >
-    <Grid Name="grid" Background="#17212B">
+    <Grid x:Name="grid" Background="#17212B">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="200"></RowDefinition>
+            <RowDefinition Height="280"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <!-- заголовок окна -->
-        <Grid Background="#283949" Name="grid_top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="auto">
+        <Grid Background="#283949" x:Name="grid_top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="40"></ColumnDefinition>
@@ -39,7 +39,7 @@
                 <RowDefinition Height="20"></RowDefinition>
             </Grid.RowDefinitions>
             <Image Name="icon" Grid.Column="0" Source="Resources/icon.ico" HorizontalAlignment="Left"/>
-            <TextBlock Name="Title" Grid.Column="0" Text="Авторизация" Height="20" Margin="20,0,0,0" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
+            <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" Margin="20,0,0,0" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
             <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click">
                 <Image Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center" Source="Resources/hide.png"/>
             </Button>
@@ -50,13 +50,14 @@
                 <Image Height="20" Width="20" Stretch="Uniform" Source="Resources/exit.png"/>
             </Button>
         </Grid>
-        <Grid Name="grid_list" Background="#0E1621"  ShowGridLines="False" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-                    <Label Content="Логин:" Foreground="WhiteSmoke" HorizontalAlignment="Left" Margin="75,0,0,0" VerticalAlignment="Top" Width="150" Height="30"/>
-                    <TextBox x:Name="login" Foreground="WhiteSmoke" Background="#FF17212B" HorizontalAlignment="Left" Margin="75,30,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="150" Height="30"/>
-                    <Label Content="Пароль:" Foreground="WhiteSmoke" HorizontalAlignment="Left" Margin="75,60,0,0" VerticalAlignment="Top" Width="150" Height="30"/>
-                    <PasswordBox x:Name="password" Foreground="WhiteSmoke" Background="#FF17212B" HorizontalAlignment="Left" Margin="75,90,0,0" VerticalAlignment="Top" Width="150" Height="30"/>
-                    <Button x:Name="button_one" Content="OK" Foreground="WhiteSmoke" Background="#FF17212B" HorizontalAlignment="Left" Margin="75,130,0,0" VerticalAlignment="Top" Width="50" Height="30" Click="Button_one_Click"/>
-                    <Button x:Name="button_two" Content="Back" Foreground="WhiteSmoke" Background="#FF17212B" HorizontalAlignment="Left" Margin="175,130,0,0" VerticalAlignment="Top" Width="50" Height="30" Click="Button_two_Click"/>
+        <Grid x:Name="grid_form" Background="#0E1621" Grid.Column="0" Grid.Row="1" Margin="0">
+            <Label Content="Авторизация/Регистрация" FontSize="16" Foreground="WhiteSmoke" HorizontalAlignment="Left" Margin="25,20,0,0" VerticalAlignment="Top" Width="210" Height="30"/>
+            <Label Content="Логин:" Foreground="WhiteSmoke" HorizontalAlignment="Left" Margin="50,60,0,0" VerticalAlignment="Top" Width="150" Height="30"/>
+            <TextBox x:Name="login" Foreground="WhiteSmoke" Background="#FF17212B" HorizontalAlignment="Left" Margin="50,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="150" Height="30"/>
+            <Label Content="Пароль:" Foreground="WhiteSmoke" HorizontalAlignment="Left" Margin="50,120,0,0" VerticalAlignment="Top" Width="150" Height="30"/>
+            <PasswordBox x:Name="password" Foreground="WhiteSmoke" Background="#FF17212B" HorizontalAlignment="Left" Margin="50,150,0,0" VerticalAlignment="Top" Width="150" Height="30"/>
+            <Button x:Name="button_one" Content="OK" Foreground="WhiteSmoke" Background="#FF17212B" HorizontalAlignment="Left" Margin="50,200,0,0" VerticalAlignment="Top" Width="50" Height="30" Click="Button_one_Click"/>
+            <Button x:Name="button_two" Content="Back" Foreground="WhiteSmoke" Background="#FF17212B" HorizontalAlignment="Left" Margin="150,200,0,0" VerticalAlignment="Top" Width="50" Height="30" Click="Button_two_Click"/>
 
         </Grid>
 

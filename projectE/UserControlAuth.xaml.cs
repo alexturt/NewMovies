@@ -26,8 +26,9 @@ namespace projectE
         }
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
-            //Close();
-            Process.GetCurrentProcess().Kill();
+            
+            //Process.GetCurrentProcess().Kill();
+            Close();
         }
         //нажали кнопку "во весь экран" или "вернуть к нормальному размеру"
         private void button_maximazing_Click(object sender, RoutedEventArgs e)
