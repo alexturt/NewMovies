@@ -1440,12 +1440,14 @@ namespace projectE
 
         private void button_filtering_close_Click(object sender, RoutedEventArgs e)
         {
+            grid.RowDefinitions[2].IsEnabled = false;
             grid.RowDefinitions[2].Height = new GridLength(0);
             button_filtering_open.Visibility = Visibility.Visible;
         }
 
         private void button_filtering_open_Click(object sender, RoutedEventArgs e)
         {
+            grid.RowDefinitions[2].IsEnabled = true;
             grid.RowDefinitions[2].Height = new GridLength(1,GridUnitType.Auto);
             button_filtering_open.Visibility = Visibility.Collapsed;
             textbox_filtering.Text = "";
@@ -1466,7 +1468,7 @@ namespace projectE
             allmoviesCount = dt_movies.Rows.Count;
             show_movies(grid_list, button_sctoll_top, columns_count);
             sw.Stop();
-            textbox_filtering.Text = sw.ElapsedMilliseconds.ToString();
+            //textbox_filtering.Text = sw.ElapsedMilliseconds.ToString();
         }
 
         // <-- Блок методов для уведомлений
