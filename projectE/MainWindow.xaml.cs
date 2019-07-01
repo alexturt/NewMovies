@@ -37,7 +37,6 @@ namespace projectE
             combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за неделю", Foreground = Brushes.LightGray, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за месяц", Foreground = Brushes.LightGray, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.SelectedIndex = 0;
-            //DataTable dt =  db.GetMovieF();
             { }
         }
         DB db = new DB();
@@ -833,6 +832,8 @@ namespace projectE
             }
             db.updateAgeRestriction(IsChecked[1]);
             dt.Dispose();
+            //UserControlAuth AuthWindow = new UserControlAuth();
+            //AuthWindow.ShowDialog();
         }
 
         //Sources
