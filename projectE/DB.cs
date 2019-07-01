@@ -53,9 +53,10 @@ namespace projectE
             }
             try
             {
+                name = name.Trim();
                 cmd = new SQLiteCommand(conn);
                 cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched,dateAdd) " +
-                    "SELECT LOWER(@name),@year,@date,@country,LOWER(@genres),@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched,@dateAdd " +
+                    "SELECT @name,@year,@date,@country,LOWER(@genres),@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched,@dateAdd " +
                     "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
                 cmd.Parameters.Add("@name", DbType.String).Value = name;
                 cmd.Parameters.Add("@year", DbType.Int32).Value = year;

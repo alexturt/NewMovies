@@ -426,58 +426,66 @@ namespace projectE
 
         private void create_and_add_elements(Grid _grid_row, int i, int _columns_count)
         {
-            Button btf = new Button()//кнопка добавления/удаления из избранного
+            try
             {
-                Name = "button_favorite" + i,
-                Height = 40,
-                Width = 40,
-                //Background = null,
-                VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                BorderThickness = new Thickness(0, 0, 0, 0),
-                //присвоение соответсвтующей картинки
-                Content = new Image() { Source = Convert.ToBoolean(dt_movies.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill, Margin = new Thickness(5) },
-                Tag = dt_movies.Rows[i]["id"]//index
-            };
-            btf.Click += button_favorite_Click;//привязывание события клика
-            TextBlock tb = new TextBlock()//текст справа от постера
-            {
-                Name = "textBlock_middle_content" + i,
-                TextWrapping = TextWrapping.WrapWithOverflow,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                Text = dt_movies.Rows[i]["name"].ToString(),
-                Foreground = Brushes.LightGray,
-                FontSize = 14,
-                Padding = new Thickness(5, 5, 5, 25),
-                Tag = dt_movies.Rows[i]["id"]//index
-            };
-            Image img = new Image()//постер
-            {
-                Source = dt_movies.Rows[i]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[i]["poster"]),//картинка из массива по id
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                Stretch = Stretch.Uniform,
-                Tag = dt_movies.Rows[i]["id"]//index
-            };
-            //расстановка и добавление элементов в грид
+                Button btf = new Button()//кнопка добавления/удаления из избранного
+                {
+                    Name = "button_favorite" + i,
+                    Height = 40,
+                    Width = 40,
+                    //Background = null,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    BorderThickness = new Thickness(0, 0, 0, 0),
+                    //присвоение соответсвтующей картинки
+                    Content = new Image() { Source = Convert.ToBoolean(dt_movies.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill, Margin = new Thickness(5) },
+                    Tag = dt_movies.Rows[i]["id"]//index
+                };
 
-            Grid.SetColumn(img, i % _columns_count * 2);
-            Grid.SetColumnSpan(img, 2);
-            Grid.SetRow(img, 0);
-            _grid_row.Children.Add(img);
+                btf.Click += button_favorite_Click;//привязывание события клика
+                TextBlock tb = new TextBlock()//текст справа от постера
+                {
+                    Name = "textBlock_middle_content" + i,
+                    TextWrapping = TextWrapping.WrapWithOverflow,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Text = dt_movies.Rows[i]["name"].ToString(),
+                    Foreground = Brushes.LightGray,
+                    FontSize = 14,
+                    Padding = new Thickness(5, 5, 5, 25),
+                    Tag = dt_movies.Rows[i]["id"]//index
+                };
 
-            Grid.SetColumn(tb, i % _columns_count * 2);
-            Grid.SetColumnSpan(tb, 2);
-            Grid.SetRow(tb, 1);
-            _grid_row.Children.Add(tb);
+                Image img = new Image()//постер
+                {
+                    Source = dt_movies.Rows[i]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[i]["poster"]),//картинка из массива по id
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Stretch = Stretch.Uniform,
+                    Tag = dt_movies.Rows[i]["id"]//index
+                };
+                //расстановка и добавление элементов в грид
 
-            //кнопка на постере //в методах сверху убрать лишние колонки
-            Grid.SetColumn(btf, i % _columns_count * 2 + 1);
-            Grid.SetRow(btf, 0);
-            _grid_row.Children.Add(btf);
-            tags.Add(dt_movies.Rows[i]["id"]);
+                Grid.SetColumn(img, i % _columns_count * 2);
+                Grid.SetColumnSpan(img, 2);
+                Grid.SetRow(img, 0);
+                _grid_row.Children.Add(img);
+
+                Grid.SetColumn(tb, i % _columns_count * 2);
+                Grid.SetColumnSpan(tb, 2);
+                Grid.SetRow(tb, 1);
+                _grid_row.Children.Add(tb);
+
+                //кнопка на постере //в методах сверху убрать лишние колонки
+                Grid.SetColumn(btf, i % _columns_count * 2 + 1);
+                Grid.SetRow(btf, 0);
+                _grid_row.Children.Add(btf);
+                tags.Add(dt_movies.Rows[i]["id"]);
+            }
+
+            catch { }
         }
+
         //для отладки и прочего
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
@@ -626,14 +634,15 @@ namespace projectE
                 return new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
             var image = new BitmapImage();
             using (var mem = new MemoryStream(imageData))
-            {
-                mem.Position = 0;
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = mem;
-                image.EndInit();
+            { 
+                    mem.Position = 0;
+                    image.BeginInit();
+                    image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.UriSource = null;
+                    image.StreamSource = mem;
+                    image.EndInit();
+
             }
             image.Freeze();
             return image;
