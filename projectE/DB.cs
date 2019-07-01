@@ -12,6 +12,10 @@ namespace projectE
         private string path = "Data Source="+ Environment.CurrentDirectory + "\\newMovies.db;New=False;Version=3";
         private WebClient wb = new WebClient();
 
+        public DB()
+        {
+            connect();
+        }
         public void connect()
         {
             // создаём объект для подключения к БД
@@ -28,8 +32,8 @@ namespace projectE
             // устанавливаем соединение с БД
             conn.Open();
         }
-        
-        
+
+
         // добавление фильма
         public void AddMovie(string name, int year, string date,
             string country, string genres, string agerating,
@@ -43,15 +47,14 @@ namespace projectE
             {
                 bytes = wb.DownloadData(poster);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
             cmd = new SQLiteCommand(conn);
-            //cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) VALUES (@name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched)";
-            cmd.CommandText = @"insert into movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) "+
-                "select @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched "+
-                "where not exists(SELECT 1 from movies where name=@name and year=@year)";
+            cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) " +
+                "SELECT @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched " +
+                "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
             cmd.Parameters.Add("@name", DbType.String).Value = name;
             cmd.Parameters.Add("@year", DbType.Int32).Value = year;
             cmd.Parameters.Add("@date", DbType.Date).Value = date;
@@ -71,16 +74,20 @@ namespace projectE
 
 
 
+
         // Settings get/set methods -->
         // (НЕ УДАЛЯЙТЕ)
-        public DataTable GetSettings()//string setting)
+
+        private bool showRestricted = true;
+
+        public DataTable GetSettings()
         {
             if (conn == null)
                 connect();
-            //System.Windows.MessageBox.Show("GetSettings()");
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT checked FROM settings", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
 
@@ -88,68 +95,243 @@ namespace projectE
         {
             if (conn == null)
                 connect();
+            if (setting == "age" || setting == "1") updateAgeRestriction(check);
             if (import)
             {
                 ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE \"index\"=" + setting);
-                return;
             }
-            ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE setting='" + setting + "'");
+            else
+            {
+                ExecuteQuery("UPDATE settings SET checked=" + check + " WHERE setting='" + setting + "'");
+            }
+            
         }
+        
+        public void updateAgeRestriction(bool _showRestricted)
+        {
+            showRestricted = _showRestricted;
+        }
+
         // (НЕ УДАЛЯЙТЕ)
         // <-- Settings get/set methods
 
 
-            
+
+
+
         //выгрузка всех фильмов, сортировка по дате(сначала свежие)
-        public DataTable GetMovies()
+        public DataTable GetRecommends()
         {
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies order by date desc", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE agerating<>'18+' ORDER BY date ASC LIMIT 25", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date ASC LIMIT 25", conn);
+            }
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
+        }
+        
+        //выгрузка всех фильмов, сортировка по дате(сначала свежие)
+        public DataTable GetMovies(int limit, int offset)
+        {
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE NOT agerating='18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return dt;
+        }
+        //выгрузка фильма по id
+        public DataTable GetMovie(int index)
+        {
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE id=" + index, conn);
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return dt;
+        }
+        //выгрузка кол-ва фильмов
+        public int GetMoviesCount()
+        {
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies", conn);
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
+        //выгрузка кол-ва фильмов
+        public int GetMoviesTodayCount()
+        {
+            string date = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE date='" + date + "' ", conn);
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
         }
         //выгрузка всго избранного, сортировка по дате(сначала свежие)
-        public DataTable GetFavorites()
+        public DataTable GetFavorites(int limit, int offset)
         {
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=true order by date desc", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true AND agerating<>'18+' ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE favorite=true ORDER BY date DESC LIMIT " + limit + " OFFSET " + offset, conn);
+            }
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
         }
-        //выгрузка всго просмотренного, сортировка по дате(сначала свежие)
-        public DataTable GetWatched()
+        //выгрузка кол-ва избранного, сортировка по дате(сначала свежие)
+        public int GetFavoritesCount()
         {
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select * from movies where watched=true order by date desc", conn);
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE favorite=true ORDER BY date DESC", conn);
             dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
+        //выгрузка сегодняшних фильмов
+        public DataTable GetMoviesToday()
+        {
+            string date = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date + "' AND agerating<>'18+' ", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date='" + date + "' ", conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
             return dt;
+        }
+        //выгрузка фильмов за неделю
+        public DataTable GetMoviesWeek()
+        {
+            DateTime dateTime = DateTime.Today.AddDays(-7);
+            string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' ORDER BY date DESC", conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return dt;
+        }
+        //выгрузка кол-ва фильмов за неделю
+        public int GetMoviesWeekCount()
+        {
+            DateTime dateTime = DateTime.Today.AddDays(-7);
+            string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE date>'" + date + "' AND favorite=false", conn);
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
+        //выгрузка фильмов за месяц
+        public DataTable GetMoviesMonth()
+        {
+            DateTime dateTime = DateTime.Today.AddDays(-31);
+            string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' ORDER BY date DESC", conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return dt;
+        }
+        //выгрузка кол-ва фильмов за месяц
+        public int GetMoviesMonthCount()
+        {
+            DateTime dateTime = DateTime.Today.AddDays(-31);
+            string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE date>'" + date + "' AND favorite=false ORDER BY date DESC", conn);
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
         }
         //устанавливаем/снимаем избранное
         public void SetFavorite(int index, bool favorite)
         {
             if (conn == null)
                 connect();
-            ExecuteQuery("update movies set favorite=" + favorite + " where id=" + index);
+            ExecuteQuery("UPDATE movies SET favorite=" + favorite + " WHERE id=" + index);
         }
         //устанавливаем/снимаем просмотренное
         public void SetWatched(int index, bool watched)
         {
             if (conn == null)
                 connect();
-            ExecuteQuery("update movies set watched=" + watched + " where id=" + index);
+            ExecuteQuery("UPDATE movies SET watched=" + watched + " WHERE id=" + index);
         }
         //для удаления удаленных записей из файла БД
         public void Vacuum()
         {
             if (conn == null)
                 connect();
-            ExecuteQuery("vacuum;");
+            ExecuteQuery("VACUUM;");
             close();
         }
         private void ExecuteQuery(string txtQuery)
