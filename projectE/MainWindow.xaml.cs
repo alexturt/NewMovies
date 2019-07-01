@@ -36,6 +36,18 @@ namespace projectE
             combobox_top_choose.Items.Add(new TextBlock() { IsEnabled = false, Text = "Новинки за месяц", Foreground = Brushes.LightGray, Background = Brushes.Transparent });
             combobox_top_choose.SelectedIndex = 0;
         }
+
+        int limitWind;
+        [STAThread]
+        public void ShowBox(string v)
+        {    
+                thread = new Thread(Upd);
+                thread.Abort();
+                MessageBox.Show(v, "Ошибка", MessageBoxButton.OK);              
+                    
+            
+        }
+
         DB db = new DB();
         DataTable dt_movies = new DataTable();
         int columns_count;
@@ -485,13 +497,16 @@ namespace projectE
             parser.UpdateList();
             isRun = false;
         }
+        Thread thread;
         //нажали кнопку домой
         private void button_home_Click(object sender, RoutedEventArgs e)
         {
-            Thread thread = new Thread(Upd);
+            thread = new Thread(Upd);
             if (!isRun)
             {
+                thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
+
             }
             if (combobox_top_choose.SelectedIndex == 0 && textBox_content_headet.Text == "Рекомендовано")
                 return;
