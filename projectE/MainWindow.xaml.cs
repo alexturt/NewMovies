@@ -1469,7 +1469,7 @@ namespace projectE
             if (combobox_filter.SelectedIndex == 0)
                 genre = "";
             else
-                genre = genre.Substring(0, 5);
+                genre = genre.Substring(0, genre.Length-2);
 
             dt_movies = db.GetMoviesByFilter(name, genre);
             allmoviesCount = dt_movies.Rows.Count;
