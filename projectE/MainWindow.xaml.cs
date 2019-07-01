@@ -160,7 +160,7 @@ namespace projectE
                 return;
             if (e.Source.GetType() == typeof(TextBlock))
             {
-                    Title.Text = (e.Source as TextBlock).Tag.ToString();
+                    //Title.Text = (e.Source as TextBlock).Tag.ToString();
                     grid_content.MouseLeftButtonUp -= grid_list_MouseLeftButtonUp_1;
                     //GC.Collect();
                     dt_movies = db.GetMovie(Convert.ToInt32((e.Source as TextBlock).Tag));
@@ -169,7 +169,7 @@ namespace projectE
             else
             if (e.Source.GetType() == typeof(Image))
             {
-                Title.Text = (e.Source as Image).Tag.ToString();
+                //Title.Text = (e.Source as Image).Tag.ToString();
                 grid_content.MouseLeftButtonUp -= grid_list_MouseLeftButtonUp_1;
                 //GC.Collect();
                 dt_movies = db.GetMovie(Convert.ToInt32((e.Source as Image).Tag));
@@ -256,7 +256,7 @@ namespace projectE
             Grid.SetColumnSpan(tb2, 2);
             Grid.SetRow(tb2, 1);
             grid_content.Children.Add(tb2);
-            Title.Text = grid_content.RowDefinitions.Count.ToString();
+            //Title.Text = grid_content.RowDefinitions.Count.ToString();
         }
         //для вкладки подробнее создание гиперссылок
         private Hyperlink createURL(string url, string name, int size, Brush brush)
@@ -685,7 +685,7 @@ namespace projectE
         int lists = 1;
         private void scroll_viewer_center_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            Title.Text = lists.ToString() + " " + offset.ToString();
+            //Title.Text = lists.ToString() + " " + offset.ToString();
             if (e.VerticalOffset == scroll_viewer_center.ScrollableHeight
                 && combobox_top_choose.SelectedIndex != -1 && offset + limit < allmoviesCount
                 && dt_movies.Rows.Count > 0)
