@@ -1415,9 +1415,9 @@ namespace projectE
 
         // Блок методов для уведомлений -->
 
-        public void ShowNotification(int time = 10000, string header = "Notification", string text = "All is Okay!")
+        public void ShowNotification(int time = 10000, string header = "Notification", string text = "This is a base notification!")
         {
-            if (IsChecked[0])
+            if (IsChecked[0])//Can show notification?
             {
                 System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
                 notifyIcon.Visible = true;
@@ -1428,6 +1428,13 @@ namespace projectE
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
             }
         }
+
+        // <-- Блок методов для уведомлений
+
+
+
+
+
         //content close
         private void button_panel_close_Click(object sender, RoutedEventArgs e)
         {
@@ -1470,7 +1477,5 @@ namespace projectE
             sw.Stop();
             //textbox_filtering.Text = sw.ElapsedMilliseconds.ToString();
         }
-
-        // <-- Блок методов для уведомлений
     }
 }
