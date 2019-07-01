@@ -153,15 +153,15 @@ namespace projectE
             CQ film = CQ.CreateFromUrl(Html);
             for (int i = 1; i < 11; i++)
             {
-                foreach (IDomObject obj in film.Find("#jr-pagenav-ajax > div.jrTableGrid.jrDataList.jrResults > div:nth-child("+i+") > div.jr-listing-outer.jrCol.jrTableColumnMain > div.jrContentTitle"))
+                foreach (IDomObject obj in film.Find("#jr-pagenav-ajax > div.jrTableGrid.jrDataList.jrResults > div:nth-child(" + i + ") > div.jr-listing-outer.jrCol.jrTableColumnMain > div.jrContentTitle"))
                 {
 
                     if (obj.FirstChild.FirstChild.NodeValue.ToLower().Equals(name.ToLower().Trim()))
                     {
-                            data = obj.NextSibling.NextSibling.FirstElementChild.FirstElementChild.LastChild.NodeValue.Split(' ');
-                            data = data[0].Split('.');
-                            datat = data[2] + "-" + data[1] + "-" + data[0];
-                        
+                        data = obj.NextSibling.NextSibling.FirstElementChild.FirstElementChild.LastChild.NodeValue.Split(' ');
+                        data = data[0].Split('.');
+                        datat = data[2] + "-" + data[1] + "-" + data[0];
+
                     }
                 }
             }
@@ -221,7 +221,40 @@ namespace projectE
 
                 }
             } while (j < countStr);
-            
+
+            if (ageR == "")
+            {
+                Html = @"https://www.kinoafisha.info/search/?q=" + nameP;
+                film = CQ.CreateFromUrl(Html);
+                for (int i = 1; i < 4; i++)
+                {
+                    foreach (IDomObject obj in film.Find("#main-left > div.layer-empty > div.grid.grid-search > div > div.grid_cell10 > div > article:nth-child("+i+") > div > div.films_right > a"))
+                    {
+                        if (obj.FirstChild.FirstChild.FirstChild.NodeValue.Trim().Equals(name.Trim()))
+                        {
+                            string a = @"https:" + obj.GetAttribute("href");
+                            film = CQ.CreateFromUrl(a);
+                            //#main-left > div:nth-child(7) > div > div > div > div.grid_row > div.grid_cell9 > div.movieInfoV2_info > div:nth-child(4) > span.movieInfoV2_infoData
+                            foreach (IDomObject obj1 in film.Find(".movieInfoV2_infoData"))
+                            {
+                                try
+                                {
+                                    ageR = obj1.FirstChild.NodeValue.Trim();
+                                    if ((ageR.Length == 3) || (ageR.Length == 2))
+                                    {
+                                        return ageR;
+                                    }
+                                    else
+                                    {
+                                        ageR = "0+";
+                                    }
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+            }
             if (ageR == "")
             {
                 ageR = "0+";
@@ -361,7 +394,7 @@ namespace projectE
                         }
                         films[countElem, 4] = film.Find("#dle-content > div > div.fstory-content.margin-b40.block-p > h4").Text(); //Описание
                         films[countElem, 5] = FindTrailer(name, year); //Трейлер
-                        films[countElem, 6] = FindAgeRating(name,year); //Возр.огр
+                        films[countElem, 6] = FindAgeRating(name, year); //Возр.огр
                         films[countElem, 7] = film.Find("#fstory-film > div > div.col-sm-4.col-xs-12.fstory-poster-in > div.fstory-poster > img").Attr("src"); //Картинка
                         films[countElem, 8] = ReData(FindData(name, year)); //Дата выхода
                                                                             //          films[countElem, 9] = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
@@ -429,7 +462,7 @@ namespace projectE
                         {
                             films[countElem, 8] = ReData(FindData(name, year));
                         }
-                                                                                                                                               //          films[countElem, 9] = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
+                        //          films[countElem, 9] = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
                         foreach (IDomObject obj in film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value")) //Страна
                         {
                             films[countElem, 9] += obj.FirstChild.NodeValue + " ";
@@ -566,7 +599,7 @@ namespace projectE
         {
             List<string> ListFilm = new List<string>();
             CQ film = CQ.CreateFromUrl(Html);
-            for (int i = 1; i < 45; i++)
+            for (int i = 1; i < 150; i++)
             {
                 foreach (IDomObject obj in film.Find("#dle-content > div > div > ul > li:nth-child(" + i + ") > a"))
                 {
@@ -590,8 +623,17 @@ namespace projectE
                 CQ film = CQ.CreateFromFile("film.txt");
                 string[] nameFr = film.Find("#dle-content > h1").Text().Split('(').ToArray();
                 string name = nameFr[0];
-                nameFr = nameFr[1].Split(')');
-                string year = nameFr[0];
+                string year = "0000";
+                try
+                {
+                    nameFr = nameFr[1].Split(')');
+                    year = nameFr[0];
+                }
+                catch
+                {
+                    //#dle-content > div:nth-child(5) > dl > span.dnina > span > a
+                    year = film.Find("#dle-content > div:nth-child(5) > dl > span.dnina > span > a").Text();
+                }
                 if (name != "")
                 {
                     if (!DoubleFilm(name, year))
@@ -622,7 +664,7 @@ namespace projectE
                                 }
                             }
                             if (films[countElem, 3] == null)
-                            { 
+                            {
                                 foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(6) > span > span:nth-child(1) > a")) //Жанр
                                 { //1
                                     films[countElem, 3] += obj.FirstChild.NodeValue.Trim() + " ";
@@ -637,7 +679,7 @@ namespace projectE
                         //       films[countElem, 4] = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
                         films[countElem, 5] = FindTrailer(name, year); //Трейлер
                         films[countElem, 6] = FindAgeRating(name, year); ; //Возр.огр
-                                                    //       films[countElem, 7] = @"https://hdkinozor.ru" + film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img").Attr("src"); //Картинка
+                                                                           //       films[countElem, 7] = @"https://hdkinozor.ru" + film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img").Attr("src"); //Картинка
                         foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img")) //Картинка
                         {
                             films[countElem, 7] = @"https://hdkinozor.ru" + obj.GetAttribute("data-cfsrc");
@@ -724,12 +766,12 @@ namespace projectE
                             {
                                 films[countElem, 4] = "Прости, описание отсутствует. Читай на сайте-источнике :)";
                             }
-                            }
+                        }
                         //       films[countElem, 4] = film.Find("#dle-content > div.kikos > div > span.masha_index.masha_index44").Text().Trim(); //Описание
                         //       films[countElem, 4] = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
                         films[countElem, 5] = Html + "/video"; //Трейлер
                         films[countElem, 6] = FindAgeRating(name, year); ; //Возр.огр
-                                                    //       films[countElem, 7] = @"https://hdkinozor.ru" + film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img").Attr("src"); //Картинка
+                                                                           //       films[countElem, 7] = @"https://hdkinozor.ru" + film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img").Attr("src"); //Картинка
 
                         films[countElem, 7] = @"https://e-torrent.ru/uploads/posts/2016-11/1479684493_garo_svyaschennoe_plamya_2016.jpg"; //Картинка
                         films[countElem, 8] = ReData(film.Find("#left-pane > div:nth-child(4) > div.details-pane > div.left-box > a:nth-child(1)").Text()); //Дата выхода
