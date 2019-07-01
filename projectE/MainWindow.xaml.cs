@@ -214,16 +214,26 @@ namespace projectE
             grid_content.RowDefinitions.Add(new RowDefinition());
             grid_content.RowDefinitions.Add(new RowDefinition());
 
-            Image img = new Image()
+            try
             {
-                Name = "image_right_content",
-                Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                Stretch = Stretch.Uniform,
-                Tag = index,
-                MaxWidth = 300
-            };
+                Image img = new Image()
+                {
+                    Name = "image_right_content",
+                    Source = dt_movies.Rows[index]["poster"].GetType() == typeof(DBNull) ? posterNONE : LoadImage((byte[])dt_movies.Rows[index]["poster"]),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Stretch = Stretch.Uniform,
+                    Tag = index,
+                    MaxWidth = 300
+                };
+                Grid.SetColumn(img, 0);
+                Grid.SetRow(img, 0);
+                grid_content.Children.Add(img);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
 
             TextBlock tb = new TextBlock();
             tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), dt_movies.Rows[index]["name"].ToString(), 22, Brushes.AliceBlue));
@@ -263,9 +273,6 @@ namespace projectE
                 Tag = index
             };
 
-            Grid.SetColumn(img, 0);
-            Grid.SetRow(img, 0);
-            grid_content.Children.Add(img);
 
             Grid.SetColumn(tb, 1);
             Grid.SetRow(tb, 0);
