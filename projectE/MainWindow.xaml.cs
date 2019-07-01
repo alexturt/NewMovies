@@ -616,7 +616,10 @@ namespace projectE
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {//удаление удаленных записей из файла БД
+            //notifyIcon = null;
+            //notifyIcon.Dispose();
             db.Vacuum();
+            
         }
         //из массива байт в картинку
         private static BitmapImage LoadImage(byte[] imageData)
@@ -1418,24 +1421,26 @@ namespace projectE
         }
 
         // <-- Блок методов для меню настроек
-        
+
 
 
 
 
         // Блок методов для уведомлений -->
-
+        System.Windows.Forms.NotifyIcon notifyIcon;
         public void ShowNotification(int time = 10000, string header = "Notification", string text = "This is a base notification!")
         {
             if (IsChecked[0])//Can show notification?9
             {
-                System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
+                notifyIcon = new System.Windows.Forms.NotifyIcon();
                 notifyIcon.Visible = true;
                 using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
                 {
                     notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                    
                     //notifyIcon.Icon = new System.Drawing.Icon("1",0,0);
                 }
+                notifyIcon.BalloonTipClosed += (sender, e) => { var thisIcon = (System.Windows.Forms.NotifyIcon)sender; thisIcon.Visible = false; thisIcon.Dispose(); };
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
                 
             }
