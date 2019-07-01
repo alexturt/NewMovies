@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Diagnostics;
 using System.Collections.Generic;
 
+
 namespace projectE
 {
     /// <summary>
@@ -115,6 +116,7 @@ namespace projectE
             show_movies(grid_list, button_sctoll_top, columns_count);
             update_movies("Рекомендовано", limit, offset);
             show_movies(grid_recommends, button_sctoll_top, columns_count_recommends);
+            ShowNotification(15000, "Новые фильмы!", "Вышло 6 новых фильмов за сегодня и 2 фильма из списка избранного!");
         }
         //тут одни костыли
         //нажатие на кнопку добавить/удалить из избранного
@@ -1425,15 +1427,17 @@ namespace projectE
 
         public void ShowNotification(int time = 10000, string header = "Notification", string text = "This is a base notification!")
         {
-            if (IsChecked[0])//Can show notification?
+            if (IsChecked[0])//Can show notification?9
             {
                 System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
                 notifyIcon.Visible = true;
                 using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
                 {
                     notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                    //notifyIcon.Icon = new System.Drawing.Icon("1",0,0);
                 }
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
+                
             }
         }
 
