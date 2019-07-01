@@ -37,6 +37,7 @@ namespace projectE
             combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за неделю", Foreground = Brushes.LightGray, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за месяц", Foreground = Brushes.LightGray, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.SelectedIndex = 0;
+            createNotifyIcon();
             { }
         }
 
@@ -125,7 +126,7 @@ namespace projectE
             show_movies(grid_list, button_sctoll_top, columns_count);
             update_movies("Рекомендовано", limit, offset);
             show_movies(grid_recommends, button_sctoll_top, columns_count_recommends);
-            ShowNotification(15000, "Новые фильмы!", "Вышло 6 новых фильмов за сегодня и 2 фильма из списка избранного!");
+            ShowNotification(1500000, "Новые фильмы!", "Вышло 6 новых фильмов за сегодня и 2 фильма из списка избранного!");
         }
         //тут одни костыли
         //нажатие на кнопку добавить/удалить из избранного
@@ -566,6 +567,7 @@ namespace projectE
         //нажали кнопку скрыть в трей
         private void button_hide_Click(object sender, RoutedEventArgs e)
         {
+            ShowInTaskbar = false;
             WindowState = WindowState.Minimized;
         }
         //перетаскивание окна за верхнюю панельку
@@ -765,6 +767,7 @@ namespace projectE
 
         private void combobox_top_choose_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            offset = 0;
             switch (((TextBlock)e.AddedItems[0]).Text)
             {
                 case "Все":
@@ -1466,24 +1469,51 @@ namespace projectE
         {
             if (IsChecked[0])//Can show notification?9
             {
-                notifyIcon = new System.Windows.Forms.NotifyIcon();
-                notifyIcon.Visible = true;
-                using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
-                {
-                    notifyIcon.Icon = new System.Drawing.Icon(iconStream);
-
-                    //notifyIcon.Icon = new System.Drawing.Icon("1",0,0);
-                }
-                notifyIcon.BalloonTipClosed += (sender, e) => { var thisIcon = (System.Windows.Forms.NotifyIcon)sender; thisIcon.Visible = false; thisIcon.Dispose(); };
+                
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
 
             }
         }
-
+        //создает и помещает в трей иконку
+        //ПКМ вызвает меню
+        //даблклик открывает окно
+        //balloontipclicked вызывается если нажали на уведомление
+        private void createNotifyIcon()
+        {
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.Visible = true;
+            using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
+            {
+                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                
+            }
+            notifyIcon.DoubleClick += (s, e) => { ShowInTaskbar = true; WindowState = WindowState.Normal; Topmost = true; };
+            
+            notifyIcon.BalloonTipClicked += (s, e) => 
+            {
+                show_new_movies();
+            };
+            System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
+            System.Windows.Forms.MenuItem menuItem = new System.Windows.Forms.MenuItem("Открыть", (s, e) => { ShowInTaskbar = true; this.WindowState = WindowState.Normal; });
+            contextMenu.MenuItems.Add(menuItem);
+            menuItem = new System.Windows.Forms.MenuItem("Выход", (s, e) => { notifyIcon.Visible = false; notifyIcon.Dispose(); this.Close(); });
+            contextMenu.MenuItems.Add(menuItem);
+            notifyIcon.ContextMenu = contextMenu;
+        }
         // <-- Блок методов для уведомлений
 
 
-
+        private void show_new_movies()
+        {
+            offset = 0;
+            combobox_top_choose.SelectedIndex = 4;
+            update_movies("Новинки за неделю", limit, offset);
+            show_movies(grid_list, button_sctoll_top, columns_count);
+            ShowInTaskbar = true;
+            if (WindowState == WindowState.Minimized)
+                WindowState = WindowState.Normal;
+            Topmost = true;
+        }
 
 
         //content close
