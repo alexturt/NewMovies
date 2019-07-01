@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Documents;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace projectE
 {
@@ -51,6 +52,8 @@ namespace projectE
         static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         static BitmapImage posterNONE = new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+
+        List<object> tags = new List<object>();
 
         //нажатие на кнопку открыть/закрыть правую панель
         private void button_panel_Click(object sender, RoutedEventArgs e)
@@ -152,16 +155,18 @@ namespace projectE
         //        dt_movies.Rows[index]["watched"] = true;
         //    }
         //}
-
+        int tag_index;
         //определение id фильма по нажатию на элементы в центральном гриде и открытие правой вкладке и инфой о фильме
         private void grid_list_MouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
         {
             if (e.Source == null)
                 return;
+            // = Convert.ToInt32((e.Source as TextBlock).Tag);
             if (e.Source.GetType() == typeof(TextBlock))
             {
-                    //Title.Text = (e.Source as TextBlock).Tag.ToString();
-                    grid_content.MouseLeftButtonUp -= grid_list_MouseLeftButtonUp_1;
+                tag_index = Convert.ToInt32((e.Source as TextBlock).Tag);
+                //Title.Text = (e.Source as TextBlock).Tag.ToString();
+                grid_content.MouseLeftButtonUp -= grid_list_MouseLeftButtonUp_1;
                     //GC.Collect();
                     dt_movies = db.GetMovie(Convert.ToInt32((e.Source as TextBlock).Tag));
                     content_load(0);//показать инфу о фильме в правой вкладке
@@ -169,6 +174,7 @@ namespace projectE
             else
             if (e.Source.GetType() == typeof(Image))
             {
+                tag_index = Convert.ToInt32((e.Source as Image).Tag);
                 //Title.Text = (e.Source as Image).Tag.ToString();
                 grid_content.MouseLeftButtonUp -= grid_list_MouseLeftButtonUp_1;
                 //GC.Collect();
@@ -333,6 +339,7 @@ namespace projectE
         /// <param name="_dt">команда бд или таблица с фильмами</param>
         private void show_movies(Grid _grid, Button _button_scroll, int _columns_count)
         {
+            //tags = new object[dt_movies.Rows.Count];
             _button_scroll.IsEnabled = false;//выключение кнопки "вверх"
             _button_scroll.Visibility = Visibility.Hidden;//скрыть кнопку "вверх"
             _grid.Visibility = Visibility.Visible;
@@ -412,7 +419,7 @@ namespace projectE
                 BorderThickness = new Thickness(0, 0, 0, 0),
                 //присвоение соответсвтующей картинки
                 Content = new Image() { Source = Convert.ToBoolean(dt_movies.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill, Margin = new Thickness(5) },
-                Tag = dt_movies.Rows[i]["id"]//index(не id)
+                Tag = dt_movies.Rows[i]["id"]//index
             };
             btf.Click += button_favorite_Click;//привязывание события клика
             //Button btw = new Button()//кнопка добавления/удаления из просмотренного
@@ -439,7 +446,7 @@ namespace projectE
                 Foreground = Brushes.LightGray,
                 FontSize = 14,
                 Padding = new Thickness(5, 5, 5, 25),
-                Tag = dt_movies.Rows[i]["id"]//index (не id)
+                Tag = dt_movies.Rows[i]["id"]//index
             };
             Image img = new Image()//постер
             {
@@ -447,7 +454,7 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Stretch = Stretch.Uniform,
-                Tag = dt_movies.Rows[i]["id"]//index (не id)
+                Tag = dt_movies.Rows[i]["id"]//index
             };
             //расстановка и добавление элементов в грид
 
@@ -469,6 +476,7 @@ namespace projectE
             Grid.SetColumn(btf, i % _columns_count * 2 + 1);
             Grid.SetRow(btf, 0);
             _grid_row.Children.Add(btf);
+            tags.Add(dt_movies.Rows[i]["id"]);
         }
         //для отладки и прочего
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
