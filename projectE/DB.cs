@@ -53,7 +53,7 @@ namespace projectE
             }
             cmd = new SQLiteCommand(conn);
             cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) " +
-                "SELECT @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched " +
+                "SELECT LOWER(@name),@year,@date,@country,LOWER(@genres),@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched " +
                 "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
             cmd.Parameters.Add("@name", DbType.String).Value = name;
             cmd.Parameters.Add("@year", DbType.Int32).Value = year;
@@ -128,11 +128,11 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (!showRestricted)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE agerating<>'18+' ORDER BY date ASC LIMIT 25", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE agerating<>'18+' ORDER BY date ASC LIMIT 28", conn);
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date ASC LIMIT 25", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date ASC LIMIT 28", conn);
             }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
@@ -169,6 +169,26 @@ namespace projectE
             dataAdapter.Dispose();
             return dt;
         }
+        //фильтрация по имени и жанру
+        public DataTable GetMoviesByFilter(string name, string genre)
+        {
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') ORDER BY date DESC", conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return dt;
+        }
+
         //выгрузка кол-ва фильмов
         public int GetMoviesCount()
         {
@@ -345,6 +365,49 @@ namespace projectE
         public void close()
         {
             conn.Close();
+        }
+    }
+}
+
+//взято с http://www.cyberforum.ru/ado-net/thread1708878.html
+namespace ASC.Data.SQLite
+{
+
+    /// <summary>
+    /// Класс переопределяет функцию Lower() в SQLite, т.к. встроенная функция некорректно работает с символами > 128
+    /// </summary>
+    [SQLiteFunction(Name = "lower", Arguments = 1, FuncType = FunctionType.Scalar)]
+    public class LowerFunction : SQLiteFunction
+    {
+
+        /// <summary>
+        /// Вызов скалярной функции Lower().
+        /// </summary>
+        /// <param name="args">Параметры функции</param>
+        /// <returns>Строка в нижнем регистре</returns>
+        public override object Invoke(object[] args)
+        {
+            if (args.Length == 0 || args[0] == null) return null;
+            return ((string)args[0]).ToLower();
+        }
+    }
+
+    /// <summary>
+    /// Класс переопределяет функцию Upper() в SQLite, т.к. встроенная функция некорректно работает с символами > 128
+    /// </summary>
+    [SQLiteFunction(Name = "upper", Arguments = 1, FuncType = FunctionType.Scalar)]
+    public class UpperFunction : SQLiteFunction
+    {
+
+        /// <summary>
+        /// Вызов скалярной функции Upper().
+        /// </summary>
+        /// <param name="args">Параметры функции</param>
+        /// <returns>Строка в верхнем регистре</returns>
+        public override object Invoke(object[] args)
+        {
+            if (args.Length == 0 || args[0] == null) return null;
+            return ((string)args[0]).ToUpper();
         }
     }
 }

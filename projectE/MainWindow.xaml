@@ -74,31 +74,32 @@
                                 ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                 />
                             <TextBox x:Name="PART_EditableTextBox"
-         Style="{x:Null}" 
-         Template="{StaticResource ComboBoxTextBox}" 
-         HorizontalAlignment="Left" 
-         VerticalAlignment="Center" 
-         Margin="3,3,23,3"
-         Focusable="True" 
-         Background="Transparent"
-         Visibility="Hidden"
-         IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                                 Style="{x:Null}" 
+                                 Template="{StaticResource ComboBoxTextBox}" 
+                                 HorizontalAlignment="Left" 
+                                 VerticalAlignment="Center" 
+                                 Margin="3,3,23,3"
+                                 Focusable="True" 
+                                 Background="Transparent"
+                                 Visibility="Hidden"
+                                 IsReadOnly="{TemplateBinding IsReadOnly}"/>
                             <Popup 
-        Name="Popup"
-        Placement="Bottom"
-        IsOpen="{TemplateBinding IsDropDownOpen}"
-        AllowsTransparency="True" 
-        Focusable="False"
-        PopupAnimation="Slide">
+                                Name="Popup"
+                                Placement="Bottom"
+                                IsOpen="{TemplateBinding IsDropDownOpen}"
+                                AllowsTransparency="True" 
+                                Focusable="False"
+                                PopupAnimation="Slide">
                                 <Grid 
-          Name="DropDown"
-          SnapsToDevicePixels="True"                
-          MinWidth="{TemplateBinding ActualWidth}"
-          MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                      Name="DropDown"
+                                      SnapsToDevicePixels="True"                
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MinHeight="10"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border 
-            x:Name="DropDownBorder"
-            Background="#283949"
-            BorderThickness="1"/>
+                                        x:Name="DropDownBorder"
+                                        Background="#283949"
+                                        BorderThickness="1"/>
                                     <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
@@ -118,14 +119,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="0"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <!--<ColumnDefinition Width="{Binding ElementName= button_settings, Path=ActualWidth}"></ColumnDefinition>-->
             <ColumnDefinition Width="40"></ColumnDefinition>
-            <ColumnDefinition MinWidth="200" Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition MinWidth="200" Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
         <!-- заголовок окна -->
@@ -189,20 +190,101 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="{Binding ElementName= button_search, Path=ActualWidth}"></ColumnDefinition>
-                    <ColumnDefinition Width="{Binding ElementName= button_panel, Path=ActualWidth}"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="button_search" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black">
-                    <Image Height="auto" Margin="5" Width="auto" Source="Resources/лупа2.png" Stretch="Fill" VerticalAlignment="Top"/>
+                <Button x:Name="button_filtering_open" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_open_Click">
+                    <Image Height="auto" Margin="7" Width="auto" Source="Resources/лупастрелка.png" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
                 <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
                     <Image Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Source="Resources/панель2.png" Stretch="Fill"/>
                 </Button>
                 <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="LightGray" MaxLength="255" Visibility="Collapsed"/>
-                <ComboBox Grid.Column="0" Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="LightGray" SelectionChanged="combobox_top_choose_SelectionChanged" SelectedIndex="0"/>
+                <ComboBox Grid.Column="0" Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="LightGray" SelectedIndex="0" SelectionChanged="combobox_top_choose_SelectionChanged">
+                    <!--<TextBlock Text="Всу" Foreground = "LightGray" Background = "Transparent" FontSize="14"></TextBlock>
+                    <TextBlock Text = "Рекомендовано" Foreground = "LightGray" Background = "Transparent" FontSize="14"/>
+                    <TextBlock Text = "Избранное" Foreground = "LightGray" Background = "Transparent" FontSize="14"/>
+                    <TextBlock Text = "Новинки за сегодня" Foreground = "LightGray" Background = "Transparent" FontSize="14"/>
+                    <TextBlock Text = "Новинки за неделю" Foreground = "LightGray" Background = "Transparent" FontSize="14"/>
+                    <TextBlock Text = "Новинки за месяц" Foreground = "LightGray" Background = "Transparent" FontSize="14"/>-->
+                </ComboBox>
+                
             </Grid>
         </Border>
-        
+         <!--панель поиска--><!--
+        <Border Grid.Column="1" Grid.Row="2" BorderBrush="#0A121B" BorderThickness="0,0,0,1">
+            <Grid Name="grid_filtering" Grid.Column="1" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" ></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBox Grid.Column="0" Grid.Row="0" Name="textbox_filtering" Margin="7" Background="#0E1621" BorderThickness="1" BorderBrush="#283949" Foreground="LightGray" FontSize="14" MaxLength="70" Padding="2"></TextBox>
+                <ComboBox Grid.Column="1" Grid.Row="0" Margin="0,7,7,7" SelectedIndex="0" >
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="0,0,0,5">все жанры</TextBlock>
+                </ComboBox>
+                <Button x:Name="button_search" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black">
+                    <Image Height="auto" Margin="7" Width="auto" Source="Resources/лупа2.png" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
+                <Button x:Name="button_filtering_close" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_close_Click">
+                    <Image Height="auto" Margin="8" Width="auto" Source="Resources/back_to_recomends.png" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
+            </Grid>
+        </Border>-->
+        <!--панель поиска-->
+        <Border Grid.Column="1" Grid.Row="2" BorderBrush="#0A121B" BorderThickness="0,0,0,1">
+            <Grid Name="grid_filtering" Grid.Column="1" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBox Grid.Column="0" Grid.Row="0" Name="textbox_filtering" Margin="7" Background="#0E1621" BorderThickness="1" BorderBrush="#283949" Foreground="LightGray" FontSize="14" MaxLength="70" Padding="2"></TextBox>
+                <ComboBox Grid.Column="0" Grid.Row="1" Name="combobox_filter" Margin="7,7,7,7" SelectedIndex="0" >
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Все жанры</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Аниме</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Биография</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Боевик</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Вестерн</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Военный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Детектив</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Детский</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Документальный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Драма</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Игра</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">История</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Комедия</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Концерт</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Короткометражка</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Криминал</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мелодрама</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Музыка</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мультфильм</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мюзикл</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Новости</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Приключения</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Семейный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Спорт</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Триллер</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Ужасы</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Фантастика</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Фэнтези</TextBlock>
+                </ComboBox>
+                <Button x:Name="button_search" Width="40" Height="40" Grid.Column="2" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_search_Click">
+                    <Image Height="auto" Margin="7" Width="auto" Source="Resources/лупа2.png" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
+                <Button x:Name="button_filtering_close" Width="40" Height="40" Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_close_Click">
+                    <Image Height="auto" Margin="8" Width="auto" Source="Resources/back_to_recomends.png" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
+            </Grid>
+        </Border>
         <!-- верхняя правая панель -->
         <Border  Grid.Row="1" Grid.Column="2" Name="border_content_header" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <Grid Name="grid_content_header"  Background="#17212B">
