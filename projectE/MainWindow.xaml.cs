@@ -1029,6 +1029,11 @@ namespace projectE
         //Settings butt clicked
         private void Button_settings_Click(object sender, RoutedEventArgs e)
         {
+            //пример использования инпутбокса
+            //string value = "";
+            //InputBox("Изменение ограничения 18+", "Введите пароль",ref value);
+            //Title.Text = value;
+            //конец примера
             if (textBox_content_headet.Text == settings_header)
                 return;
             LoadSettings();
@@ -1249,6 +1254,87 @@ namespace projectE
             textbox_filtering.Text = "";
             textbox_filtering.Focus();
         }
+        
+        public static bool InputBox(string title, string promptText, ref string value)
+        {
+            Window window = new Window();
+            TextBlock label = new TextBlock();
+            PasswordBox textBox = new PasswordBox();
+            Button buttonOk = new Button();
+            Button buttonCancel = new Button();
+
+            window.Title = title;
+            label.Text = promptText;
+            textBox.Password = value;
+            textBox.PasswordChar = '*';
+            textBox.MaxLength = 4;
+            buttonOk.Content = "OK";
+            buttonCancel.Content = "Cancel";
+            buttonOk.IsDefault = true;
+            buttonOk.Click += (s, e) => { window.Close(); };
+            buttonCancel.IsCancel = true;
+            
+            label.HorizontalAlignment = HorizontalAlignment.Stretch;
+            label.VerticalAlignment = VerticalAlignment.Stretch;
+            label.TextAlignment = TextAlignment.Center;
+            label.FontSize = 24;
+            label.Margin = new Thickness(5);
+            textBox.Margin = new Thickness(5);
+            textBox.Width = 80;
+            textBox.VerticalAlignment = VerticalAlignment.Stretch;
+            textBox.HorizontalAlignment = HorizontalAlignment.Center;
+            //textBox.alig = TextAlignment.Center;
+            textBox.FontSize = 26;
+            //textBox.pa
+            buttonOk.VerticalAlignment = VerticalAlignment.Stretch;
+            buttonOk.HorizontalAlignment = HorizontalAlignment.Stretch;
+            buttonOk.Margin = new Thickness(5);
+            buttonCancel.VerticalAlignment = VerticalAlignment.Stretch;
+            buttonCancel.HorizontalAlignment = HorizontalAlignment.Stretch;
+            buttonCancel.Margin = new Thickness(5);
+
+            Grid grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition());
+            grid.ColumnDefinitions.Add(new ColumnDefinition());
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.Background = Brushes.LightGray;
+
+            Grid.SetColumn(label, 0);
+            Grid.SetRow(label, 0);
+            Grid.SetColumnSpan(label, 2);
+
+            Grid.SetColumn(textBox, 0);
+            Grid.SetRow(textBox, 1);
+            Grid.SetColumnSpan(textBox, 2);
+
+            Grid.SetColumn(buttonOk, 0);
+            Grid.SetRow(buttonOk, 2);
+
+            Grid.SetColumn(buttonCancel, 1);
+            Grid.SetRow(buttonCancel, 2);
+
+            grid.Children.Add(label);
+            grid.Children.Add(textBox);
+            grid.Children.Add(buttonOk);
+            grid.Children.Add(buttonCancel);
+            
+            window.Height = 200;
+            window.Width = 250;
+            window.Content = grid;
+            window.ResizeMode = ResizeMode.NoResize;
+            //window.AllowsTransparency = true;
+            //window.BorderBrush = Brushes.Black;
+            //window.BorderThickness = new Thickness(10);
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.WindowStyle = WindowStyle.SingleBorderWindow;
+            window.ShowDialog();
+            value = textBox.Password;
+            return true;
+        }
 
     }
+
+
 }
