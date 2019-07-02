@@ -196,20 +196,20 @@ namespace projectE
             if (year == 0)
                 if (!showRestricted)
                 {
-                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND lower(agerating) like lower('%" + age + "%') AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
                 }
                 else
                 {
-                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND lower(agerating) like lower('%" + age + "%') ORDER BY date DESC limit 50", conn);
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' ORDER BY date DESC limit 50", conn);
                 }
             else
                 if (!showRestricted)
                 {
-                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND lower(agerating) like lower('%" + age + "%') AND year=" + year + " AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND year=" + year + " AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
                 }
                 else
                 {
-                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND lower(agerating) like lower('%" + age + "%') AND year=" + year + " ORDER BY date DESC limit 50", conn);
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND year=" + year + " ORDER BY date DESC limit 50", conn);
                 }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
@@ -222,7 +222,11 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+                dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies where agerating<>'18+'", conn);
+            else
+                dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies", conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
@@ -264,7 +268,15 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE favorite=true ORDER BY date DESC", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE favorite=true AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE favorite=true ORDER BY date DESC ", conn);
+            }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
@@ -316,10 +328,41 @@ namespace projectE
         {
             DateTime dateTime = DateTime.Today.AddDays(-7);
             string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE date>'" + date + "' AND favorite=false", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' ORDER BY date DESC", conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
+        //выгрузка кол-ва фильмов ДОБАВЛЕННЫХ В БД за неделю
+        public int GetAddedMoviesWeekCount()
+        {
+            DateTime dateTime = DateTime.Today.AddDays(-7);
+            string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE dateAdd>'" + date + "' AND dateAdd<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE dateAdd>'" + date + "' AND dateAdd<='" + today + "' ORDER BY date DESC", conn);
+            }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
@@ -336,11 +379,11 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (!showRestricted)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<='" + today + "' ORDER BY date DESC", conn);
             }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
@@ -351,10 +394,40 @@ namespace projectE
         {
             DateTime dateTime = DateTime.Today.AddDays(-31);
             string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE date>'" + date + "' AND favorite=false ORDER BY date DESC", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' ORDER BY date DESC", conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
+        public int GetFavoritesMoviesWeekCount()
+        {
+            DateTime dateTime = DateTime.Today.AddDays(-7);
+            string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND favorite=true AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND favorite=true ORDER BY date DESC", conn);
+            }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
