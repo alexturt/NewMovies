@@ -73,10 +73,11 @@ namespace projectE
                 cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
                 cmd.Parameters.Add("@dateAdd", DbType.Date).Value = dateAdd;
                 cmd.ExecuteNonQuery();
+                Console.WriteLine("Добавили в базу " + name);
             }
             catch
             {
-                Console.WriteLine("Мы не сохранили " + name + " ошибка в дате? - " + date + " ссылка: " + urlinfo);
+                Console.WriteLine("Мы не сохранили " + name);
             }
         }
         // 
@@ -406,8 +407,12 @@ namespace ASC.Data.SQLite
         /// <returns>Строка в нижнем регистре</returns>
         public override object Invoke(object[] args)
         {
-            if (args.Length == 0 || args[0] == null) return null;
-            return ((string)args[0]).ToLower();
+            try
+            {
+                if (args.Length == 0 || args[0] == null) return null;
+                return ((string)args[0]).ToLower();
+            }
+            catch { return null; }
         }
     }
 

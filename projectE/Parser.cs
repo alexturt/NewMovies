@@ -56,6 +56,7 @@ namespace projectE
 
             CheckSettings();
 
+            Console.WriteLine("---------------------------------------------------------------НАЧАЛО ПАРСИНГА 2019--------------------------------------");
             if (IsChecked[7])
             {
                 Start = DateTime.Now.TimeOfDay;
@@ -125,6 +126,8 @@ namespace projectE
                 FullTime += Stop.Subtract(Start);
                 Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
             }
+            Console.WriteLine("---------------------------------------------------------------КОНЕЦ ПАРСИНГА 2019--------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------НАЧАЛО ПАРСИНГА 2018--------------------------------------");
             //---------------------------------------------------------------2018-------------------------
             if (IsChecked[7])
             {
@@ -184,6 +187,8 @@ namespace projectE
                 FullTime += Stop.Subtract(Start);
                 Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
             }
+            Console.WriteLine("---------------------------------------------------------------КОНЕЦ ПАРСИНГА 2018--------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------НАЧАЛО ПАРСИНГА 2017--------------------------------------");
             //---------------------------------------------------------------2017-------------------------
             if (IsChecked[7])
             {
@@ -222,7 +227,7 @@ namespace projectE
                 FullTime += Stop.Subtract(Start);
                 Console.WriteLine("Конец: " + Stop + ". Потрачено: " + Stop.Subtract(Start));
             }
-
+            Console.WriteLine("---------------------------------------------------------------КОНЕЦ ПАРСИНГА 2017--------------------------------------");
             Console.WriteLine("Было выгружено : " + countElem + ". Всего потрачено: " + FullTime);
 
             //        addBd();
@@ -361,20 +366,20 @@ namespace projectE
                 {
                     for (int i = 1; i < 11; i++)
                     {
-                        foreach (IDomObject obj in film.Find("#jr-pagenav-ajax > div.jrTableGrid.jrDataList.jrResults > div:nth-child(" + i + ") > div.jr-listing-outer.jrCol.jrTableColumnMain > div.jrContentTitle"))
-                        {
-
-                            if (obj.FirstChild.FirstChild.NodeValue.ToLower().Equals(name.ToLower().Trim()))
+                            foreach (IDomObject obj in film.Find("#jr-pagenav-ajax > div.jrTableGrid.jrDataList.jrResults > div:nth-child(" + i + ") > div.jr-listing-outer.jrCol.jrTableColumnMain > div.jrContentTitle"))
                             {
-                                age = obj.NextSibling.NextSibling.FirstElementChild.FirstElementChild.LastChild.NodeValue.Split(' ');
-                                ageR = age[1].Replace("г.", "").Replace("(", "").Replace(")", "").Trim();
-                                if (ageR.Length > 3)
+
+                                if (obj.FirstChild.FirstChild.NodeValue.ToLower().Equals(name.ToLower().Trim()))
                                 {
-                                    ageR = ageR.Remove(3);
+                                    age = obj.NextSibling.NextSibling.FirstElementChild.FirstElementChild.LastChild.NodeValue.Split(' ');
+                                    ageR = age[1].Replace("г.", "").Replace("(", "").Replace(")", "").Trim();
+                                    if (ageR.Length > 3)
+                                    {
+                                        ageR = ageR.Remove(3);
+                                    }
+                                    return ageR;
                                 }
-                                return ageR;
                             }
-                        }
                     }
                     if (countStr != 1)
                     {
@@ -497,6 +502,7 @@ namespace projectE
                         {
                             genres += obj.FirstChild.NodeValue + " ";
                         }
+                        description = null;
                         description = film.Find("#dle-content > div > div.fstory-content.margin-b40.block-p > h4").Text(); //Описание
                         urltrailer = FindTrailer(name, year); //Трейлер
                         agerating = FindAgeRating(name, year); //Возр.огр
@@ -545,7 +551,7 @@ namespace projectE
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
                 {
-                    name = film.Find("#kino-page > div.kino-title-full > h1").Text().Replace("(фильм 2019) смотреть онлайн", "").Replace("(видео)", "").Trim();
+                    name = film.Find("#kino-page > div.kino-title-full > h1").Text().Replace("(фильм 2019) смотреть онлайн", "").Replace("(фильм 2018) смотреть онлайн", "").Replace("(фильм 2017) смотреть онлайн", "").Replace("(видео)", "").Trim();
                     year = film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(1) > span.value").Text();
                     if (name != "")
                     {
@@ -564,10 +570,15 @@ namespace projectE
                                 //  #kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value > span:nth-child(1)
                                 foreach (IDomObject obj1 in film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value > span"))
                                 {
-                                    genres += obj1.FirstChild.LastChild.NodeValue + " ";
+                                    try
+                                    {
+                                        genres += obj1.FirstChild.LastChild.NodeValue + " ";
+                                    }
+                                    catch { }
                                 }
                             }
                         }
+                        description = null;
                         foreach (IDomObject obj in film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix")) //Жанр
                         {
                             description += obj.LastChild.NodeValue + " ";
@@ -634,6 +645,7 @@ namespace projectE
                         {
                             genres += obj.FirstChild.NodeValue.Trim() + " ";
                         }
+                        description = null;
                         description = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.description").Text().Trim();
                         //       description = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
                         urltrailer = Html.Replace("/description", "") + "/trailers#play"; //Трейлер
@@ -703,6 +715,7 @@ namespace projectE
                         {
                             genres += obj.FirstChild.FirstChild.FirstChild.NodeValue.Trim() + " ";
                         }
+                        description = null;
                         description = film.Find("#block-ovg-content > div > section.info-section.section--center.mdl-grid.mdl-shadow--2dp > div.description.mdl-cell.mdl-cell--12-col > div > p").Text().Trim(); //Описание
                                                                                                                                                                                                                  //       description = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
                         urltrailer = Html; //Трейлер
@@ -747,7 +760,7 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-                Task.Delay(500).Wait();
+       //         Task.Delay(500).Wait();
                 string Html = ListFilm[i];
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
@@ -798,6 +811,7 @@ namespace projectE
                                 }
                             }
                         }
+                        description = null;
                         foreach (IDomObject obj in film.Find("#dle-content > div.kikos > div")) //Описание
                         {
                             description = obj.FirstChild.NextElementSibling.PreviousSibling.NodeValue.Trim() + " ";
@@ -886,6 +900,7 @@ namespace projectE
                             genres += obj.FirstChild.NodeValue.Trim() + " ";
                             //             }
                         }
+                        description = null;
                         foreach (IDomObject obj in film.Find("#left-pane > div.text-block.description > div.body > div")) //Описание
                         {
                             try
