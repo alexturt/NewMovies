@@ -37,6 +37,7 @@ namespace projectE
             combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за неделю", Foreground = Brushes.LightGray, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за месяц", Foreground = Brushes.LightGray, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.SelectedIndex = 0;
+            update_combobox_years();
             createNotifyIcon();
             { }
         }
@@ -64,6 +65,8 @@ namespace projectE
         static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         static BitmapImage posterNONE = new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage notifyImg = new BitmapImage(new Uri("/Resources/notify.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage redNotifyImg = new BitmapImage(new Uri("/Resources/rednotify.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
 
         List<object> tags = new List<object>();
 
@@ -123,11 +126,35 @@ namespace projectE
         {
             CheckSettings();
             offset = 0;
-            update_movies("Все", limit, offset);
-            show_movies(grid_list, button_sctoll_top, columns_count);
+            /*update_movies("Все", limit, offset);
+            show_movies(grid_list, button_sctoll_top, columns_count);*/
             update_movies("Рекомендовано", limit, offset);
             show_movies(grid_recommends, button_sctoll_top, columns_count_recommends);
             ShowNotification(1500000, "Новые фильмы!", "Вышло 6 новых фильмов за сегодня и 2 фильма из списка избранного!");
+        }
+
+        private void update_combobox_age()
+        {
+            combobox_filter_age.Items.Clear();
+            combobox_filter_age.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = "Все" });
+            combobox_filter_age.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = "0+" });
+            combobox_filter_age.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = "6+" });
+            combobox_filter_age.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = "12+" });
+            combobox_filter_age.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = "16+" });
+            if (IsChecked[1])
+                combobox_filter_age.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = "18+" });
+            combobox_filter_age.SelectedIndex = 0;
+        }
+
+        private void update_combobox_years()
+        {
+            combobox_filter_year.Items.Clear();
+            combobox_filter_year.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = "Все" });
+            combobox_filter_year.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = DateTime.Now.Year.ToString() });
+            combobox_filter_year.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = (DateTime.Now.Year - 1).ToString() });
+            combobox_filter_year.Items.Add(new TextBlock() { Background = null, Foreground = Brushes.LightGray, FontSize = 14, Padding = new Thickness(5, 0, 0, 5), Text = (DateTime.Now.Year - 2).ToString() });
+         
+            combobox_filter_year.SelectedIndex = 0;
         }
         //тут одни костыли
         //нажатие на кнопку добавить/удалить из избранного
@@ -253,8 +280,8 @@ namespace projectE
 
             if (dt_movies.Rows[index]["URLtrailer"].ToString() != "")
                 tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLtrailer"].ToString(), "Трейлер\r\n", 14, Brushes.AliceBlue));
-            if (dt_movies.Rows[index]["URLinfo"].ToString() != "")
-                tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), "Подробнее...\r\n", 14, Brushes.AliceBlue));
+            //if (dt_movies.Rows[index]["URLinfo"].ToString() != "")
+            //    tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), "Подробнее...\r\n", 14, Brushes.AliceBlue));
             if (dt_movies.Rows[index]["URLwatch"].ToString() != "")
                 tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLwatch"].ToString(), "Просмотр\r\n", 14, Brushes.AliceBlue));
             tb.TextWrapping = TextWrapping.WrapWithOverflow;
@@ -388,27 +415,28 @@ namespace projectE
                 create_and_add_elements(grid_row, i, _columns_count);
             }
             string str = "Пусто";
-            switch (((TextBlock)combobox_top_choose.SelectedItem).Text)
-            {
-                case "Все":
-                    str = "Фильмов в базе данных нет ☹";
-                    break;
-                case "Рекомендовано":
-                    str = "Рекомендованных фильмов нет ☹";
-                    break;
-                case "Избранное":
-                    str = "Список избранного пуст ☹";
-                    break;
-                case "Новинки за сегодня":
-                    str = "Новинок за сегодня нет ☹";
-                    break;
-                case "Новинки за неделю":
-                    str = "Новинок за неделю нет ☹";
-                    break;
-                case "Новинки за месяц":
-                    str = "Новинок за месяц нет ☹";
-                    break;
-            }
+            if (!grid.RowDefinitions[2].IsEnabled)
+                switch (((TextBlock)combobox_top_choose.SelectedItem).Text)
+                {
+                    case "Все":
+                        str = "Фильмов в базе данных нет ☹";
+                        break;
+                    case "Рекомендовано":
+                        str = "Рекомендованных фильмов нет ☹";
+                        break;
+                    case "Избранное":
+                        str = "Список избранного пуст ☹";
+                        break;
+                    case "Новинки за сегодня":
+                        str = "Новинок за сегодня нет ☹";
+                        break;
+                    case "Новинки за неделю":
+                        str = "Новинок за неделю нет ☹";
+                        break;
+                    case "Новинки за месяц":
+                        str = "Новинок за месяц нет ☹";
+                        break;
+                }
             if (dt_movies.Rows.Count == 0)
             {
                 _grid.RowDefinitions.Add(new RowDefinition());
@@ -515,8 +543,12 @@ namespace projectE
                 thread.Start();
 
             }
-            if (combobox_top_choose.SelectedIndex == 0 && textBox_content_headet.Text == "Рекомендовано")
+            if (combobox_top_choose.SelectedIndex == 0 && textBox_content_headet.Text == "Рекомендовано"
+                && !button_sctoll_top.IsEnabled && !button_content_sctoll_top.IsEnabled && !grid.RowDefinitions[2].IsEnabled)
                 return;
+            grid.RowDefinitions[2].IsEnabled = false;
+            grid.RowDefinitions[2].Height = new GridLength(0);
+            button_filtering_open.Visibility = Visibility.Visible;
             combobox_top_choose.SelectedIndex = 0;
             offset = 0;
             button_panel_close.Visibility = Visibility.Collapsed;
@@ -548,8 +580,9 @@ namespace projectE
         //нажали кнопку закрыть окно
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
-            GC.Collect();
             Process.GetCurrentProcess().Kill();
+            //Hide();
+            GC.Collect();
         }
         //нажали кнопку "во весь экран" или "вернуть к нормальному размеру"
         private void button_maximazing_Click(object sender, RoutedEventArgs e)
@@ -569,7 +602,7 @@ namespace projectE
         private void button_hide_Click(object sender, RoutedEventArgs e)
         {
             ShowInTaskbar = false;
-            WindowState = WindowState.Minimized;
+            Hide();
         }
         //перетаскивание окна за верхнюю панельку
         private void Title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -603,6 +636,7 @@ namespace projectE
         //покрутили колесико в центральной вкладке
         private void stack_list_MouseWheel(object sender, MouseWheelEventArgs e)
         {
+            Title.Text = grid.RowDefinitions[2].IsEnabled.ToString();
             if (stack_list.Height > scroll_viewer_content.Height)
                 if (e.Delta < 0)//если покрутили вниз
                 {
@@ -710,7 +744,7 @@ namespace projectE
         {
             if (e.VerticalOffset == scroll_viewer_center.ScrollableHeight
                 && combobox_top_choose.SelectedIndex != -1 && offset + limit < allmoviesCount
-                && dt_movies.Rows.Count > 0)
+                && dt_movies.Rows.Count > 0 && !grid.RowDefinitions[2].IsEnabled)
             {
                 lists = offset / limit + 1;
                 kostil = scroll_viewer_center.ScrollableHeight;
@@ -722,7 +756,7 @@ namespace projectE
             }
             if (e.VerticalOffset == 0 && combobox_top_choose.SelectedIndex != -1)
             {
-                if (offset >= limit && dt_movies.Rows.Count > 0)
+                if (offset >= limit && dt_movies.Rows.Count > 0 && !grid.RowDefinitions[2].IsEnabled)
                 {
                     offset -= limit;
                     lists = offset / limit;
@@ -769,6 +803,12 @@ namespace projectE
         private void combobox_top_choose_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             offset = 0;
+            if (combobox_top_choose.SelectedIndex > 0)
+            {
+                grid.RowDefinitions[2].IsEnabled = false;
+                grid.RowDefinitions[2].Height = new GridLength(0);
+                button_filtering_open.Visibility = Visibility.Visible;
+            }
             switch (((TextBlock)e.AddedItems[0]).Text)
             {
                 case "Все":
@@ -841,6 +881,7 @@ namespace projectE
                 IsChecked[i] = Convert.ToBoolean(dt.Rows[i].ItemArray[0].ToString());
             }
             db.updateAgeRestriction(IsChecked[1]);
+            update_combobox_age();
             dt.Dispose();
             //UserControlAuth AuthWindow = new UserControlAuth();
             //AuthWindow.ShowDialog();
@@ -1470,10 +1511,9 @@ namespace projectE
         {
             if (IsChecked[0])//Can show notification?9
             {
-                
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
-
             }
+            button_notify.Content = new Image() { Source = redNotifyImg, Stretch = Stretch.Fill, Margin = new Thickness(6) };
         }
         //создает и помещает в трей иконку
         //ПКМ вызвает меню
@@ -1497,7 +1537,7 @@ namespace projectE
             System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
             System.Windows.Forms.MenuItem menuItem = new System.Windows.Forms.MenuItem("Открыть", (s, e) => { ShowInTaskbar = true; this.WindowState = WindowState.Normal; });
             contextMenu.MenuItems.Add(menuItem);
-            menuItem = new System.Windows.Forms.MenuItem("Выход", (s, e) => { notifyIcon.Visible = false; notifyIcon.Dispose(); this.Close(); });
+            menuItem = new System.Windows.Forms.MenuItem("Выход", (s, e) => { notifyIcon.Visible = false; notifyIcon.Dispose(); Process.GetCurrentProcess().Kill(); });
             contextMenu.MenuItems.Add(menuItem);
             notifyIcon.ContextMenu = contextMenu;
         }
@@ -1510,6 +1550,7 @@ namespace projectE
             combobox_top_choose.SelectedIndex = 4;
             update_movies("Новинки за неделю", limit, offset);
             show_movies(grid_list, button_sctoll_top, columns_count);
+            scroll_viewer_center.ScrollToTop();
             ShowInTaskbar = true;
             if (WindowState == WindowState.Minimized)
                 WindowState = WindowState.Normal;
@@ -1536,28 +1577,92 @@ namespace projectE
 
         private void button_filtering_open_Click(object sender, RoutedEventArgs e)
         {
+            combobox_top_choose.SelectedIndex = 0;
             grid.RowDefinitions[2].IsEnabled = true;
             grid.RowDefinitions[2].Height = new GridLength(1, GridUnitType.Auto);
             button_filtering_open.Visibility = Visibility.Collapsed;
             textbox_filtering.Text = "";
+            textbox_filtering.Focus();
         }
 
         private void button_search_Click(object sender, RoutedEventArgs e)
         {
+            search();
+        }
+        private void search()
+        {
             Stopwatch sw = new Stopwatch();
             sw.Start();
             string name = textbox_filtering.Text.ToLower();
-            string genre = ((TextBlock)combobox_filter.SelectedItem).Text;
-            if (combobox_filter.SelectedIndex == 0)
+            string genre = ((TextBlock)combobox_filter_genres.SelectedItem).Text;
+            string age = ((TextBlock)combobox_filter_age.SelectedItem).Text;
+            int year;
+            if (combobox_filter_genres.SelectedIndex == 0)
                 genre = "";
             else
                 genre = genre.Substring(0, genre.Length - 2);
-
-            dt_movies = db.GetMoviesByFilter(name, genre);
+            if (combobox_filter_age.SelectedIndex == 0)
+                age = "";
+            if (combobox_filter_year.SelectedIndex == 0)
+                year = 0;
+            else
+                year = int.Parse(((TextBlock)combobox_filter_year.SelectedItem).Text);
+            dt_movies = db.GetMoviesByFilter(name, genre, age, year);
             allmoviesCount = dt_movies.Rows.Count;
-            show_movies(grid_list, button_sctoll_top, columns_count);
             sw.Stop();
+            //Title.Text = "";
+            //Title.Text += " bd=" + sw.ElapsedMilliseconds.ToString();
+            sw.Restart();
+            show_movies(grid_list, button_sctoll_top, columns_count);
+            scroll_viewer_center.ScrollToTop();
+            sw.Stop();
+            //Title.Text += " show=" + sw.ElapsedMilliseconds.ToString();
             //textbox_filtering.Text = sw.ElapsedMilliseconds.ToString();
+        }
+        private void button_notify_Click(object sender, RoutedEventArgs e)
+        {
+            button_notify.Content = new Image() { Source = notifyImg, Stretch = Stretch.Fill, Margin = new Thickness(6) };
+            show_new_movies();
+            notify_load();
+            //добавить отображение текстов уведомлений в правой вкладке
+        }
+
+        private void notify_load()
+        {
+            textBox_content_headet.Text = "Уведомления";
+            scroll_viewer_content.ScrollToTop();
+            if (!grid.ColumnDefinitions[2].IsEnabled)
+                openPanel();
+            grid_recommends.Visibility = Visibility.Collapsed;
+            grid_content.Visibility = Visibility.Visible;
+            button_panel_close.Visibility = Visibility.Visible;
+            grid_content.Children.Clear();
+            grid_content.RowDefinitions.Clear();
+            grid_content.ColumnDefinitions.Clear();
+            grid_content.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            grid_content.RowDefinitions.Add(new RowDefinition());
+            TextBlock tb = new TextBlock()
+            {
+                Text = "Тута что-то будет связанное с уведомлениями",
+                TextWrapping = TextWrapping.WrapWithOverflow,
+                FontSize = 22,
+                Background = Brushes.Transparent,
+                Foreground = Brushes.LightGray,
+                Padding = new Thickness(30)
+            };
+            Grid.SetColumn(tb, 0);
+            Grid.SetRow(tb, 0);
+            grid_content.Children.Add(tb);
+        }
+
+        private void textbox_filtering_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                button_search.Focus();
+                search();
+            }
         }
     }
 }

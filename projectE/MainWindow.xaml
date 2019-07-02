@@ -119,7 +119,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="0"></RowDefinition>
+            <RowDefinition Height="0" IsEnabled="False"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -159,7 +159,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{Binding ElementName= button_home, Path=ActualHeight}"></RowDefinition>
                     <RowDefinition Height="{Binding ElementName= button_favorite, Path=ActualHeight}"></RowDefinition>
-                    <RowDefinition Height="{Binding ElementName= button_watched, Path=ActualHeight}"></RowDefinition>
+                    <RowDefinition Height="{Binding ElementName= button_notify, Path=ActualHeight}"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="{Binding ElementName= button_settings, Path=ActualHeight}"></RowDefinition>
                 </Grid.RowDefinitions>
@@ -172,8 +172,11 @@
                 <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_list_Click_1">
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/звезда2.png" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_watched" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_watched_Click_1" Visibility="Collapsed">
+                <!--<Button x:Name="button_watched" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_watched_Click_1" Visibility="Collapsed">
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/глаз2.png" Stretch="Fill"/>
+                </Button>-->
+                <Button x:Name="button_notify" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Visibility="Visible" Click="button_notify_Click">
+                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/notify.png" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click">
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/шестерня2.png" Stretch="Fill"/>
@@ -240,15 +243,21 @@
             <Grid Name="grid_filtering" Grid.Column="1" Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="40"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="40"></RowDefinition>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Column="0" Grid.Row="0" Name="textbox_filtering" Margin="7" Background="#0E1621" BorderThickness="1" BorderBrush="#283949" Foreground="LightGray" FontSize="14" MaxLength="70" Padding="2"></TextBox>
-                <ComboBox Grid.Column="0" Grid.Row="1" Name="combobox_filter" Margin="7,7,7,7" SelectedIndex="0" >
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Все жанры</TextBlock>
+                <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Name="textbox_filtering" Margin="7" Background="#0E1621" BorderThickness="1" BorderBrush="#283949" Foreground="LightGray" FontSize="14" MaxLength="70" Padding="2" KeyDown="textbox_filtering_KeyDown"></TextBox>
+                <TextBlock Grid.Column="0" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Жанр</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Возраст</TextBlock>
+                <TextBlock Grid.Column="2" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Год</TextBlock>
+                <ComboBox Grid.Column="0" Grid.Row="2" Name="combobox_filter_genres" Margin="7,7,7,7" SelectedIndex="0" >
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Все</TextBlock>
                     <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Аниме</TextBlock>
                     <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Биография</TextBlock>
                     <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Боевик</TextBlock>
@@ -277,10 +286,14 @@
                     <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Фантастика</TextBlock>
                     <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Фэнтези</TextBlock>
                 </ComboBox>
-                <Button x:Name="button_search" Width="40" Height="40" Grid.Column="2" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_search_Click">
+                <ComboBox Grid.Column="1" Grid.Row="2" Name="combobox_filter_age" Margin="7,7,7,7" SelectedIndex="0" >
+                </ComboBox>
+                <ComboBox Grid.Column="2" Grid.Row="2" Name="combobox_filter_year" Margin="7,7,7,7" SelectedIndex="0" >
+                </ComboBox>
+                <Button x:Name="button_search" Width="40" Height="40" Grid.Column="3" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_search_Click">
                     <Image Height="auto" Margin="7" Width="auto" Source="Resources/лупа2.png" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
-                <Button x:Name="button_filtering_close" Width="40" Height="40" Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_close_Click">
+                <Button x:Name="button_filtering_close" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_close_Click">
                     <Image Height="auto" Margin="8" Width="auto" Source="Resources/back_to_recomends.png" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
             </Grid>
