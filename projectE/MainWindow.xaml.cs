@@ -48,6 +48,7 @@ namespace projectE
             thread = new Thread(Upd);
             thread.Abort();
             MessageBox.Show(v, "Ошибка", MessageBoxButton.OK);
+            isRun = false;
         }
 
         DB db = new DB();
