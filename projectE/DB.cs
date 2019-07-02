@@ -38,7 +38,7 @@ namespace projectE
         public void AddMovie(string name, int year, string date,
             string country, string genres, string agerating,
             string description, string poster, string urltrailer,
-            string urlinfo, string urlwatch, bool favorite, bool watched)
+            string urlinfo, string urlwatch, bool favorite, bool watched, string dateAdd)
         {
             if (conn == null)
                 connect();
@@ -51,24 +51,41 @@ namespace projectE
             {
                 Console.WriteLine(ex.ToString());
             }
-            cmd = new SQLiteCommand(conn);
-            cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) " +
-                "SELECT @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched " +
-                "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
-            cmd.Parameters.Add("@name", DbType.String).Value = name;
-            cmd.Parameters.Add("@year", DbType.Int32).Value = year;
-            cmd.Parameters.Add("@date", DbType.Date).Value = date;
-            cmd.Parameters.Add("@country", DbType.String).Value = country;
-            cmd.Parameters.Add("@genres", DbType.String).Value = genres;
-            cmd.Parameters.Add("@agerating", DbType.String).Value = agerating;
-            cmd.Parameters.Add("@description", DbType.String).Value = description;
-            cmd.Parameters.Add("@poster", DbType.Binary).Value = bytes;
-            cmd.Parameters.Add("@URLtrailer", DbType.String).Value = urltrailer;
-            cmd.Parameters.Add("@URLinfo", DbType.String).Value = urlinfo;
-            cmd.Parameters.Add("@URLwatch", DbType.String).Value = urlwatch;
-            cmd.Parameters.Add("@favorite", DbType.Boolean).Value = favorite;
-            cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
-            cmd.ExecuteNonQuery();
+            try
+            {
+                name = name.Trim();
+                cmd = new SQLiteCommand(conn);
+                cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched,dateAdd) " +
+                    "SELECT @name,@year,@date,@country,LOWER(@genres),@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched,@dateAdd " +
+                    "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
+                cmd.Parameters.Add("@name", DbType.String).Value = name;
+                cmd.Parameters.Add("@year", DbType.Int32).Value = year;
+                cmd.Parameters.Add("@date", DbType.Date).Value = date;
+                cmd.Parameters.Add("@country", DbType.String).Value = country;
+                cmd.Parameters.Add("@genres", DbType.String).Value = genres;
+                cmd.Parameters.Add("@agerating", DbType.String).Value = agerating;
+                cmd.Parameters.Add("@description", DbType.String).Value = description;
+                cmd.Parameters.Add("@poster", DbType.Binary).Value = bytes;
+                cmd.Parameters.Add("@URLtrailer", DbType.String).Value = urltrailer;
+                cmd.Parameters.Add("@URLinfo", DbType.String).Value = urlinfo;
+                cmd.Parameters.Add("@URLwatch", DbType.String).Value = urlwatch;
+                cmd.Parameters.Add("@favorite", DbType.Boolean).Value = favorite;
+                cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
+                cmd.Parameters.Add("@dateAdd", DbType.Date).Value = dateAdd;
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    Console.WriteLine("Добавили в базу " + name);
+                }
+                catch
+                {
+                    Console.WriteLine("Мы не сохранили " + name);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Мы не сохранили " + name);
+            }
         }
         // 
 
@@ -128,11 +145,11 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (!showRestricted)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE agerating<>'18+' ORDER BY date ASC LIMIT 25", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE agerating<>'18+' ORDER BY date ASC LIMIT 28", conn);
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date ASC LIMIT 25", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date ASC LIMIT 28", conn);
             }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
@@ -169,13 +186,47 @@ namespace projectE
             dataAdapter.Dispose();
             return dt;
         }
+        //фильтрация по имени и жанру
+        public DataTable GetMoviesByFilter(string name, string genre, string age, int year)
+        {
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (year == 0)
+                if (!showRestricted)
+                {
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
+                }
+                else
+                {
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' ORDER BY date DESC limit 50", conn);
+                }
+            else
+                if (!showRestricted)
+                {
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND year=" + year + " AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
+                }
+                else
+                {
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND year=" + year + " ORDER BY date DESC limit 50", conn);
+                }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return dt;
+        }
+
         //выгрузка кол-ва фильмов
         public int GetMoviesCount()
         {
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+                dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies where agerating<>'18+'", conn);
+            else
+                dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies", conn);
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
@@ -217,7 +268,15 @@ namespace projectE
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE favorite=true ORDER BY date DESC", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE favorite=true AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE favorite=true ORDER BY date DESC ", conn);
+            }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
@@ -269,10 +328,41 @@ namespace projectE
         {
             DateTime dateTime = DateTime.Today.AddDays(-7);
             string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE date>'" + date + "' AND favorite=false", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' ORDER BY date DESC", conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
+        //выгрузка кол-ва фильмов ДОБАВЛЕННЫХ В БД за неделю
+        public int GetAddedMoviesWeekCount()
+        {
+            DateTime dateTime = DateTime.Today.AddDays(-7);
+            string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE dateAdd>'" + date + "' AND dateAdd<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE dateAdd>'" + date + "' AND dateAdd<='" + today + "' ORDER BY date DESC", conn);
+            }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
@@ -289,11 +379,11 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (!showRestricted)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<='" + today + "' ORDER BY date DESC", conn);
             }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
@@ -304,10 +394,40 @@ namespace projectE
         {
             DateTime dateTime = DateTime.Today.AddDays(-31);
             string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT COUNT(*) FROM movies WHERE date>'" + date + "' AND favorite=false ORDER BY date DESC", conn);
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' ORDER BY date DESC", conn);
+            }
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
+        public int GetFavoritesMoviesWeekCount()
+        {
+            DateTime dateTime = DateTime.Today.AddDays(-7);
+            string date = dateTime.Year.ToString() + '-' + (dateTime.Month < 10 ? "0" : "") + dateTime.Month.ToString() + '-' + (dateTime.Day < 10 ? "0" : "") + dateTime.Day.ToString() + " 00:00:00";
+            string today = DateTime.Today.Year.ToString() + '-' + (DateTime.Today.Month < 10 ? "0" : "") + DateTime.Today.Month.ToString() + '-' + (DateTime.Today.Day < 10 ? "0" : "") + DateTime.Today.Day.ToString() + " 00:00:00";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter;
+            if (!showRestricted)
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND favorite=true AND agerating<>'18+' ORDER BY date DESC", conn);
+            }
+            else
+            {
+                dataAdapter = new SQLiteDataAdapter("SELECT count(*) FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND favorite=true ORDER BY date DESC", conn);
+            }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return int.Parse(dt.Rows[0][0].ToString());
@@ -345,6 +465,53 @@ namespace projectE
         public void close()
         {
             conn.Close();
+        }
+    }
+}
+
+//взято с http://www.cyberforum.ru/ado-net/thread1708878.html
+namespace ASC.Data.SQLite
+{
+
+    /// <summary>
+    /// Класс переопределяет функцию Lower() в SQLite, т.к. встроенная функция некорректно работает с символами > 128
+    /// </summary>
+    [SQLiteFunction(Name = "lower", Arguments = 1, FuncType = FunctionType.Scalar)]
+    public class LowerFunction : SQLiteFunction
+    {
+
+        /// <summary>
+        /// Вызов скалярной функции Lower().
+        /// </summary>
+        /// <param name="args">Параметры функции</param>
+        /// <returns>Строка в нижнем регистре</returns>
+        public override object Invoke(object[] args)
+        {
+            try
+            {
+                if (args.Length == 0 || args[0] == null) return null;
+                return ((string)args[0]).ToLower();
+            }
+            catch { return null; }
+        }
+    }
+
+    /// <summary>
+    /// Класс переопределяет функцию Upper() в SQLite, т.к. встроенная функция некорректно работает с символами > 128
+    /// </summary>
+    [SQLiteFunction(Name = "upper", Arguments = 1, FuncType = FunctionType.Scalar)]
+    public class UpperFunction : SQLiteFunction
+    {
+
+        /// <summary>
+        /// Вызов скалярной функции Upper().
+        /// </summary>
+        /// <param name="args">Параметры функции</param>
+        /// <returns>Строка в верхнем регистре</returns>
+        public override object Invoke(object[] args)
+        {
+            if (args.Length == 0 || args[0] == null) return null;
+            return ((string)args[0]).ToUpper();
         }
     }
 }

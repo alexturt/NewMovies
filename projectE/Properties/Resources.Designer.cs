@@ -111,6 +111,26 @@ namespace projectE.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon iconRed {
+            get {
+                object obj = ResourceManager.GetObject("iconRed", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notify {
+            get {
+                object obj = ResourceManager.GetObject("notify", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap nowatched {
@@ -126,6 +146,16 @@ namespace projectE.Properties {
         internal static System.Drawing.Bitmap poster_none {
             get {
                 object obj = ResourceManager.GetObject("poster_none", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rednotify {
+            get {
+                object obj = ResourceManager.GetObject("rednotify", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -196,6 +226,16 @@ namespace projectE.Properties {
         internal static System.Drawing.Bitmap лупа2 {
             get {
                 object obj = ResourceManager.GetObject("лупа2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap лупастрелка {
+            get {
+                object obj = ResourceManager.GetObject("лупастрелка", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
