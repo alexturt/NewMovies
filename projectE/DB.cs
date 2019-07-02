@@ -38,7 +38,7 @@ namespace projectE
         public void AddMovie(string name, int year, string date,
             string country, string genres, string agerating,
             string description, string poster, string urltrailer,
-            string urlinfo, string urlwatch, bool favorite, bool watched)
+            string urlinfo, string urlwatch, bool favorite, bool watched, string dateAdd)
         {
             if (conn == null)
                 connect();
@@ -51,24 +51,33 @@ namespace projectE
             {
                 Console.WriteLine(ex.ToString());
             }
-            cmd = new SQLiteCommand(conn);
-            cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched) " +
-                "SELECT @name,@year,@date,@country,@genres,@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched " +
-                "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
-            cmd.Parameters.Add("@name", DbType.String).Value = name;
-            cmd.Parameters.Add("@year", DbType.Int32).Value = year;
-            cmd.Parameters.Add("@date", DbType.Date).Value = date;
-            cmd.Parameters.Add("@country", DbType.String).Value = country;
-            cmd.Parameters.Add("@genres", DbType.String).Value = genres;
-            cmd.Parameters.Add("@agerating", DbType.String).Value = agerating;
-            cmd.Parameters.Add("@description", DbType.String).Value = description;
-            cmd.Parameters.Add("@poster", DbType.Binary).Value = bytes;
-            cmd.Parameters.Add("@URLtrailer", DbType.String).Value = urltrailer;
-            cmd.Parameters.Add("@URLinfo", DbType.String).Value = urlinfo;
-            cmd.Parameters.Add("@URLwatch", DbType.String).Value = urlwatch;
-            cmd.Parameters.Add("@favorite", DbType.Boolean).Value = favorite;
-            cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
-            cmd.ExecuteNonQuery();
+            try
+            {
+                name = name.Trim();
+                cmd = new SQLiteCommand(conn);
+                cmd.CommandText = @"INSERT INTO movies (name,year,date,country,genres,agerating,description,poster,URLtrailer,URLinfo,URLwatch,favorite,watched,dateAdd) " +
+                    "SELECT @name,@year,@date,@country,LOWER(@genres),@agerating,@description,@poster,@URLtrailer,@URLinfo,@URLwatch,@favorite,@watched,@dateAdd " +
+                    "WHERE NOT EXISTS(SELECT 1 FROM movies WHERE name=@name AND year=@year)";
+                cmd.Parameters.Add("@name", DbType.String).Value = name;
+                cmd.Parameters.Add("@year", DbType.Int32).Value = year;
+                cmd.Parameters.Add("@date", DbType.Date).Value = date;
+                cmd.Parameters.Add("@country", DbType.String).Value = country;
+                cmd.Parameters.Add("@genres", DbType.String).Value = genres;
+                cmd.Parameters.Add("@agerating", DbType.String).Value = agerating;
+                cmd.Parameters.Add("@description", DbType.String).Value = description;
+                cmd.Parameters.Add("@poster", DbType.Binary).Value = bytes;
+                cmd.Parameters.Add("@URLtrailer", DbType.String).Value = urltrailer;
+                cmd.Parameters.Add("@URLinfo", DbType.String).Value = urlinfo;
+                cmd.Parameters.Add("@URLwatch", DbType.String).Value = urlwatch;
+                cmd.Parameters.Add("@favorite", DbType.Boolean).Value = favorite;
+                cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
+                cmd.Parameters.Add("@dateAdd", DbType.Date).Value = dateAdd;
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                Console.WriteLine("Мы не сохранили " + name + " ошибка в дате? - " + date + " ссылка: " + urlinfo);
+            }
         }
         // 
 
