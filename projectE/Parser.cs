@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -30,8 +31,8 @@ namespace projectE
         public bool stop = false;
         public CQ IsConnectInternet(string Html)
         {
-            if (!stop)
-            {
+     //       if (!stop)
+       //     {
                 try
                 {
                     CQ film = CQ.CreateFromUrl(Html);
@@ -40,12 +41,12 @@ namespace projectE
                 catch
                 {
                     MainWindow mw = new MainWindow();
-                    mw.ShowBox("Интернет соединение отсутствует или очень медленное. Загрузка новых данных не удалась");
-                    stop = true;
+       //             mw.ShowBox("Интернет соединение отсутствует или очень медленное. Загрузка новых данных не удалась");
+       //             stop = true;
                     return null;
                 }
-            }
-            return null;
+     //       }
+    //        return null;
         }
 
         public void UpdateList()
@@ -315,7 +316,10 @@ namespace projectE
                                             if ((masDat.Count() == 3))
                                             {
                                                 datat = masDat[0] + " " + masDat[1] + " " + masDat[2];
-                                                return datat;
+                                                if (TextIsDate(datat))
+                                                {
+                                                    return datat;
+                                                }
                                             }
                                             else
                                             {
@@ -335,7 +339,15 @@ namespace projectE
                     datat = "0001-01-01";
                 }
             }
-            return datat;
+            data = datat.Split('-');
+            if (data[0].Equals(year))
+            {
+                return datat;
+            }
+            else
+            {
+                return "0001-01-01";
+            }
         }
 
         private string FindAgeRating(string name, string year)
@@ -486,7 +498,7 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-                Task.Delay(500).Wait(); ;
+     //           Task.Delay(500).Wait(); ;
                 string Html = ListFilm[i];
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
@@ -509,7 +521,7 @@ namespace projectE
                         agerating = FindAgeRating(name, year); //Возр.огр
                         poster = film.Find("#fstory-film > div > div.col-sm-4.col-xs-12.fstory-poster-in > div.fstory-poster > img").Attr("src"); //Картинка
                         date = ReData(FindData(name, year)); //Дата выхода
-                                                             //          country = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
+                        country = null;                                    //          country = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
                         foreach (IDomObject obj in film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text"))
                         {
                             country += obj.FirstChild.NodeValue + " ";
@@ -547,12 +559,12 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-                Task.Delay(500).Wait();
+        //        Task.Delay(500).Wait();
                 string Html = ListFilm[i];
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
                 {
-                    name = film.Find("#kino-page > div.kino-title-full > h1").Text().Replace("(фильм 2019) смотреть онлайн", "").Replace("(фильм 2018) смотреть онлайн", "").Replace("(фильм 2017) смотреть онлайн", "").Replace("(видео)", "").Trim();
+                    name = film.Find("#kino-page > div.kino-title-full > h1").Text().Replace("(фильм 2019) смотреть онлайн", "").Replace("(фильм 2018) смотреть онлайн", "").Replace("(фильм 2017) смотреть онлайн", "").Replace("сериал смотреть онлайн", "").Replace("все серии", "").Replace("(видео)", "").Trim();
                     year = film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(1) > span.value").Text();
                     if (name != "")
                     {
@@ -562,11 +574,14 @@ namespace projectE
                         genres = null;             //        genres = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(5) > div > div.finfo-text > a").Text(); //Жанр
                         foreach (IDomObject obj in film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(2) > span.value")) //Жанр
                         {
-                            try
+                            if (genres == null)
                             {
-                                genres += obj.FirstChild.LastChild.NodeValue + " ";
+                                try
+                                {
+                                    genres += obj.FirstChild.LastChild.NodeValue + " ";
+                                } catch { }
                             }
-                            catch
+                            if (genres == null)
                             {
                                 //  #kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value > span:nth-child(1)
                                 foreach (IDomObject obj1 in film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value > span"))
@@ -575,9 +590,16 @@ namespace projectE
                                     {
                                         genres += obj1.FirstChild.LastChild.NodeValue + " ";
                                     }
-                                    catch { }
+                                    catch
+                                    {
+                                        genres += obj1.FirstChild.NodeValue + " ";
+                                    }
                                 }
                             }
+                        }
+                        if (genres == null)
+                        { //#kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value > span:nth-child(1)
+                            string a = "";
                         }
                         description = null;
                         foreach (IDomObject obj in film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix")) //Жанр
@@ -586,17 +608,25 @@ namespace projectE
                         }
                         //       description = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
                         urltrailer = FindTrailer(name, year); //Трейлер
-                        agerating = FindAgeRating(name, year); ; //Возр.огр
+                        agerating = FindAgeRating(name, year); //Возр.огр
                         poster = @"https://filmzor.net" + film.Find("#kino-page > div.fcols.clearfix > div > img").Attr("src"); //Картинка
                         date = ReData(film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(7) > span.value").Text()); //Дата выхода
-                        if ((date == "") || (date == "-"))
+                        if ((date == "") || (date == "-") || !TextIsDate(date))
                         {
                             date = ReData(FindData(name, year));
                         }
+                        
                         country = null;//          country = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
                         foreach (IDomObject obj in film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value")) //Страна
                         {
-                            country += obj.FirstChild.NodeValue + " ";
+                            if (obj.FirstChild.NodeValue != null)
+                            {
+                                country += obj.FirstChild.NodeValue + " ";
+                            }
+                            else
+                            {
+                                country = film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(4) > span.value").First().Text();
+                            }
                         }
                         urlwatch = Html; //Сам фильм
                         countElem++;
@@ -605,6 +635,17 @@ namespace projectE
                 }
                 db.AddMovie(name, Convert.ToInt32(year), date, country, genres, agerating, description, poster, urltrailer, urlinfo, urlwatch, false, false, ReNowData(DateTime.Now));
             }
+        }
+
+        static bool TextIsDate(string text)
+        {
+            var dateFormat = "yyyy-mm-dd";
+            DateTime scheduleDate;
+            if (DateTime.TryParseExact(text, dateFormat, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out scheduleDate))
+            {
+                return true;
+            }
+            return false;
         }
 
         public void UpdateListIvi(string Html)
@@ -629,13 +670,13 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-                Task.Delay(500).Wait();
+                //      Task.Delay(500).Wait();
                 string Html = @"https://www.ivi.ru" + ListFilm[i] + "/description";
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
                 {
-                    string name = film.Find("body > div.page-wrapper > div > section > div.title-block > h1").Text().Replace("Фильм ", "").Trim();
-                    string year = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.top-wrapper > div.properties > a:nth-child(1)").Text();
+                    name = film.Find("body > div.page-wrapper > div > section > div.title-block > h1").Text().Replace("Фильм ", "").Trim();
+                    year = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.top-wrapper > div.properties > a:nth-child(1)").Text();
                     if (name != "")
                     {
                         //   if (!DoubleFilm(name, year))
@@ -653,7 +694,7 @@ namespace projectE
                         agerating = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.top-wrapper > div.properties > span.separate > span:nth-child(3)").Text(); //Возр.огр
                         poster = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > aside > figure > a > img").Attr("src"); //Картинка
                         date = ReData(film.Find("body > div.page-wrapper > div > div > section:nth-child(3) > aside > dl > dd").Text()); //Дата выхода
-                        if (date == "")
+                        if ((date == "") || (date == "-") || !TextIsDate(date))
                         {
                             date = ReData(FindData(name, year));
                         }
@@ -666,8 +707,9 @@ namespace projectE
                         countElem++;
                         // }
                     }
+
+                    db.AddMovie(name, Convert.ToInt32(year), date, country, genres, agerating, description, poster, urltrailer, urlinfo, urlwatch, false, false, ReNowData(DateTime.Now));
                 }
-                db.AddMovie(name, Convert.ToInt32(year), date, country, genres, agerating, description, poster, urltrailer, urlinfo, urlwatch, false, false, ReNowData(DateTime.Now));
             }
 
         }
@@ -696,7 +738,7 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-                Task.Delay(500).Wait();
+       //         Task.Delay(500).Wait();
                 string Html = ListFilm[i];
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
@@ -816,14 +858,28 @@ namespace projectE
                                 }
                             }
                             if (genres == null)
-                            {
-                                string a = "какой-то косяк";
+                            { //#dle-content > div:nth-child(5) > dl > dd:nth-child(8) > span > span > a
+                                foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd")) //Жанр
+                                { //1
+                                    genres += obj.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.FirstElementChild.FirstElementChild.FirstElementChild.FirstChild.NodeValue.Trim() + " ";
+                                    break;
+                                }
                             }
+                            if (genres == null)
+                            { string a = "Опять косяк"; }
+                               
                         }
                         description = null;
                         foreach (IDomObject obj in film.Find("#dle-content > div.kikos > div")) //Описание
                         {
-                            description = obj.FirstChild.NextElementSibling.PreviousSibling.NodeValue.Trim() + " ";
+                            try
+                            {
+                                description = obj.FirstChild.NextElementSibling.PreviousSibling.NodeValue.Trim() + " ";
+                            }
+                            catch
+                            {
+                                description = obj.FirstChild.NextSibling.NodeValue.Trim() + " ";
+                            }
                         }
                         //       description = film.Find("#dle-content > div.kikos > div > span.masha_index.masha_index44").Text().Trim(); //Описание
                         //       description = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
@@ -835,6 +891,7 @@ namespace projectE
                             poster = @"https://hdkinozor.ru" + obj.GetAttribute("src");
                         }
                         date = ReData(FindData(name, year)); //Дата выхода
+
                         country = null;                                   //          country = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
                         foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(8) > span > a")) //Страна
                         {
@@ -887,7 +944,7 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-                Task.Delay(500).Wait();
+        //        Task.Delay(500).Wait();
                 string Html = @"https://www.lostfilm.tv" + ListFilm[i];
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
