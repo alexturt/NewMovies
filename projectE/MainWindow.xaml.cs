@@ -637,7 +637,7 @@ namespace projectE
         //покрутили колесико в центральной вкладке
         private void stack_list_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Title.Text = grid.RowDefinitions[2].IsEnabled.ToString();
+            //Title.Text = grid.RowDefinitions[2].IsEnabled.ToString();
             if (stack_list.Height > scroll_viewer_content.Height)
                 if (e.Delta < 0)//если покрутили вниз
                 {
