@@ -171,7 +171,7 @@
                 <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_list_Click_1">
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/звезда2.png" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_notify" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Visibility="Visible">
+                <Button x:Name="button_notify" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Visibility="Visible" Click="button_notify_Click">
                     <Image Margin="5" VerticalAlignment="Top" Source="Resources/notify.png" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click">
