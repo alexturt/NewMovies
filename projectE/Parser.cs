@@ -366,20 +366,20 @@ namespace projectE
                 {
                     for (int i = 1; i < 11; i++)
                     {
-                            foreach (IDomObject obj in film.Find("#jr-pagenav-ajax > div.jrTableGrid.jrDataList.jrResults > div:nth-child(" + i + ") > div.jr-listing-outer.jrCol.jrTableColumnMain > div.jrContentTitle"))
-                            {
+                        foreach (IDomObject obj in film.Find("#jr-pagenav-ajax > div.jrTableGrid.jrDataList.jrResults > div:nth-child(" + i + ") > div.jr-listing-outer.jrCol.jrTableColumnMain > div.jrContentTitle"))
+                        {
 
-                                if (obj.FirstChild.FirstChild.NodeValue.ToLower().Equals(name.ToLower().Trim()))
+                            if (obj.FirstChild.FirstChild.NodeValue.ToLower().Equals(name.ToLower().Trim()))
+                            {
+                                age = obj.NextSibling.NextSibling.FirstElementChild.FirstElementChild.LastChild.NodeValue.Split(' ');
+                                ageR = age[1].Replace("г.", "").Replace("(", "").Replace(")", "").Trim();
+                                if (ageR.Length > 3)
                                 {
-                                    age = obj.NextSibling.NextSibling.FirstElementChild.FirstElementChild.LastChild.NodeValue.Split(' ');
-                                    ageR = age[1].Replace("г.", "").Replace("(", "").Replace(")", "").Trim();
-                                    if (ageR.Length > 3)
-                                    {
-                                        ageR = ageR.Remove(3);
-                                    }
-                                    return ageR;
+                                    ageR = ageR.Remove(3);
                                 }
+                                return ageR;
                             }
+                        }
                     }
                     if (countStr != 1)
                     {
@@ -389,6 +389,7 @@ namespace projectE
                         {
                             j++;
                         }
+                        else { break; }
 
                     }
                 } while (j < countStr);
@@ -760,7 +761,7 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-       //         Task.Delay(500).Wait();
+                //         Task.Delay(500).Wait();
                 string Html = ListFilm[i];
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
@@ -784,19 +785,23 @@ namespace projectE
                         urlinfo = Html; //ссылка
                         genres = null;
                         foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(12) > span > span")) //Жанр
-                        { 
+                        {
                             genres += obj.FirstChild.FirstChild.NodeValue.Trim() + " ";
                         }
                         if (genres == null)
                         {
-                            try
+                            if (genres == null)
                             {
                                 foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(8) > span > span")) //Жанр
                                 { //1
-                                    genres += obj.FirstChild.FirstChild.NodeValue.Trim() + " ";
+                                    try
+                                    {
+                                        genres += obj.FirstChild.FirstChild.NodeValue.Trim() + " ";
+                                    }
+                                    catch { }
                                 }
                             }
-                            catch
+                            if (genres == null)
                             {
                                 foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd:nth-child(10) > span > span")) //Жанр
                                 { //1
@@ -810,6 +815,10 @@ namespace projectE
                                     genres += obj.FirstChild.NodeValue.Trim() + " ";
                                 }
                             }
+                            if (genres == null)
+                            {
+                                string a = "какой-то косяк";
+                            }
                         }
                         description = null;
                         foreach (IDomObject obj in film.Find("#dle-content > div.kikos > div")) //Описание
@@ -820,7 +829,7 @@ namespace projectE
                         //       description = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
                         urltrailer = FindTrailer(name, year); //Трейлер
                         agerating = FindAgeRating(name, year); //Возр.огр
-                                                                 //       poster = @"https://hdkinozor.ru" + film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img").Attr("src"); //Картинка
+                        poster = null;                                         //       poster = @"https://hdkinozor.ru" + film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img").Attr("src"); //Картинка
                         foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > div > div.cmokka > img")) //Картинка
                         {
                             poster = @"https://hdkinozor.ru" + obj.GetAttribute("src");
@@ -892,7 +901,7 @@ namespace projectE
                         // {
                         genres = null;
                         urlinfo = Html; //ссылка
-                                     //        genres = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(5) > div > div.finfo-text > a").Text(); //Жанр
+                                        //        genres = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(5) > div > div.finfo-text > a").Text(); //Жанр
                         foreach (IDomObject obj in film.Find("#left-pane > div:nth-child(4) > div.details-pane > div.right-box > a:nth-child(1)")) //Жанр
                         {
                             //            if (!(obj.FirstChild.NodeValue.Trim()).Equals("По сериалу"))
@@ -966,7 +975,14 @@ namespace projectE
                     dataMas[0] = "0" + dataMas[0];
                 }
             }
-            return dataMas[2].Trim() + "-" + mounth + "-" + dataMas[0].Trim();
+            try
+            {
+                return dataMas[2].Trim() + "-" + mounth + "-" + dataMas[0].Trim();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private string ReNowData(DateTime date)

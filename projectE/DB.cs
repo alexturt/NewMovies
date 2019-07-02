@@ -72,8 +72,15 @@ namespace projectE
                 cmd.Parameters.Add("@favorite", DbType.Boolean).Value = favorite;
                 cmd.Parameters.Add("@watched", DbType.Boolean).Value = watched;
                 cmd.Parameters.Add("@dateAdd", DbType.Date).Value = dateAdd;
-                cmd.ExecuteNonQuery();
-                Console.WriteLine("Добавили в базу " + name);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    Console.WriteLine("Добавили в базу " + name);
+                }
+                catch
+                {
+                    Console.WriteLine("Мы не сохранили " + name);
+                }
             }
             catch
             {
