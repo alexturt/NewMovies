@@ -603,6 +603,7 @@ namespace projectE
         {
             ShowInTaskbar = false;
             Hide();
+            //WindowState = WindowState.Minimized;
         }
         //перетаскивание окна за верхнюю панельку
         private void Title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -636,7 +637,7 @@ namespace projectE
         //покрутили колесико в центральной вкладке
         private void stack_list_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Title.Text = grid.RowDefinitions[2].IsEnabled.ToString();
+            //Title.Text = grid.RowDefinitions[2].IsEnabled.ToString();
             if (stack_list.Height > scroll_viewer_content.Height)
                 if (e.Delta < 0)//если покрутили вниз
                 {
@@ -1528,14 +1529,14 @@ namespace projectE
                 notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                 
             }
-            notifyIcon.DoubleClick += (s, e) => { ShowInTaskbar = true; WindowState = WindowState.Normal; Topmost = true; };
+            notifyIcon.DoubleClick += (s, e) => { ShowInTaskbar = true; Show(); };
             
             notifyIcon.BalloonTipClicked += (s, e) => 
             {
                 show_new_movies();
             };
             System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
-            System.Windows.Forms.MenuItem menuItem = new System.Windows.Forms.MenuItem("Открыть", (s, e) => { ShowInTaskbar = true; this.WindowState = WindowState.Normal; });
+            System.Windows.Forms.MenuItem menuItem = new System.Windows.Forms.MenuItem("Открыть", (s, e) => { ShowInTaskbar = true; Show(); });
             contextMenu.MenuItems.Add(menuItem);
             menuItem = new System.Windows.Forms.MenuItem("Выход", (s, e) => { notifyIcon.Visible = false; notifyIcon.Dispose(); Process.GetCurrentProcess().Kill(); });
             contextMenu.MenuItems.Add(menuItem);
@@ -1554,7 +1555,7 @@ namespace projectE
             ShowInTaskbar = true;
             if (WindowState == WindowState.Minimized)
                 WindowState = WindowState.Normal;
-            Topmost = true;
+            Show();
         }
 
 
