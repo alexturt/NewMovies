@@ -170,20 +170,30 @@ namespace projectE
             return dt;
         }
         //фильтрация по имени и жанру
-        public DataTable GetMoviesByFilter(string name, string genre)
+        public DataTable GetMoviesByFilter(string name, string genre, string age, int year)
         {
             if (conn == null)
                 connect();
             DataTable dt = new DataTable();
             SQLiteDataAdapter dataAdapter;
-            if (!showRestricted)
-            {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating<>'18+' ORDER BY date DESC", conn);
-            }
+            if (year == 0)
+                if (!showRestricted)
+                {
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND lower(agerating) like lower('%" + age + "%') AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
+                }
+                else
+                {
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND lower(agerating) like lower('%" + age + "%') ORDER BY date DESC limit 50", conn);
+                }
             else
-            {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') ORDER BY date DESC", conn);
-            }
+                if (!showRestricted)
+                {
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND lower(agerating) like lower('%" + age + "%') AND year=" + year + " AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
+                }
+                else
+                {
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND lower(agerating) like lower('%" + age + "%') AND year=" + year + " ORDER BY date DESC limit 50", conn);
+                }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
             return dt;
