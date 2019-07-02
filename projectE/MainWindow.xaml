@@ -299,7 +299,7 @@
             
             <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_content_ScrollChanged">
                 <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B" MouseWheel="stack_content_MouseWheel">
-                    <Grid Name="grid_content" Visibility="Collapsed">
+                    <Grid Name="grid_right" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -308,8 +308,9 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-
-        <!--| Settings block START |-->
+                    </Grid>
+                    <Grid Name="grid_content" Visibility="Collapsed">
+                        <!--| Settings block START |-->
         <Label 
             x:Name="label_sources" 
             Content="Источники фильмов:" 
