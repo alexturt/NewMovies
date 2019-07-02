@@ -413,6 +413,8 @@ namespace projectE
                         str = "Новинок за месяц нет ☹";
                         break;
                 }
+            else
+                str = "Результатов поиска \"" + textbox_filtering.Text + "\", жанры: " + (combobox_filter_genres.SelectedItem as TextBlock).Text + ", возраст: " + (combobox_filter_age.SelectedItem as TextBlock).Text + ", год: " + (combobox_filter_year.SelectedItem as TextBlock).Text + " нет";
             if (dt_movies.Rows.Count == 0)
             {
                 _grid.RowDefinitions.Add(new RowDefinition());
@@ -423,7 +425,9 @@ namespace projectE
                     VerticalAlignment = VerticalAlignment.Center,
                     FontSize = 18,
                     Foreground = Brushes.LightGray,
-                    IsEnabled = false
+                    IsEnabled = false,
+                    TextWrapping = TextWrapping.WrapWithOverflow,
+                    TextAlignment = TextAlignment.Center
                 };
                 Grid.SetRow(tb, 0);
                 _grid.Children.Add(tb);
