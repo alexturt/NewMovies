@@ -817,7 +817,7 @@ namespace projectE
                             }
                             if (genres == null)
                             {
-                                string a = "какой-то косяк";
+                                //string a = "какой-то косяк";
                             }
                         }
                         description = null;
