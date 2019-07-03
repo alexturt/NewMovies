@@ -2,6 +2,7 @@
 using projectE;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,22 +12,19 @@ namespace projectE.Tests
     [TestClass()]
     public class DBTests
     {
-        DB db = new DB();
-        Parser parser = new Parser();
-        bool Bool = false;
-
         [TestMethod()]
-        public void AddMovieTest()
+        public void GetRecommendsTest()
         {
-            
-            try
-            {
-                db.AddMovie("a", 2019, "a", "a", "a", "a", "a", "a", "a", "a", "a", Convert.ToBoolean(Bool), Convert.ToBoolean(Bool), "a");
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail();
-            }
+            DB db = new DB();
+            var v = db.GetRecommends();
+            Assert.IsInstanceOfType(v,typeof(DataTable));
+        }
+        [TestMethod()]
+        public void GetRecommendsTest2()
+        {
+            DB db = new DB();
+            var v = db.GetRecommends();
+            Assert.IsInstanceOfType(v, typeof(int));
         }
     }
 }

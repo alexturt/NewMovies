@@ -23,6 +23,7 @@ namespace projectE
     {
         public MainWindow()
         {
+            //MessageBox.Show(Environment.CurrentDirectory.ToString());
             InitializeComponent();
             UpdateSettings();
             columns_count = 2;
@@ -223,8 +224,7 @@ namespace projectE
             grid_right.RowDefinitions.Add(new RowDefinition());
             grid_right.RowDefinitions.Add(new RowDefinition());
 
-            try
-            {
+            
                 Image img = new Image()
                 {
                     Name = "image_right_content",
@@ -238,12 +238,6 @@ namespace projectE
                 Grid.SetColumn(img, 0);
                 Grid.SetRow(img, 0);
                 grid_right.Children.Add(img);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
             TextBlock tb = new TextBlock();
             tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), dt_movies.Rows[index]["name"].ToString(), 22, Brushes.AliceBlue));
             Run run = new Run()
@@ -290,7 +284,7 @@ namespace projectE
             grid_right.Children.Add(tb2);
         }
         //для вкладки подробнее создание гиперссылок
-        private Hyperlink createURL(string url, string name, int size, Brush brush)
+        public Hyperlink createURL(string url, string name, int size, Brush brush)
         {
             Uri uri = null;
             Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out uri);
@@ -305,7 +299,7 @@ namespace projectE
             return link;
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        public void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try
             {
@@ -558,12 +552,14 @@ namespace projectE
         //нажали кнопку закрыть окно
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
-            try
+            /*try
             {
                 thread.Abort();
-            } catch { }
+            } catch { }*/
             GC.Collect();
-            Process.GetCurrentProcess().Kill();
+            //Process.GetCurrentProcess().Kill();
+            ShowInTaskbar = false;
+            WindowState = WindowState.Minimized;
         }
         //нажали кнопку "во весь экран" или "вернуть к нормальному размеру"
         private void button_maximazing_Click(object sender, RoutedEventArgs e)
@@ -582,7 +578,7 @@ namespace projectE
         //нажали кнопку скрыть в трей
         private void button_hide_Click(object sender, RoutedEventArgs e)
         {
-            ShowInTaskbar = false;
+            //ShowInTaskbar = false;
             WindowState = WindowState.Minimized;
         }
         //перетаскивание окна за верхнюю панельку
@@ -644,7 +640,7 @@ namespace projectE
 
         }
         //из массива байт в картинку
-        private static BitmapImage LoadImage(byte[] imageData)
+        public static BitmapImage LoadImage(byte[] imageData)
         {
             try
             {
@@ -671,7 +667,7 @@ namespace projectE
             }
         }
         //конвертирует дату из "гггг.мм.дд 00:00:00" в "20 июня 2019"
-        private string ConvertDate(string str)
+        public string ConvertDate(string str)
         {
             if (str == "01.01.0001 0:00:00")
                 return "Вышел";
@@ -1090,7 +1086,7 @@ namespace projectE
         //ПКМ вызвает меню
         //даблклик открывает окно
         //balloontipclicked вызывается если нажали на уведомление
-        private void createNotifyIcon()
+        public void createNotifyIcon()
         {
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.Visible = true;
@@ -1120,7 +1116,17 @@ namespace projectE
                 Activate();
             });
             contextMenu.MenuItems.Add(menuItem);
-            menuItem = new System.Windows.Forms.MenuItem("Выход", (s, e) => { notifyIcon.Visible = false; notifyIcon.Dispose(); Process.GetCurrentProcess().Kill(); });
+            menuItem = new System.Windows.Forms.MenuItem("Выход", (s, e) => 
+            {
+                notifyIcon.Visible = false;
+                notifyIcon.Dispose();
+                try
+                {
+                    thread.Abort();
+                }
+                catch { }
+                Process.GetCurrentProcess().Kill();
+            });
             contextMenu.MenuItems.Add(menuItem);
             notifyIcon.ContextMenu = contextMenu;
         }
@@ -1188,8 +1194,6 @@ namespace projectE
         }
         private void search()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             string name = textbox_filtering.Text.ToLower();
             string genre = ((TextBlock)combobox_filter_genres.SelectedItem).Text;
             string age = ((TextBlock)combobox_filter_age.SelectedItem).Text;
@@ -1206,11 +1210,8 @@ namespace projectE
                 year = int.Parse(((TextBlock)combobox_filter_year.SelectedItem).Text);
             dt_movies = db.GetMoviesByFilter(name, genre, age, year);
             allmoviesCount = dt_movies.Rows.Count;
-            sw.Stop();
-            sw.Restart();
             show_movies(grid_list, button_sctoll_top, columns_count);
             scroll_viewer_center.ScrollToTop();
-            sw.Stop();
         }
         private void button_notify_Click(object sender, RoutedEventArgs e)
         {
@@ -1221,35 +1222,35 @@ namespace projectE
             //добавить отображение текстов уведомлений в правой вкладке
         }
 
-        private void notify_load()
-        {
-            textBox_content_headet.Text = "Уведомления";
-            scroll_viewer_content.ScrollToTop();
-            if (!grid.ColumnDefinitions[2].IsEnabled)
-                openPanel();
-            grid_recommends.Visibility = Visibility.Collapsed;
-            grid_content.Visibility = Visibility.Collapsed;
-            grid_right.Visibility = Visibility.Visible;
-            button_panel_close.Visibility = Visibility.Visible;
-            grid_right.Children.Clear();
-            grid_right.RowDefinitions.Clear();
-            grid_right.ColumnDefinitions.Clear();
-            grid_right.ColumnDefinitions.Add(new ColumnDefinition());
-            grid_right.RowDefinitions.Add(new RowDefinition());
-            grid_right.RowDefinitions.Add(new RowDefinition());
-            TextBlock tb = new TextBlock()
-            {
-                Text = "Тута что-то будет связанное с уведомлениями",
-                TextWrapping = TextWrapping.WrapWithOverflow,
-                FontSize = 22,
-                Background = Brushes.Transparent,
-                Foreground = Brushes.LightGray,
-                Padding = new Thickness(30)
-            };
-            Grid.SetColumn(tb, 0);
-            Grid.SetRow(tb, 0);
-            grid_right.Children.Add(tb);
-        }
+        //private void notify_load()
+        //{
+        //    textBox_content_headet.Text = "Уведомления";
+        //    scroll_viewer_content.ScrollToTop();
+        //    if (!grid.ColumnDefinitions[2].IsEnabled)
+        //        openPanel();
+        //    grid_recommends.Visibility = Visibility.Collapsed;
+        //    grid_content.Visibility = Visibility.Collapsed;
+        //    grid_right.Visibility = Visibility.Visible;
+        //    button_panel_close.Visibility = Visibility.Visible;
+        //    grid_right.Children.Clear();
+        //    grid_right.RowDefinitions.Clear();
+        //    grid_right.ColumnDefinitions.Clear();
+        //    grid_right.ColumnDefinitions.Add(new ColumnDefinition());
+        //    grid_right.RowDefinitions.Add(new RowDefinition());
+        //    grid_right.RowDefinitions.Add(new RowDefinition());
+        //    TextBlock tb = new TextBlock()
+        //    {
+        //        Text = "Тута что-то будет связанное с уведомлениями",
+        //        TextWrapping = TextWrapping.WrapWithOverflow,
+        //        FontSize = 22,
+        //        Background = Brushes.Transparent,
+        //        Foreground = Brushes.LightGray,
+        //        Padding = new Thickness(30)
+        //    };
+        //    Grid.SetColumn(tb, 0);
+        //    Grid.SetRow(tb, 0);
+        //    grid_right.Children.Add(tb);
+        //}
 
         private void textbox_filtering_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1260,7 +1261,7 @@ namespace projectE
             }
         }
 
-        private bool filterIsOpen()
+        public bool filterIsOpen()
         {
             return grid.RowDefinitions[2].IsEnabled;
         }
