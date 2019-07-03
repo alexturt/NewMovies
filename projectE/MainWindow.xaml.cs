@@ -119,7 +119,7 @@ namespace projectE
             grid.ColumnDefinitions[2].Width = new GridLength(0);
             Width -= size;
         }
-
+        string password;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateSettings();
@@ -858,6 +858,7 @@ namespace projectE
         //Обновление настроек
         public void UpdateSettings()
         {
+            password = db.GetPassword();
             DataTable dt = db.GetSettings();
             for (int i = 0; i < settings_amount; i++)
             {
@@ -893,6 +894,28 @@ namespace projectE
             
             checkbox_notify.Foreground = foreColor;
             checkbox_notify.IsChecked = IsChecked[0];
+            if (password == "")
+            {
+                db.updateAgeRestriction(false);
+                IsChecked[1] = false;
+                checkbox_age.IsEnabled = false;
+                button_age.Visibility = Visibility.Visible;
+                button_age.Content = "Получить пароль";                    
+            }
+            else
+            {
+                if (!IsChecked[1])
+                {
+                    checkbox_age.IsEnabled = false;
+                    button_age.Visibility = Visibility.Visible;
+                    button_age.Content = "Ввести пароль";
+                }
+                else
+                {
+                    checkbox_age.IsEnabled = true;
+                    button_age.Visibility = Visibility.Collapsed;
+                }
+            }
             checkbox_age.Foreground = foreColor;
             checkbox_age.IsChecked = IsChecked[1];
             checkbox_netflix_com.Foreground = foreColor;
@@ -1262,7 +1285,7 @@ namespace projectE
             PasswordBox textBox = new PasswordBox();
             Button buttonOk = new Button();
             Button buttonCancel = new Button();
-
+            window.Loaded += (s, e) => { textBox.Focus(); };
             window.Title = title;
             label.Text = promptText;
             textBox.Password = value;
@@ -1334,6 +1357,33 @@ namespace projectE
             return true;
         }
 
+        private void button_age_Click(object sender, RoutedEventArgs e)
+        {
+            if (password == "")
+            {
+                string str = "";
+                Random rnd = new Random();
+                str += rnd.Next(9).ToString();
+                str += rnd.Next(9).ToString();
+                str += rnd.Next(9).ToString();
+                str += rnd.Next(9).ToString();
+                db.SetPassword(str);
+                ShowBox("Пароль: " + str);
+            }
+            else
+                if(!IsChecked[1])
+                {
+                    string value = "";
+                    InputBox("Выключение ограничения 18+", "Введите пароль",ref value);
+                    if (value == db.GetPassword())
+                    {
+                        checkbox_age.IsChecked = true;
+                        IsChecked[1] = true;
+                        
+                        //LoadSettings();
+                    }
+                }
+        }
     }
 
 
