@@ -13,12 +13,20 @@ namespace projectE.Tests
     {
         DB db = new DB();
         Parser parser = new Parser();
+        bool Bool = false;
 
         [TestMethod()]
         public void AddMovieTest()
         {
-
-            Assert.Fail();
+            
+            try
+            {
+                db.AddMovie("a", 2019, "a", "a", "a", "a", "a", "a", "a", "a", "a", Convert.ToBoolean(Bool), Convert.ToBoolean(Bool), "a");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail();
+            }
         }
     }
 }
