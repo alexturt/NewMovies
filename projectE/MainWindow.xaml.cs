@@ -1075,7 +1075,7 @@ namespace projectE
         System.Windows.Forms.NotifyIcon notifyIcon;
         public void ShowNotification(int time = 10000, string header = "Notification", string text = "This is a base notification!")
         {
-            if (IsChecked[0])//Can show notification?9
+            if (IsChecked[0])//Can show notification?
             {
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
             }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace projectE
 {
-    class Parser
+    public class Parser
     {
         DB db = new DB();
         string name, year, date, country, genres, agerating, description, poster, urltrailer, urlinfo, urlwatch;
