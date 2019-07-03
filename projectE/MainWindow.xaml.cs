@@ -37,7 +37,6 @@ namespace projectE
             combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за месяц", Foreground = Brushes.LightGray, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.SelectedIndex = 0;
             update_combobox_years();
-            createNotifyIcon();
             { }
         }
 
@@ -122,6 +121,7 @@ namespace projectE
         string password;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            createNotifyIcon();
             UpdateSettings();
             offset = 0;
             update_movies("Рекомендовано", limit, offset);
@@ -436,8 +436,7 @@ namespace projectE
 
         private void create_and_add_elements(Grid _grid_row, int i, int _columns_count)
         {
-            try
-            {
+            
                 Button btf = new Button()//кнопка добавления/удаления из избранного
                 {
                     Name = "button_favorite" + i,
@@ -490,9 +489,7 @@ namespace projectE
                 Grid.SetRow(btf, 0);
                 _grid_row.Children.Add(btf);
                 tags.Add(dt_movies.Rows[i]["id"]);
-            }
-
-            catch { }
+            
         }
 
         //для отладки и прочего
@@ -649,11 +646,13 @@ namespace projectE
         //из массива байт в картинку
         private static BitmapImage LoadImage(byte[] imageData)
         {
-            if (imageData == null || imageData.Length == 0)
-                return new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-            var image = new BitmapImage();
-            using (var mem = new MemoryStream(imageData))
-            { 
+            try
+            {
+                if (imageData == null || imageData.Length == 0)
+                    return new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+                var image = new BitmapImage();
+                using (var mem = new MemoryStream(imageData))
+                {
                     mem.Position = 0;
                     image.BeginInit();
                     image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
@@ -662,9 +661,14 @@ namespace projectE
                     image.StreamSource = mem;
                     image.EndInit();
 
+                }
+                image.Freeze();
+                return image;
             }
-            image.Freeze();
-            return image;
+            catch
+            {
+                return new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+            }
         }
         //конвертирует дату из "гггг.мм.дд 00:00:00" в "20 июня 2019"
         private string ConvertDate(string str)
@@ -1367,8 +1371,12 @@ namespace projectE
                 str += rnd.Next(9).ToString();
                 str += rnd.Next(9).ToString();
                 str += rnd.Next(9).ToString();
+                IsChecked[1] = false;
+                checkbox_age.IsChecked = false;
                 db.SetPassword(str);
                 ShowBox("Пароль: " + str);
+                db.updateAgeRestriction(true);
+                LoadSettings();
             }
             else
                 if(!IsChecked[1])
