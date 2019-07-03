@@ -31,8 +31,6 @@ namespace projectE
         public bool stop = false;
         public CQ IsConnectInternet(string Html)
         {
-     //       if (!stop)
-       //     {
                 try
                 {
                     CQ film = CQ.CreateFromUrl(Html);
@@ -42,11 +40,8 @@ namespace projectE
                 {
                     MainWindow mw = new MainWindow();
        //             mw.ShowBox("Интернет соединение отсутствует или очень медленное. Загрузка новых данных не удалась");
-       //             stop = true;
                     return null;
                 }
-     //       }
-    //        return null;
         }
 
         public void UpdateList()
@@ -316,14 +311,10 @@ namespace projectE
                                             if ((masDat.Count() == 3))
                                             {
                                                 datat = masDat[0] + " " + masDat[1] + " " + masDat[2];
-                                                if (TextIsDate(datat))
-                                                {
-                                                    return datat;
-                                                }
                                             }
                                             else
                                             {
-                                                datat = "0001-01-01";
+                                                datat = "";
                                             }
                                         }
                                         catch { }
@@ -333,14 +324,39 @@ namespace projectE
                         }
                     }
                 }
-
-                if (datat == "")
+            }
+            if (datat == "")
+            {
+                Html = @"https://www.ivi.ru/search/?q=" + nameP;
+                film = IsConnectInternet(Html);
+                if (film != null)
                 {
-                    datat = "0001-01-01";
+                    for (int i = 1; i < 11; i++)
+                    {
+                        try
+                        { //#result-video > ul > li > a
+                            foreach (IDomObject obj in film.Find("#result-video > ul > li:nth-child(" + i + ") > a"))
+                            {
+                                if (obj.FirstChild.NextSibling.NextElementSibling.FirstChild.NextElementSibling.FirstChild.NodeValue.ToLower().Equals(name.ToLower().Trim()))
+                                {
+                                    film = IsConnectInternet(@"https://www.ivi.ru" + obj.GetAttribute("href").Replace("trailers#play", "") + "description");
+                                    if (film != null)
+                                    {
+                                        datat = ReData(film.Find("body > div.page-wrapper > div > div > section:nth-child(3) > aside > dl > dd").Text());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            
+                        }
+                    }
                 }
             }
             data = datat.Split('-');
-            if (data[0].Equals(year))
+            if (data[0].Equals(year) && (TextIsDate(datat)))
             {
                 return datat;
             }
@@ -389,7 +405,6 @@ namespace projectE
                                 {
                                     ageR = ageR.Remove(3);
                                 }
-                                return ageR;
                             }
                         }
                     }
@@ -432,10 +447,6 @@ namespace projectE
                                             {
                                                 return ageR;
                                             }
-                                            else
-                                            {
-                                                ageR = "0+";
-                                            }
                                         }
                                         catch { }
                                     }
@@ -447,32 +458,42 @@ namespace projectE
             }
             if (ageR == "")
             {
+                Html = @"https://www.ivi.ru/search/?q=" + nameP;
+                film = IsConnectInternet(Html);
+                if (film != null)
+                {
+                    for (int i = 1; i < 11; i++)
+                    {
+                        try
+                        {
+                            foreach (IDomObject obj in film.Find("#result-video > ul > li:nth-child(" + i + ") > a"))
+                            {
+                                if (obj.FirstChild.NextSibling.NextElementSibling.FirstChild.NextElementSibling.FirstChild.NodeValue.ToLower().Equals(name.ToLower().Trim()))
+                                {
+                                    film = IsConnectInternet(@"https://www.ivi.ru" + obj.GetAttribute("href").Replace("trailers#play", "") + "description");
+                                    if (film != null)
+                                    {                   //body > div.page-wrapper > div.content-main > section.cols-wrapper > article > div.properties > span.separate > span:nth-child(3)
+                                        ageR = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.top-wrapper > div.properties > span.separate > span").Text();
+                                        if ((ageR.Length != 2) || (ageR.Length != 3))
+                                        {
+                                            ageR = film.Find("body > div.page-wrapper > div.content-main > section.cols-wrapper > article > div.properties > span.separate > span:nth-child(3)").Text();
+
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+                }
+            }
+            if ((ageR == "") || (ageR.Length != 2) || (ageR.Length != 3))
+                {
                 ageR = "0+";
             }
             return ageR;
         }
-
-        /*   private bool DoubleFilm(string name, string year)
-           {
-               bool flag = false;
-               for (int i = 0; i < countElem + 1; i++)
-               {
-                   if (films[i, 0] != null)
-                   {
-                       if (films[i, 1].Contains(name) && films[i, 2].Equals(year))
-                       {
-                           flag = true; //да, это дубль
-                       }
-                       else
-                       {
-                           flag = false; //еще нет такого фильма
-                       }
-                   }
-                   else { return flag; }
-               }
-               return flag;
-           }
-           */
 
         private void UpdateListNetflix(string Html)
         {
@@ -677,6 +698,11 @@ namespace projectE
                 {
                     name = film.Find("body > div.page-wrapper > div > section > div.title-block > h1").Text().Replace("Фильм ", "").Trim();
                     year = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.top-wrapper > div.properties > a:nth-child(1)").Text();
+                    if (year == "")
+                    {
+                        year = film.Find("body > div.page-wrapper > div > section > div.properties > a:nth-child(1)").Text();
+                    }
+                    //body > div.page-wrapper > div > section > div.properties > a:nth-child(1)
                     if (name != "")
                     {
                         //   if (!DoubleFilm(name, year))
@@ -687,13 +713,33 @@ namespace projectE
                         {
                             genres += obj.FirstChild.NodeValue.Trim() + " ";
                         }
+                        if (genres == null)
+                        { //body > div.page-wrapper > div > section > div.properties > span:nth-child(3) > a
+                            foreach (IDomObject obj in film.Find("body > div.page-wrapper > div > section > div.properties > span:nth-child(3) > a")) //Жанр
+                            {
+                                genres += obj.FirstChild.NodeValue.Trim() + " ";
+                            }
+                        }
                         description = null;
-                        description = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.description").Text().Trim();
+                        description = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.description").Text().Replace("Описание фильма","").Trim();
                         //       description = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
                         urltrailer = Html.Replace("/description", "") + "/trailers#play"; //Трейлер
                         agerating = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.top-wrapper > div.properties > span.separate > span:nth-child(3)").Text(); //Возр.огр
+                        if (agerating == "")
+                        {
+                            agerating = film.Find("body > div.page-wrapper > div > section > div.properties > span.separate > span:nth-child(3)").Text();
+                        }
                         poster = film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > aside > figure > a > img").Attr("src"); //Картинка
                         date = ReData(film.Find("body > div.page-wrapper > div > div > section:nth-child(3) > aside > dl > dd").Text()); //Дата выхода
+                        if (date == "")
+                        {
+                            foreach (IDomObject obj in film.Find("body > div.page-wrapper > div > div > section.cols-wrapper.cols-wrapper_secondary > aside > dl > dd:nth-child(4)")) //Страна
+                            {
+                                date = obj.FirstChild.NodeValue.Trim() + " ";
+                                break;
+                            }
+                            date = ReData(date);
+                        }
                         if ((date == "") || (date == "-") || !TextIsDate(date))
                         {
                             date = ReData(FindData(name, year));
@@ -702,6 +748,10 @@ namespace projectE
                         foreach (IDomObject obj in film.Find("body > div.page-wrapper > div > div > section:nth-child(1) > article > div.top-wrapper > div.properties > a:nth-child(2)")) //Страна
                         {
                             country += obj.FirstChild.NodeValue.Trim() + " ";
+                        }
+                        if (country == null)
+                        {
+                            country = film.Find("body > div.page-wrapper > div > section > div.properties > a:nth-child(2)").Text().Trim();
                         }
                         urlwatch = FindLinkFilm(name, year); //Сам фильм
                         countElem++;
@@ -764,7 +814,11 @@ namespace projectE
                         urltrailer = Html; //Трейлер
                         agerating = FindAgeRating(name, year); ; //Возр.огр
                         poster = @"https://kino50.top/" + film.Find("#block-ovg-content > div > section.info-section.section--center.mdl-grid.mdl-shadow--2dp > div.cover.mdl-cell.mdl-cell--4-col-desktop.mdl-cell--3-col-tablet.mdl-cell--3-col-phone > div > img").Attr("src"); //Картинка
-                        date = ReData(FindData(name, year)); //Дата выхода
+                        date = ReData(film.Find("#block-ovg-content > div > section.info-section.section--center.mdl-grid.mdl-shadow--2dp > div.info.mdl-cell.mdl-cell--8-col-desktop.mdl-cell--5-col-tablet.mdl-cell--4-col-phone > table > tbody > tr.field-date > td > span > time").Text());
+                        if ((date == "") || (date == "-") || !TextIsDate(date))
+                        {
+                            date = ReData(FindData(name, year)); //Дата выхода
+                        }
                         country = null;                                    //          country = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
                         foreach (IDomObject obj in film.Find("#block-ovg-content > div > section.info-section.section--center.mdl-grid.mdl-shadow--2dp > div.info.mdl-cell.mdl-cell--8-col-desktop.mdl-cell--5-col-tablet.mdl-cell--4-col-phone > table > tbody > tr.field-country > td > span > a")) //Страна
                         {
@@ -861,12 +915,19 @@ namespace projectE
                             { //#dle-content > div:nth-child(5) > dl > dd:nth-child(8) > span > span > a
                                 foreach (IDomObject obj in film.Find("#dle-content > div:nth-child(5) > dl > dd")) //Жанр
                                 { //1
-                                    genres += obj.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.FirstElementChild.FirstElementChild.FirstElementChild.FirstChild.NodeValue.Trim() + " ";
-                                    break;
+                                    try
+                                    {
+                                        genres += obj.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.FirstElementChild.FirstElementChild.FirstElementChild.FirstChild.NodeValue.Trim() + " ";
+                                        break;
+                                    }
+                                    catch
+                                    {
+
+                                    }
                                 }
                             }
                             if (genres == null)
-                            { string a = "Опять косяк"; }
+                            { genres = "-"; }
                                
                         }
                         description = null;
@@ -1004,7 +1065,7 @@ namespace projectE
         private string ReData(string data)
         {
             // дд месяц год
-            string[] dataMas = data.Split(' ');
+            string[] dataMas = data.Trim().Split(' ');
             string mounth = "";
             if (dataMas.Count() == 1)
             {
