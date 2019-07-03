@@ -446,6 +446,38 @@ namespace projectE
                 connect();
             ExecuteQuery("UPDATE movies SET watched=" + watched + " WHERE id=" + index);
         }
+        //устанавливаем/снимаем просмотренное
+        public void SetPassword(string pass)
+        {
+            if (conn == null)
+                connect();
+            ExecuteQuery("UPDATE credentials SET password='" + pass + "' WHERE email='1'");
+        }
+        public string GetPassword()
+        {
+            string pass = "";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select password from credentials where email='1'", conn);
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            if (dt.Rows.Count == 0)
+            {
+                createPassword();
+                pass = "";
+            }
+            else
+                pass = dt.Rows[0][0].ToString();
+            return pass;
+        }
+        public void createPassword()
+        {
+            if (conn == null)
+                connect();
+            ExecuteQuery("insert into credentials values ('1','')");
+            close();
+        }
         //для удаления удаленных записей из файла БД
         public void Vacuum()
         {

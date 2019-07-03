@@ -16,7 +16,7 @@
         MaxHeight="{DynamicResource {x:Static SystemParameters.VirtualScreenHeight}}"
         MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged" Closing="Window_Closing" Margin="0" Padding="0"
         >
-        <!--начало стилей-->
+    <!--начало стилей-->
     <Window.Resources>
 
         <SolidColorBrush x:Key="redStyle" Color="BlanchedAlmond" />
@@ -113,7 +113,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-        <!--конец стилей-->
+    <!--конец стилей-->
 
     <Grid Name="grid" Width="auto" Background="#17212B">
         <Grid.RowDefinitions>
@@ -127,7 +127,7 @@
             <ColumnDefinition MinWidth="200" Width="2*"></ColumnDefinition>
             <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        
+
         <!-- заголовок окна -->
         <Grid Background="#283949" Name="grid_top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Width="auto">
             <Grid.ColumnDefinitions>
@@ -151,7 +151,7 @@
                 <Image Height="20" Width="20" Stretch="Uniform" Source="Resources/exit.png"/>
             </Button>
         </Grid>
-        
+
         <!-- левая панель -->
         <Border  Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Name="border_menu" BorderBrush="#0A121B" BorderThickness="0,0,1,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <Grid Name="grid_menu" Background="#17212B" HorizontalAlignment="Stretch">
@@ -179,7 +179,7 @@
                 </Button>
             </Grid>
         </Border>
-        
+
         <!-- верхняя центральная панель -->
         <Border  Grid.Row="1" Grid.Column="1" Name="border_search" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <Grid Name="grid_search" Grid.Column="1" Grid.Row="1" Background="#17212B">
@@ -204,7 +204,7 @@
 
             </Grid>
         </Border>
-        
+
         <!--панель поиска-->
         <Border Grid.Column="1" Grid.Row="2" BorderBrush="#0A121B" BorderThickness="0,0,0,1">
             <Grid Name="grid_filtering" Grid.Column="1" Grid.Row="2">
@@ -265,7 +265,7 @@
                 </Button>
             </Grid>
         </Border>
-        
+
         <!-- верхняя правая панель -->
         <Border  Grid.Row="1" Grid.Column="2" Name="border_content_header" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
             <Grid Name="grid_content_header"  Background="#17212B">
@@ -281,13 +281,13 @@
                 </Button>
             </Grid>
         </Border>
-        
+
         <!-- центральная панель -->
         <ScrollViewer Name="scroll_viewer_center" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0"  VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_center_ScrollChanged">
             <StackPanel Name="stack_list" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" HorizontalAlignment="Stretch" Background="#0E1621" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" CanVerticallyScroll="True" CanHorizontallyScroll="True" MouseWheel="stack_list_MouseWheel">
                 <Grid Name="grid_list" Background="#0E1621"  ShowGridLines="False" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
                 </Grid>
-                
+
             </StackPanel>
         </ScrollViewer>
         <Button Name="button_sctoll_top" Grid.Row="3" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
@@ -296,7 +296,7 @@
 
         <!-- правая панель -->
         <Border  Grid.Row="2" Grid.Column="2" Grid.RowSpan="2"  Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
-            
+
             <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_content_ScrollChanged">
                 <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B" MouseWheel="stack_content_MouseWheel">
                     <Grid Name="grid_right" Visibility="Collapsed">
@@ -311,7 +311,7 @@
                     </Grid>
                     <Grid Name="grid_content" Visibility="Collapsed">
                         <!--| Settings block START |-->
-        <Label 
+                        <Label 
             x:Name="label_sources" 
             Content="Источники фильмов:" 
             HorizontalAlignment="Left" 
@@ -320,7 +320,7 @@
             Margin="20,20,0,0" 
             VerticalAlignment="Top"
         />
-        <CheckBox 
+                        <CheckBox 
             x:Name = "checkbox_hdkinozor_ru"
             IsThreeState = "false"
             IsChecked = "true"
@@ -333,7 +333,7 @@
             Margin="20,60,0,319" 
             IsEnabled="False"
         />
-        <CheckBox 
+                        <CheckBox 
             x:Name = "checkbox_netflix_com"
             IsThreeState = "false"
             IsChecked = "true"
@@ -345,7 +345,7 @@
             Padding = "5, 5, 5, 5" 
             Margin="20,100,0,279"
         />
-        <CheckBox 
+                        <CheckBox 
             x:Name = "checkbox_ivi_ru"
             IsThreeState = "false"
             IsChecked = "true"
@@ -357,7 +357,7 @@
             Padding = "5, 5, 5, 5" 
             Margin="20,140,0,239"
         />
-        <CheckBox 
+                        <CheckBox 
             x:Name = "checkbox_lostfilm_tv"
             IsThreeState = "false"
             IsChecked = "true"
@@ -369,7 +369,7 @@
             Padding = "5, 5, 5, 5" 
             Margin="20,180,0,199"
         />
-        <CheckBox 
+                        <CheckBox 
             x:Name = "checkbox_kinokrad_co"
             IsThreeState = "false"
             IsChecked = "true"
@@ -381,7 +381,7 @@
             Padding = "5, 5, 5, 5" 
             Margin="20,220,0,159"
         />
-        <CheckBox 
+                        <CheckBox 
             x:Name = "checkbox_filmzor_net"
             IsThreeState = "false"
             IsChecked = "true"
@@ -393,7 +393,7 @@
             Padding = "5, 5, 5, 5" 
             Margin="20,260,0,119"
         />
-        <Label 
+                        <Label 
             x:Name="label_other" 
             Content="Прочие настройки:" 
             HorizontalAlignment="Left" 
@@ -402,7 +402,7 @@
             Margin="223,20,0,0" 
             VerticalAlignment="Top"
         />
-        <CheckBox 
+                        <CheckBox 
             x:Name = "checkbox_notify"
             IsThreeState = "false"
             IsChecked = "true"
@@ -414,7 +414,7 @@
             Padding = "5, 5, 5, 5"
             Margin = "223,60,0,319"
         />
-        <CheckBox 
+                        <CheckBox 
             x:Name = "checkbox_age"
             IsThreeState = "false"
             IsChecked = "true"
@@ -426,7 +426,8 @@
             Padding = "5, 5, 5, 5" 
             Margin="223,100,0,279"
         />
-        <Button 
+                        <Button Name="button_age" Width="120" Margin="380,105,75,279" Click="button_age_Click"/>
+                        <Button 
             x:Name="button_export" 
             Content="Экспорт настроек" 
             HorizontalAlignment="Left" 
@@ -436,7 +437,7 @@
             Height="43" 
             Click="Button_export_Click"
         />
-        <Button 
+                        <Button 
             x:Name="button_import" 
             Content="Импорт настроек" 
             HorizontalAlignment="Left" 
@@ -446,7 +447,7 @@
             Height="43" 
             Click="Button_import_Click"
         />
-        <Button 
+                        <Button 
             x:Name="button_save" 
             Content="Сохранить" 
             HorizontalAlignment="Left" 
@@ -456,7 +457,7 @@
             Height="30" 
             Click="Button_save_Click"
         />
-        <Button 
+                        <Button 
             x:Name="button_cancel" 
             Content="Отменить" 
             HorizontalAlignment="Left" 
@@ -466,7 +467,7 @@
             Height="30" 
             Click="Button_cancel_Click"
         />
-        <Button 
+                        <Button 
             x:Name="button_defaults" 
             Content="По умолчанию" 
             HorizontalAlignment="Left" 
@@ -476,7 +477,7 @@
             Height="30" 
             Click="Button_defaults_Click"
         />
-        <!--| Settings block END |-->
+                        <!--| Settings block END |-->
                     </Grid>
                     <Grid Name="grid_recommends" Visibility="Collapsed" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
                     </Grid>
