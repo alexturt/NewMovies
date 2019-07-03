@@ -436,8 +436,6 @@ namespace projectE
 
         private void create_and_add_elements(Grid _grid_row, int i, int _columns_count)
         {
-            try
-            {
                 Button btf = new Button()//кнопка добавления/удаления из избранного
                 {
                     Name = "button_favorite" + i,
@@ -490,9 +488,8 @@ namespace projectE
                 Grid.SetRow(btf, 0);
                 _grid_row.Children.Add(btf);
                 tags.Add(dt_movies.Rows[i]["id"]);
-            }
-
-            catch { }
+            
+        
         }
 
         //для отладки и прочего
