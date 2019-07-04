@@ -25,6 +25,22 @@ namespace projectE
         {
             //MessageBox.Show(Environment.CurrentDirectory.ToString());
             InitializeComponent();
+
+            hide_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\hide.png"));
+            max_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\window.png"));
+            exit_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\exit.png"));
+            home_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\домик2.png"));
+            fav_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\звезда2.png"));
+            notify_image.Source = notifyImg;
+            sett_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\шестерня2.png"));
+            filo_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\лупастрелка.png"));
+            panel_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\панель2.png"));
+            seacrh_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\лупа2.png"));
+            filc_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\back_to_recomends.png"));
+            scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\up.png"));
+            content_scroll_image.Source = scroll_image.Source;
+            panel_close_image.Source = filc_image.Source;
+
             UpdateSettings();
             columns_count = 2;
             columns_count_recommends = 4;
@@ -59,13 +75,13 @@ namespace projectE
         int offset;
         int allmoviesCount;
         double scroll_viewer_right_last_height;
-        static BitmapImage noFavoriteImg = new BitmapImage(new Uri("/Resources/пустаязвезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage FavoriteImg = new BitmapImage(new Uri("/Resources/звезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage posterNONE = new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage notifyImg = new BitmapImage(new Uri("/Resources/notify.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage redNotifyImg = new BitmapImage(new Uri("/Resources/rednotify.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage noFavoriteImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString()+@"\пустаязвезда2.png"));
+        static BitmapImage FavoriteImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\звезда2.png"));
+        //static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        //static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage posterNONE = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\poster_none.png"));
+        static BitmapImage notifyImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\notify.png"));
+        static BitmapImage redNotifyImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\rednotify.png"));
 
         List<object> tags = new List<object>();
 
@@ -841,7 +857,7 @@ namespace projectE
 
         const int settings_amount = 8;
         bool[] IsChecked = new bool[settings_amount];
-        const string settings_header = "Это настройки, bitch!";
+        const string settings_header = "Настройки";
 
         static Brush foreColorEnabled = Brushes.Green;
         static Brush foreColor = Brushes.WhiteSmoke;
@@ -1135,16 +1151,16 @@ namespace projectE
 
         private void iconNormal()
         {
-            using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
+            //using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
             {
-                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                notifyIcon.Icon = new System.Drawing.Icon(Environment.CurrentDirectory.ToString() + @"\icon.ico");
             }
         }
         private void iconRed()
         {
-            using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/iconRed.ico")).Stream)
+            //using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/iconRed.ico")).Stream)
             {
-                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                notifyIcon.Icon = new System.Drawing.Icon(Environment.CurrentDirectory.ToString() + @"\iconRed.ico");
             }
         }
 

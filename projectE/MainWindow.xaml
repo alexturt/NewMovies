@@ -142,13 +142,13 @@
             <Image Name="icon" Grid.Column="0" Source="Resources/icon.ico" HorizontalAlignment="Left"/>
             <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" Margin="20,0,0,0" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
             <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click">
-                <Image Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center" Source="Resources/hide.png"/>
+                <Image Name="hide_image" Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center"/>
             </Button>
             <Button Name="button_maximazing" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_maximazing_Click">
-                <Image Height="20" Width="20" Stretch="Fill" Source="Resources/window.png"/>
+                <Image Name="max_image" Height="20" Width="20" Stretch="Fill"/>
             </Button>
             <Button Name="button_exit" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_exit_Click" Padding="0" Margin="0">
-                <Image Height="20" Width="20" Stretch="Uniform" Source="Resources/exit.png"/>
+                <Image Name="exit_image" Height="20" Width="20" Stretch="Uniform"/>
             </Button>
         </Grid>
 
@@ -166,16 +166,16 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="button_home" Width="40" Height="40" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_home_Click">
-                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/домик2.png" Stretch="Fill"/>
+                    <Image Name="home_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_list_Click_1">
-                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/звезда2.png" Stretch="Fill"/>
+                    <Image Name="fav_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_notify" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Visibility="Visible" Click="button_notify_Click">
-                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/notify.png" Stretch="Fill"/>
+                    <Image Name="notify_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
                 </Button>
                 <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click">
-                    <Image Margin="5" VerticalAlignment="Top" Source="Resources/шестерня2.png" Stretch="Fill"/>
+                    <Image Name="sett_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
                 </Button>
             </Grid>
         </Border>
@@ -193,10 +193,10 @@
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="button_filtering_open" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_open_Click">
-                    <Image Height="auto" Margin="7" Width="auto" Source="Resources/лупастрелка.png" Stretch="Fill" VerticalAlignment="Top"/>
+                    <Image Name="filo_image" Height="auto" Margin="7" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
                 <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
-                    <Image Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Source="Resources/панель2.png" Stretch="Fill"/>
+                    <Image Name="panel_image" Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Stretch="Fill"/>
                 </Button>
                 <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="LightGray" MaxLength="255" Visibility="Collapsed"/>
                 <ComboBox Grid.Column="0" Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="LightGray" SelectedIndex="0" SelectionChanged="combobox_top_choose_SelectionChanged">
@@ -258,10 +258,10 @@
                 <ComboBox Grid.Column="2" Grid.Row="2" Name="combobox_filter_year" Margin="7,7,7,7" SelectedIndex="0" >
                 </ComboBox>
                 <Button x:Name="button_search" Width="40" Height="40" Grid.Column="3" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_search_Click">
-                    <Image Height="auto" Margin="7" Width="auto" Source="Resources/лупа2.png" Stretch="Fill" VerticalAlignment="Top"/>
+                    <Image Name="seacrh_image" Height="auto" Margin="7" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
                 <Button x:Name="button_filtering_close" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_close_Click">
-                    <Image Height="auto" Margin="8" Width="auto" Source="Resources/back_to_recomends.png" Stretch="Fill" VerticalAlignment="Top"/>
+                    <Image Name="filc_image" Height="auto" Margin="8" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
             </Grid>
         </Border>
@@ -277,7 +277,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="textBox_content_headet" FontSize="14" Grid.Column="0" Background="{x:Null}" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Рекомендовано" VerticalAlignment="Stretch" Width="auto" Foreground="LightGray" TextAlignment="Center" Padding="0,0,0,0"/>
                 <Button x:Name="button_panel_close" Width="40" Height="40" Grid.Column="0" VerticalContentAlignment="Top" HorizontalAlignment="Right" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_close_Click" Visibility="Collapsed">
-                    <Image Height="auto" Margin="5" Width="auto" Source="Resources/back_to_recomends.png" Stretch="Fill" VerticalAlignment="Top"/>
+                    <Image Name="panel_close_image" Height="auto" Margin="5" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
             </Grid>
         </Border>
@@ -291,7 +291,7 @@
             </StackPanel>
         </ScrollViewer>
         <Button Name="button_sctoll_top" Grid.Row="3" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
-            <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Source="Resources/up.png" Stretch="Fill"/>
+            <Image Name="scroll_image" Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Stretch="Fill"/>
         </Button>
 
         <!-- правая панель -->
@@ -487,7 +487,7 @@
 
         <!-- кнопка "подняться вверх" -->
         <Button Name="button_content_sctoll_top" Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_content_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
-            <Image Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Source="Resources/up.png" Stretch="Fill"/>
+            <Image Name="content_scroll_image" Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Stretch="Fill"/>
         </Button>
     </Grid>
 </Window>
