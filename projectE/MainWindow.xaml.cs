@@ -23,23 +23,22 @@ namespace projectE
     {
         public MainWindow()
         {
-            //MessageBox.Show(Environment.CurrentDirectory.ToString());
             InitializeComponent();
-
+            
             hide_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\hide.png"));
             max_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\window.png"));
             exit_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\exit.png"));
             home_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\домик2.png"));
             fav_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\звезда2.png"));
-            notify_image.Source = notifyImg;
+            notify_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\notify.png")); 
             sett_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\шестерня2.png"));
             filo_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\лупастрелка.png"));
             panel_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\панель2.png"));
             seacrh_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\лупа2.png"));
             filc_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\back_to_recomends.png"));
             scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\up.png"));
-            content_scroll_image.Source = scroll_image.Source;
-            panel_close_image.Source = filc_image.Source;
+            content_scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\up.png"));
+            panel_close_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\back_to_recomends.png"));
 
             UpdateSettings();
             columns_count = 2;
@@ -526,6 +525,7 @@ namespace projectE
             thread = new Thread(Upd);
             if (!isRun)
             {
+                
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
 
@@ -1391,7 +1391,7 @@ namespace projectE
                 IsChecked[1] = false;
                 checkbox_age.IsChecked = false;
                 db.SetPassword(str);
-                ShowBox("Пароль: " + str);
+                MessageBox.Show("Пароль: "+str, "Запомни", MessageBoxButton.OK);
                 db.updateAgeRestriction(true);
                 LoadSettings();
             }

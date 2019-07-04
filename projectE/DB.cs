@@ -145,11 +145,11 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (!showRestricted)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE agerating<>'18+' ORDER BY RANDOM() LIMIT 28", conn);
+                dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=0 and agerating<>'18+' and genres in (select genres from movies where favorite=1) order by random() limit 28", conn);
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY RANDOM()LIMIT 28", conn);
+                dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=0 and genres in (select genres from movies where favorite=1) order by random() limit 28", conn);
             }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
