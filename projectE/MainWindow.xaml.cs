@@ -39,7 +39,7 @@ namespace projectE
             scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\up.png"));
             content_scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\up.png"));
             panel_close_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\back_to_recomends.png"));
-
+            
             UpdateSettings();
             columns_count = 2;
             columns_count_recommends = 4;
@@ -145,7 +145,9 @@ namespace projectE
                 str = " и " + countFavoritesWeek + " фильма из списка избранного";
             if (countWeek != 0)
                 ShowNotification(1500000, "Новые фильмы!", "Вышло " + countWeek + " новых фильмов за неделю" + str);
-
+            thread = new Thread(Upd);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
             ///////////////
             //ShowNotification(1500000, "Новые фильмы!", "Вышло 6 новых фильмов за сегодня и 2 фильма из списка избранного!");
         }
@@ -525,7 +527,6 @@ namespace projectE
             thread = new Thread(Upd);
             if (!isRun)
             {
-                
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
 

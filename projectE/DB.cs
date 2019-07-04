@@ -313,11 +313,11 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (!showRestricted)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<='" + today + "' ORDER BY date DESC", conn);
             }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
