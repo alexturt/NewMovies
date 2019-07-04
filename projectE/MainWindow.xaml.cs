@@ -841,7 +841,7 @@ namespace projectE
 
         const int settings_amount = 8;
         bool[] IsChecked = new bool[settings_amount];
-        const string settings_header = "Это настройки, bitch!";
+        const string settings_header = "Настройки";
 
         static Brush foreColorEnabled = Brushes.Green;
         static Brush foreColor = Brushes.WhiteSmoke;
