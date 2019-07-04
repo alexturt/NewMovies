@@ -23,22 +23,8 @@ namespace projectE
     {
         public MainWindow()
         {
+            //MessageBox.Show(Environment.CurrentDirectory.ToString());
             InitializeComponent();
-
-            hide_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\hide.png"));
-            max_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\window.png"));
-            exit_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\exit.png"));
-            home_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\домик2.png"));
-            fav_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\звезда2.png"));
-            fil_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\лупастрелка.png"));
-            panel_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\панель2.png"));
-            fil_close_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\back_to_recomends.png"));
-            search_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\лупа2.png"));
-            sett_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\шестерня2.png"));
-            panel_close_image.Source = fil_close_image.Source;
-            arrow_content_image.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\up.png"));
-            arrow_image.Source = arrow_content_image.Source;
-            
             UpdateSettings();
             columns_count = 2;
             columns_count_recommends = 4;
@@ -73,13 +59,13 @@ namespace projectE
         int offset;
         int allmoviesCount;
         double scroll_viewer_right_last_height;
-        static BitmapImage noFavoriteImg = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\пустаязвезда2.png"));
-        static BitmapImage FavoriteImg = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\звезда2.png"));
-        //static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        //static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage posterNONE = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\poster_none.png"));
-        static BitmapImage notifyImg = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\notify.png"));
-        static BitmapImage redNotifyImg = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\rednotify.png"));
+        static BitmapImage noFavoriteImg = new BitmapImage(new Uri("/Resources/пустаязвезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage FavoriteImg = new BitmapImage(new Uri("/Resources/звезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage posterNONE = new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage notifyImg = new BitmapImage(new Uri("/Resources/notify.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage redNotifyImg = new BitmapImage(new Uri("/Resources/rednotify.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
 
         List<object> tags = new List<object>();
 
@@ -573,7 +559,6 @@ namespace projectE
             GC.Collect();
             //Process.GetCurrentProcess().Kill();
             ShowInTaskbar = false;
-            Hide();
             WindowState = WindowState.Minimized;
         }
         //нажали кнопку "во весь экран" или "вернуть к нормальному размеру"
@@ -594,7 +579,6 @@ namespace projectE
         private void button_hide_Click(object sender, RoutedEventArgs e)
         {
             //ShowInTaskbar = false;
-            //Hide();
             WindowState = WindowState.Minimized;
         }
         //перетаскивание окна за верхнюю панельку
@@ -857,7 +841,7 @@ namespace projectE
 
         const int settings_amount = 8;
         bool[] IsChecked = new bool[settings_amount];
-        const string settings_header = "Настройки";
+        const string settings_header = "Это настройки, bitch!";
 
         static Brush foreColorEnabled = Brushes.Green;
         static Brush foreColor = Brushes.WhiteSmoke;
@@ -1112,7 +1096,9 @@ namespace projectE
                 button_notify.Content = new Image() { Source = notifyImg, Stretch = Stretch.Fill, Margin = new Thickness(6) };
                 iconNormal();
                 ShowInTaskbar = true;
-                show_new_movies();
+                if (WindowState == WindowState.Minimized)
+                    WindowState = WindowState.Normal;
+                Activate();
             };
             
             notifyIcon.BalloonTipClicked += (s, e) => 
@@ -1127,7 +1113,6 @@ namespace projectE
                 ShowInTaskbar = true;
                 if (WindowState == WindowState.Minimized)
                     WindowState = WindowState.Normal;
-                Show();
                 Activate();
             });
             contextMenu.MenuItems.Add(menuItem);
@@ -1150,16 +1135,16 @@ namespace projectE
 
         private void iconNormal()
         {
-            //using (Stream iconStream = Application.GetResourceStream(new Uri(Environment.CurrentDirectory.ToString() + @"\icon.ico")).Stream)
+            using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
             {
-                notifyIcon.Icon = new System.Drawing.Icon(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\icon.ico");
+                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
             }
         }
         private void iconRed()
         {
-            //using (Stream iconStream = Application.GetResourceStream(new Uri(Environment.CurrentDirectory.ToString() + @"\iconRed.ico")).Stream)
+            using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/iconRed.ico")).Stream)
             {
-                notifyIcon.Icon = new System.Drawing.Icon(AppDomain.CurrentDomain.BaseDirectory.ToString() + @"\iconRed.ico");
+                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
             }
         }
 
@@ -1178,7 +1163,6 @@ namespace projectE
             ShowInTaskbar = true;
             if (WindowState == WindowState.Minimized)
                 WindowState = WindowState.Normal;
-            Show();
             Activate();
         }
 
@@ -1375,7 +1359,6 @@ namespace projectE
             window.WindowStyle = WindowStyle.SingleBorderWindow;
             window.ShowDialog();
             value = textBox.Password;
-            
             return true;
         }
 
@@ -1385,6 +1368,7 @@ namespace projectE
             {
                 string str = "";
                 Random rnd = new Random();
+                str += rnd.Next(9).ToString();
                 str += rnd.Next(9).ToString();
                 str += rnd.Next(9).ToString();
                 str += rnd.Next(9).ToString();
