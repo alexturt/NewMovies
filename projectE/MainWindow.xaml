@@ -112,6 +112,61 @@
             <Style.Triggers>
             </Style.Triggers>
         </Style>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <!--конец стилей-->
 
@@ -141,13 +196,13 @@
             </Grid.RowDefinitions>
             <Image Name="icon" Grid.Column="0" Source="Resources/icon.ico" HorizontalAlignment="Left"/>
             <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" Margin="20,0,0,0" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
-            <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click">
+            <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click" Style="{DynamicResource ButtonStyle1}">
                 <Image Name="hide_image" Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center"/>
             </Button>
-            <Button Name="button_maximazing" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_maximazing_Click">
+            <Button Name="button_maximazing" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_maximazing_Click" Style="{DynamicResource ButtonStyle1}">
                 <Image Name="max_image" Height="20" Width="20" Stretch="Fill"/>
             </Button>
-            <Button Name="button_exit" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_exit_Click" Padding="0" Margin="0">
+            <Button Name="button_exit" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_exit_Click" Padding="0" Margin="0" Style="{DynamicResource ButtonStyle1}">
                 <Image Name="exit_image" Height="20" Width="20" Stretch="Uniform"/>
             </Button>
         </Grid>
@@ -165,16 +220,16 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="button_home" Width="40" Height="40" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_home_Click">
+                <Button x:Name="button_home" Width="40" Height="40" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_home_Click" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="home_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_list_Click_1">
+                <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_list_Click_1" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="fav_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_notify" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Visibility="Visible" Click="button_notify_Click">
+                <Button x:Name="button_notify" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Visibility="Visible" Click="button_notify_Click" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="notify_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
                 </Button>
-                <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click">
+                <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="sett_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
                 </Button>
             </Grid>
@@ -192,10 +247,10 @@
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="button_filtering_open" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_open_Click">
+                <Button x:Name="button_filtering_open" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_open_Click" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="filo_image" Height="auto" Margin="7" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
-                <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click">
+                <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="panel_image" Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Stretch="Fill"/>
                 </Button>
                 <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="LightGray" MaxLength="255" Visibility="Collapsed"/>
@@ -257,10 +312,10 @@
                 </ComboBox>
                 <ComboBox Grid.Column="2" Grid.Row="2" Name="combobox_filter_year" Margin="7,7,7,7" SelectedIndex="0" >
                 </ComboBox>
-                <Button x:Name="button_search" Width="40" Height="40" Grid.Column="3" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_search_Click">
+                <Button x:Name="button_search" Width="40" Height="40" Grid.Column="3" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_search_Click" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="seacrh_image" Height="auto" Margin="7" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
-                <Button x:Name="button_filtering_close" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_close_Click">
+                <Button x:Name="button_filtering_close" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_close_Click" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="filc_image" Height="auto" Margin="8" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
             </Grid>
@@ -276,7 +331,7 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="textBox_content_headet" FontSize="14" Grid.Column="0" Background="{x:Null}" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Рекомендовано" VerticalAlignment="Stretch" Width="auto" Foreground="LightGray" TextAlignment="Center" Padding="0,0,0,0"/>
-                <Button x:Name="button_panel_close" Width="40" Height="40" Grid.Column="0" VerticalContentAlignment="Top" HorizontalAlignment="Right" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_close_Click" Visibility="Collapsed">
+                <Button x:Name="button_panel_close" Width="40" Height="40" Grid.Column="0" VerticalContentAlignment="Top" HorizontalAlignment="Right" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_close_Click" Visibility="Collapsed" Style="{DynamicResource ButtonStyle1}">
                     <Image Name="panel_close_image" Height="auto" Margin="5" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
             </Grid>
@@ -290,7 +345,7 @@
 
             </StackPanel>
         </ScrollViewer>
-        <Button Name="button_sctoll_top" Grid.Row="3" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
+        <Button Name="button_sctoll_top" Grid.Row="3" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0" Style="{DynamicResource ButtonStyle1}">
             <Image Name="scroll_image" Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Stretch="Fill"/>
         </Button>
 
@@ -426,7 +481,7 @@
             Padding = "5, 5, 5, 5" 
             Margin="223,100,0,279"
         />
-                        <Button Name="button_age" Width="120" Margin="380,105,75,279" Click="button_age_Click"/>
+                        <Button Name="button_age" Width="120" Margin="380,105,75,279" Click="button_age_Click" Style="{DynamicResource ButtonStyle1}" Background="#283949" Foreground="WhiteSmoke"/>
                         <Button 
             x:Name="button_export" 
             Content="Экспорт настроек" 
@@ -435,7 +490,7 @@
             VerticalAlignment="Top" 
             Width="114" 
             Height="43" 
-            Click="Button_export_Click"
+            Click="Button_export_Click" Style="{DynamicResource ButtonStyle1}"
         />
                         <Button 
             x:Name="button_import" 
@@ -445,7 +500,7 @@
             VerticalAlignment="Top" 
             Width="114" 
             Height="43" 
-            Click="Button_import_Click"
+            Click="Button_import_Click" Style="{DynamicResource ButtonStyle1}"
         />
                         <Button 
             x:Name="button_save" 
@@ -455,7 +510,7 @@
             VerticalAlignment="Top" 
             Width="76" 
             Height="30" 
-            Click="Button_save_Click"
+            Click="Button_save_Click" Style="{DynamicResource ButtonStyle1}"
         />
                         <Button 
             x:Name="button_cancel" 
@@ -465,7 +520,7 @@
             VerticalAlignment="Top" 
             Width="76" 
             Height="30" 
-            Click="Button_cancel_Click"
+            Click="Button_cancel_Click" Style="{DynamicResource ButtonStyle1}"
         />
                         <Button 
             x:Name="button_defaults" 
@@ -475,7 +530,7 @@
             VerticalAlignment="Top" 
             Width="95" 
             Height="30" 
-            Click="Button_defaults_Click"
+            Click="Button_defaults_Click" Style="{DynamicResource ButtonStyle1}"
         />
                         <!--| Settings block END |-->
                     </Grid>
@@ -486,7 +541,7 @@
         </Border>
 
         <!-- кнопка "подняться вверх" -->
-        <Button Name="button_content_sctoll_top" Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_content_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0">
+        <Button Name="button_content_sctoll_top" Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_content_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0" Style="{DynamicResource ButtonStyle1}">
             <Image Name="content_scroll_image" Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Stretch="Fill"/>
         </Button>
     </Grid>

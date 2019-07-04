@@ -446,15 +446,16 @@ namespace projectE
 
         private void create_and_add_elements(Grid _grid_row, int i, int _columns_count)
         {
-            
-                Button btf = new Button()//кнопка добавления/удаления из избранного
-                {
-                    Name = "button_favorite" + i,
-                    Height = 40,
-                    Width = 40,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
+
+            Button btf = new Button()//кнопка добавления/удаления из избранного
+            {
+                Name = "button_favorite" + i,
+                Height = 40,
+                Width = 40,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                BorderThickness = new Thickness(0, 0, 0, 0),
+                Style = (Style)FindResource("ButtonStyle1"),
                     //присвоение соответсвтующей картинки
                     Content = new Image() { Source = Convert.ToBoolean(dt_movies.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill, Margin = new Thickness(5) },
                     Tag = dt_movies.Rows[i]["id"]//index
@@ -596,6 +597,7 @@ namespace projectE
         {
             //ShowInTaskbar = false;
             WindowState = WindowState.Minimized;
+            //Hide();
         }
         //перетаскивание окна за верхнюю панельку
         private void Title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -1112,9 +1114,7 @@ namespace projectE
                 button_notify.Content = new Image() { Source = notifyImg, Stretch = Stretch.Fill, Margin = new Thickness(6) };
                 iconNormal();
                 ShowInTaskbar = true;
-                if (WindowState == WindowState.Minimized)
-                    WindowState = WindowState.Normal;
-                Activate();
+                show_new_movies();
             };
             
             notifyIcon.BalloonTipClicked += (s, e) => 
