@@ -56,14 +56,9 @@ namespace projectE
             { }
         }
 
-        int limitWind;
-        [STAThread]
         public void ShowBox(string v)
         {
-            thread = new Thread(Upd);
-            thread.Abort();
             MessageBox.Show(v, "Ошибка", MessageBoxButton.OK);
-            isRun = false;
         }
 
         DB db = new DB();
@@ -254,20 +249,23 @@ namespace projectE
                 Grid.SetRow(img, 0);
                 grid_right.Children.Add(img);
             TextBlock tb = new TextBlock();
-            tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), dt_movies.Rows[index]["name"].ToString(), 22, Brushes.AliceBlue));
-            Run run = new Run()
+            try
             {
-                FontSize = 16,
-                Text = Environment.NewLine +
-                    dt_movies.Rows[index]["year"].ToString() + "\r\n\r\n" +
-                    dt_movies.Rows[index]["country"].ToString() + "\r\n\r\n" +
-                    dt_movies.Rows[index]["genres"].ToString() + "\r\n\r\n" +
-                    ConvertDate(dt_movies.Rows[index]["date"].ToString()) + "\r\n\r\n" +
-                    dt_movies.Rows[index]["agerating"].ToString() + "\r\n\r\n",
-                Foreground = Brushes.LightGray,
-                Tag = index
-            };
-            tb.Inlines.Add(run);
+                tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), dt_movies.Rows[index]["name"].ToString(), 22, Brushes.AliceBlue));
+                Run run = new Run()
+                {
+                    FontSize = 16,
+                    Text = Environment.NewLine +
+                        dt_movies.Rows[index]["year"].ToString() + "\r\n\r\n" +
+                        dt_movies.Rows[index]["country"].ToString() + "\r\n\r\n" +
+                        dt_movies.Rows[index]["genres"].ToString() + "\r\n\r\n" +
+                        ConvertDate(dt_movies.Rows[index]["date"].ToString()) + "\r\n\r\n" +
+                        dt_movies.Rows[index]["agerating"].ToString() + "\r\n\r\n",
+                    Foreground = Brushes.LightGray,
+                    Tag = index
+                };
+                tb.Inlines.Add(run);
+
 
             if (dt_movies.Rows[index]["URLtrailer"].ToString() != "")
                 tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLtrailer"].ToString(), "Трейлер\r\n", 14, Brushes.AliceBlue));
@@ -297,6 +295,8 @@ namespace projectE
             Grid.SetColumnSpan(tb2, 2);
             Grid.SetRow(tb2, 1);
             grid_right.Children.Add(tb2);
+            }
+            catch { }
         }
         //для вкладки подробнее создание гиперссылок
         public Hyperlink createURL(string url, string name, int size, Brush brush)

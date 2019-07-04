@@ -38,8 +38,6 @@ namespace projectE
             }
             catch
             {
-                MainWindow mw = new MainWindow();
-                //             mw.ShowBox("Интернет соединение отсутствует или очень медленное. Загрузка новых данных не удалась");
                 return null;
             }
         }
