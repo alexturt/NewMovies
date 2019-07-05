@@ -1,0 +1,558 @@
+﻿<Window x:Class="projectE.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:projectE"
+        mc:Ignorable="d"
+        BorderBrush="{x:Null}"
+        BorderThickness="0"
+        Title="NewMovies" Height="650" Width="1000"
+        MinWidth="340"
+        MinHeight="450"
+        ResizeMode="CanResizeWithGrip"
+        AllowsTransparency="True"
+        
+        MaxHeight="{DynamicResource {x:Static SystemParameters.VirtualScreenHeight}}"
+        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged" Closing="Window_Closing" Margin="0" Padding="0"
+        >
+    <!--начало стилей-->
+    <Window.Resources>
+
+        <SolidColorBrush x:Key="redStyle" Color="BlanchedAlmond" />
+
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Border x:Name="Border" Grid.ColumnSpan="2" 
+                      Background="#283949"
+                      
+                      BorderThickness="1" />
+                <Border 
+                      Grid.Column="0"
+                      Margin="1" 
+                      Background="#283949" 
+                      BorderThickness="0,0,1,0" />
+                <Path 
+                  x:Name="Arrow"
+                  Grid.Column="1"     
+                    
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M0,0L8,8 16,0z" Fill="#FF0E1621"/>
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="TextBox">
+            <Border x:Name="PART_ContentHost" Focusable="False" Background="#283949" />
+        </ControlTemplate>
+
+        <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton 
+                                 Name="ToggleButton" 
+                                 Template="{StaticResource ComboBoxToggleButton}" 
+                                 Grid.Column="2" 
+                                 Focusable="false"
+                                 IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                 ClickMode="Press">
+                            </ToggleButton>
+                            <ContentPresenter
+                                Name="ContentSite"
+                                IsHitTestVisible="False" 
+                                Margin="3,3,23,3"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Content="{TemplateBinding ComboBox.SelectionBoxItem}" 
+                                ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}" 
+                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                />
+                            <TextBox x:Name="PART_EditableTextBox"
+                                 Style="{x:Null}" 
+                                 Template="{StaticResource ComboBoxTextBox}" 
+                                 HorizontalAlignment="Left" 
+                                 VerticalAlignment="Center" 
+                                 Margin="3,3,23,3"
+                                 Focusable="True" 
+                                 Background="Transparent"
+                                 Visibility="Hidden"
+                                 IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            <Popup 
+                                Name="Popup"
+                                Placement="Bottom"
+                                IsOpen="{TemplateBinding IsDropDownOpen}"
+                                AllowsTransparency="True" 
+                                Focusable="False"
+                                PopupAnimation="Slide">
+                                <Grid 
+                                      Name="DropDown"
+                                      SnapsToDevicePixels="True"                
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MinHeight="10"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border 
+                                        x:Name="DropDownBorder"
+                                        Background="#283949"
+                                        BorderThickness="1"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <!--конец стилей-->
+
+    <Grid Name="grid" Width="auto" Background="#17212B">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="0" IsEnabled="False"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40"></ColumnDefinition>
+            <ColumnDefinition MinWidth="200" Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <!-- заголовок окна -->
+        <Grid Background="#283949" Name="grid_top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Image Name="icon" Grid.Column="0" Source="Resources/icon.ico" HorizontalAlignment="Left"/>
+            <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" Margin="20,0,0,0" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
+            <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click" Style="{DynamicResource ButtonStyle1}">
+                <Image Name="hide_image" Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center"/>
+            </Button>
+            <Button Name="button_maximazing" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_maximazing_Click" Style="{DynamicResource ButtonStyle1}">
+                <Image Name="max_image" Height="20" Width="20" Stretch="Fill"/>
+            </Button>
+            <Button Name="button_exit" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_exit_Click" Padding="0" Margin="0" Style="{DynamicResource ButtonStyle1}">
+                <Image Name="exit_image" Height="20" Width="20" Stretch="Uniform"/>
+            </Button>
+        </Grid>
+
+        <!-- левая панель -->
+        <Border  Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Name="border_menu" BorderBrush="#0A121B" BorderThickness="0,0,1,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_menu" Background="#17212B" HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{Binding ElementName= button_home, Path=ActualHeight}"></RowDefinition>
+                    <RowDefinition Height="{Binding ElementName= button_favorite, Path=ActualHeight}"></RowDefinition>
+                    <RowDefinition Height="{Binding ElementName= button_notify, Path=ActualHeight}"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="{Binding ElementName= button_settings, Path=ActualHeight}"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="button_home" Width="40" Height="40" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_home_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="home_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
+                </Button>
+                <Button x:Name="button_favorite" Width="40" Height="40" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_favorite_list_Click_1" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="fav_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
+                </Button>
+                <Button x:Name="button_notify" Width="40" Height="40" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Visibility="Visible" Click="button_notify_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="notify_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
+                </Button>
+                <Button x:Name="button_settings" Width="40" Height="40" Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Margin="0" Click="Button_settings_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="sett_image" Margin="5" VerticalAlignment="Top" Stretch="Fill"/>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- верхняя центральная панель -->
+        <Border  Grid.Row="1" Grid.Column="1" Name="border_search" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_search" Grid.Column="1" Grid.Row="1" Background="#17212B">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="button_filtering_open" Width="40" Height="40" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_open_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="filo_image" Height="auto" Margin="7" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
+                <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="panel_image" Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Stretch="Fill"/>
+                </Button>
+                <TextBox x:Name="textBox_search" FontSize="14" Grid.Column="1" Background="#FF0E1621" BorderBrush="#283949" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Поиск" VerticalAlignment="Stretch" Width="auto" HorizontalContentAlignment="Stretch" Foreground="LightGray" MaxLength="255" Visibility="Collapsed"/>
+                <ComboBox Grid.Column="0" Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="LightGray" SelectedIndex="0" SelectionChanged="combobox_top_choose_SelectionChanged">
+                </ComboBox>
+
+            </Grid>
+        </Border>
+
+        <!--панель поиска-->
+        <Border Grid.Column="1" Grid.Row="2" BorderBrush="#0A121B" BorderThickness="0,0,0,1">
+            <Grid Name="grid_filtering" Grid.Column="1" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Name="textbox_filtering" Margin="7" Background="#0E1621" BorderThickness="1" BorderBrush="#283949" Foreground="LightGray" FontSize="14" MaxLength="70" Padding="2" KeyDown="textbox_filtering_KeyDown"></TextBox>
+                <TextBlock Grid.Column="0" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Жанр</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Возраст</TextBlock>
+                <TextBlock Grid.Column="2" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Год</TextBlock>
+                <ComboBox Grid.Column="0" Grid.Row="2" Name="combobox_filter_genres" Margin="7,7,7,7" SelectedIndex="0" >
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Все</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Аниме</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Биография</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Боевик</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Вестерн</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Военный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Детектив</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Детский</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Документальный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Драма</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Игра</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">История</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Комедия</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Концерт</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Короткометражка</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Криминал</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мелодрама</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Музыка</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мультфильм</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мюзикл</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Новости</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Приключения</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Семейный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Спорт</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Триллер</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Ужасы</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Фантастика</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Фэнтези</TextBlock>
+                </ComboBox>
+                <ComboBox Grid.Column="1" Grid.Row="2" Name="combobox_filter_age" Margin="7,7,7,7" SelectedIndex="0" >
+                </ComboBox>
+                <ComboBox Grid.Column="2" Grid.Row="2" Name="combobox_filter_year" Margin="7,7,7,7" SelectedIndex="0" >
+                </ComboBox>
+                <Button x:Name="button_search" Width="40" Height="40" Grid.Column="3" Grid.Row="2" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_search_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="seacrh_image" Height="auto" Margin="7" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
+                <Button x:Name="button_filtering_close" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_filtering_close_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="filc_image" Height="auto" Margin="8" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- верхняя правая панель -->
+        <Border  Grid.Row="1" Grid.Column="2" Name="border_content_header" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_content_header"  Background="#17212B">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="textBox_content_headet" FontSize="14" Grid.Column="0" Background="{x:Null}" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Рекомендовано" VerticalAlignment="Stretch" Width="auto" Foreground="LightGray" TextAlignment="Center" Padding="0,0,0,0"/>
+                <Button x:Name="button_panel_close" Width="40" Height="40" Grid.Column="0" VerticalContentAlignment="Top" HorizontalAlignment="Right" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_close_Click" Visibility="Collapsed" Style="{DynamicResource ButtonStyle1}">
+                    <Image Name="panel_close_image" Height="auto" Margin="5" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- центральная панель -->
+        <ScrollViewer Name="scroll_viewer_center" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0"  VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_center_ScrollChanged">
+            <StackPanel Name="stack_list" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" HorizontalAlignment="Stretch" Background="#0E1621" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" CanVerticallyScroll="True" CanHorizontallyScroll="True" MouseWheel="stack_list_MouseWheel">
+                <Grid Name="grid_list" Background="#0E1621"  ShowGridLines="False" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
+        <Button Name="button_sctoll_top" Grid.Row="3" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0" Style="{DynamicResource ButtonStyle1}">
+            <Image Name="scroll_image" Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Stretch="Fill"/>
+        </Button>
+
+        <!-- правая панель -->
+        <Border  Grid.Row="2" Grid.Column="2" Grid.RowSpan="2"  Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+
+            <ScrollViewer Name="scroll_viewer_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_content_ScrollChanged">
+                <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B" MouseWheel="stack_content_MouseWheel">
+                    <Grid Name="grid_right" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                    <Grid Name="grid_content" Visibility="Collapsed">
+                        <!--| Settings block START |-->
+                        <Label 
+            x:Name="label_sources" 
+            Content="Источники фильмов:" 
+            HorizontalAlignment="Left" 
+            Height = "40"
+            FontSize = "16"
+            Margin="20,20,0,0" 
+            VerticalAlignment="Top"
+        />
+                        <CheckBox 
+            x:Name = "checkbox_hdkinozor_ru"
+            IsThreeState = "false"
+            IsChecked = "true"
+            Height = "40"
+            FontSize = "16"
+            Content = "hdkinozor.ru"
+            VerticalContentAlignment = "Center"
+            HorizontalAlignment = "Left"
+            Padding = "5, 5, 5, 5" 
+            Margin="20,60,0,319" 
+            IsEnabled="False"
+        />
+                        <CheckBox 
+            x:Name = "checkbox_netflix_com"
+            IsThreeState = "false"
+            IsChecked = "true"
+            Height = "40"
+            FontSize = "16"
+            Content = "netflix.com"
+            VerticalContentAlignment = "Center"
+            HorizontalAlignment = "Left"
+            Padding = "5, 5, 5, 5" 
+            Margin="20,100,0,279"
+        />
+                        <CheckBox 
+            x:Name = "checkbox_ivi_ru"
+            IsThreeState = "false"
+            IsChecked = "true"
+            Height = "40"
+            FontSize = "16"
+            Content = "ivi.ru"
+            VerticalContentAlignment = "Center"
+            HorizontalAlignment = "Left"
+            Padding = "5, 5, 5, 5" 
+            Margin="20,140,0,239"
+        />
+                        <CheckBox 
+            x:Name = "checkbox_lostfilm_tv"
+            IsThreeState = "false"
+            IsChecked = "true"
+            Height = "40"
+            FontSize = "16"
+            Content = "lostfilm.tv"
+            VerticalContentAlignment = "Center"
+            HorizontalAlignment = "Left"
+            Padding = "5, 5, 5, 5" 
+            Margin="20,180,0,199"
+        />
+                        <CheckBox 
+            x:Name = "checkbox_kinokrad_co"
+            IsThreeState = "false"
+            IsChecked = "true"
+            Height = "40"
+            FontSize = "16"
+            Content = "kinokrad.co"
+            VerticalContentAlignment = "Center"
+            HorizontalAlignment = "Left"
+            Padding = "5, 5, 5, 5" 
+            Margin="20,220,0,159"
+        />
+                        <CheckBox 
+            x:Name = "checkbox_filmzor_net"
+            IsThreeState = "false"
+            IsChecked = "true"
+            Height = "40"
+            FontSize = "16"
+            Content = "filmzor.net"
+            VerticalContentAlignment = "Center"
+            HorizontalAlignment = "Left"
+            Padding = "5, 5, 5, 5" 
+            Margin="20,260,0,119"
+        />
+                        <Label 
+            x:Name="label_other" 
+            Content="Прочие настройки:" 
+            HorizontalAlignment="Left" 
+            Height = "40"
+            FontSize = "16"
+            Margin="223,20,0,0" 
+            VerticalAlignment="Top"
+        />
+                        <CheckBox 
+            x:Name = "checkbox_notify"
+            IsThreeState = "false"
+            IsChecked = "true"
+            Height = "40"
+            FontSize = "16"
+            Content = "Показывать уведомления?"
+            VerticalContentAlignment = "Center"
+            HorizontalAlignment = "Left"
+            Padding = "5, 5, 5, 5"
+            Margin = "223,60,0,319"
+        />
+                        <CheckBox 
+            x:Name = "checkbox_age"
+            IsThreeState = "false"
+            IsChecked = "true"
+            Height = "40"
+            FontSize = "16"
+            Content = "Показывать 18+?"
+            VerticalContentAlignment = "Center"
+            HorizontalAlignment = "Left"
+            Padding = "5, 5, 5, 5" 
+            Margin="223,100,0,279"
+        />
+                        <Button Name="button_age" Width="120" Margin="380,105,75,279" Click="button_age_Click" Style="{DynamicResource ButtonStyle1}" Background="#283949" Foreground="WhiteSmoke"/>
+                        <Button 
+            x:Name="button_export" 
+            Content="Экспорт настроек" 
+            HorizontalAlignment="Left" 
+            Margin="223,145,0,0" 
+            VerticalAlignment="Top" 
+            Width="114" 
+            Height="43" 
+            Click="Button_export_Click" Style="{DynamicResource ButtonStyle1}"
+        />
+                        <Button 
+            x:Name="button_import" 
+            Content="Импорт настроек" 
+            HorizontalAlignment="Left" 
+            Margin="223,193,0,0" 
+            VerticalAlignment="Top" 
+            Width="114" 
+            Height="43" 
+            Click="Button_import_Click" Style="{DynamicResource ButtonStyle1}"
+        />
+                        <Button 
+            x:Name="button_about" 
+            Content="О создателях :)" 
+            HorizontalAlignment="Left" 
+            Margin="223,241,0,0" 
+            VerticalAlignment="Top" 
+            Width="114" 
+            Height="43" 
+            Click="Button_about_Click" Style="{DynamicResource ButtonStyle1}"
+        />
+                        <Button 
+            x:Name="button_save" 
+            Content="Сохранить" 
+            HorizontalAlignment="Left" 
+            Margin="20,333,0,0" 
+            VerticalAlignment="Top" 
+            Width="76" 
+            Height="30" 
+            Click="Button_save_Click" Style="{DynamicResource ButtonStyle1}"
+        />
+                        <Button 
+            x:Name="button_cancel" 
+            Content="Отменить" 
+            HorizontalAlignment="Left" 
+            Margin="101,333,0,0" 
+            VerticalAlignment="Top" 
+            Width="76" 
+            Height="30" 
+            Click="Button_cancel_Click" Style="{DynamicResource ButtonStyle1}"
+        />
+                        <Button 
+            x:Name="button_defaults" 
+            Content="По умолчанию" 
+            HorizontalAlignment="Left" 
+            Margin="182,333,0,0" 
+            VerticalAlignment="Top" 
+            Width="95" 
+            Height="30" 
+            Click="Button_defaults_Click" Style="{DynamicResource ButtonStyle1}"
+        />
+                        <!--| Settings block END |-->
+                    </Grid>
+                    <Grid Name="grid_recommends" Visibility="Collapsed" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- кнопка "подняться вверх" -->
+        <Button Name="button_content_sctoll_top" Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="40" Click="button_content_sctoll_top_Click" Background="{x:Null}" Visibility="Hidden" IsEnabled="False" BorderThickness="0" Margin="0,0,20,0" Style="{DynamicResource ButtonStyle1}">
+            <Image Name="content_scroll_image" Height="40" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="40" Stretch="Fill"/>
+        </Button>
+    </Grid>
+</Window>
