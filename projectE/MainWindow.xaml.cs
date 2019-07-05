@@ -71,8 +71,6 @@ namespace projectE
         double scroll_viewer_right_last_height;
         static BitmapImage noFavoriteImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString()+@"\пустаязвезда2.png"));
         static BitmapImage FavoriteImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\звезда2.png"));
-        //static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        //static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
         static BitmapImage posterNONE = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\poster_none.png"));
         static BitmapImage notifyImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\notify.png"));
         static BitmapImage redNotifyImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\rednotify.png"));
@@ -149,7 +147,6 @@ namespace projectE
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             ///////////////
-            //ShowNotification(1500000, "Новые фильмы!", "Вышло 6 новых фильмов за сегодня и 2 фильма из списка избранного!");
         }
 
         private void update_combobox_age()
@@ -553,7 +550,6 @@ namespace projectE
             openPanel();
             scroll_viewer_center.ScrollToTop();//проскролить вверх
             scroll_viewer_content.ScrollToTop();
-            //thread.Abort();
             GC.Collect();
         }
         //нажали кнопку избранное (меню)
@@ -570,12 +566,7 @@ namespace projectE
         //нажали кнопку закрыть окно
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
-            /*try
-            {
-                thread.Abort();
-            } catch { }*/
             GC.Collect();
-            //Process.GetCurrentProcess().Kill();
             ShowInTaskbar = false;
             WindowState = WindowState.Minimized;
         }
@@ -596,9 +587,7 @@ namespace projectE
         //нажали кнопку скрыть в трей
         private void button_hide_Click(object sender, RoutedEventArgs e)
         {
-            //ShowInTaskbar = false;
             WindowState = WindowState.Minimized;
-            //Hide();
         }
         //перетаскивание окна за верхнюю панельку
         private void Title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -910,7 +899,9 @@ namespace projectE
             button_export.Background = backColorButt;
             button_import.Foreground = foreColor;
             button_import.Background = backColorButt;
-            
+            button_about.Foreground = foreColor;
+            button_about.Background = backColorButt;
+
             checkbox_notify.Foreground = foreColor;
             checkbox_notify.IsChecked = IsChecked[0];
             if (password == "")
@@ -1026,6 +1017,14 @@ namespace projectE
             MessageBox.Show("Импорт настроек прошёл успешно!");
         }
 
+        //About developers
+        private void Button_about_Click(object sender, RoutedEventArgs e)
+        {
+            string about = "Александр Туртыгин - Управление командой и меню настроек; \nЕкатерина Бондаренко - Парсинг и БД; \nИгорь Чайкин - Дизайн приложения; \nРустам Романов - Главный QA проекта.";
+            string version = "\n\nВерсия приложения: " + System.Windows.Forms.Application.ProductVersion.ToString();
+            MessageBox.Show(about + version, "Над программой работали:");
+        }
+
         //Save
         private void Button_save_Click(object sender, RoutedEventArgs e)
         {
@@ -1036,7 +1035,6 @@ namespace projectE
             IsChecked[4] = (bool)checkbox_lostfilm_tv.IsChecked;
             IsChecked[5] = (bool)checkbox_kinokrad_co.IsChecked;
             IsChecked[6] = (bool)checkbox_filmzor_net.IsChecked;
-            //IsChecked[7] = (bool)checkbox_hdkinozor_ru.IsChecked;
             for (int i = 0; i < settings_amount - 1; i++) 
             {
                 db.SetSettings(i.ToString(), IsChecked[i], true);
@@ -1152,14 +1150,12 @@ namespace projectE
 
         private void iconNormal()
         {
-            //using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
             {
                 notifyIcon.Icon = new System.Drawing.Icon(Environment.CurrentDirectory.ToString() + @"\icon.ico");
             }
         }
         private void iconRed()
         {
-            //using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/iconRed.ico")).Stream)
             {
                 notifyIcon.Icon = new System.Drawing.Icon(Environment.CurrentDirectory.ToString() + @"\iconRed.ico");
             }
@@ -1235,40 +1231,8 @@ namespace projectE
             button_notify.Content = new Image() { Source = notifyImg, Stretch = Stretch.Fill, Margin = new Thickness(6) };
             show_new_movies();
             iconNormal();
-            //notify_load();
-            //добавить отображение текстов уведомлений в правой вкладке
         }
-
-        //private void notify_load()
-        //{
-        //    textBox_content_headet.Text = "Уведомления";
-        //    scroll_viewer_content.ScrollToTop();
-        //    if (!grid.ColumnDefinitions[2].IsEnabled)
-        //        openPanel();
-        //    grid_recommends.Visibility = Visibility.Collapsed;
-        //    grid_content.Visibility = Visibility.Collapsed;
-        //    grid_right.Visibility = Visibility.Visible;
-        //    button_panel_close.Visibility = Visibility.Visible;
-        //    grid_right.Children.Clear();
-        //    grid_right.RowDefinitions.Clear();
-        //    grid_right.ColumnDefinitions.Clear();
-        //    grid_right.ColumnDefinitions.Add(new ColumnDefinition());
-        //    grid_right.RowDefinitions.Add(new RowDefinition());
-        //    grid_right.RowDefinitions.Add(new RowDefinition());
-        //    TextBlock tb = new TextBlock()
-        //    {
-        //        Text = "Тута что-то будет связанное с уведомлениями",
-        //        TextWrapping = TextWrapping.WrapWithOverflow,
-        //        FontSize = 22,
-        //        Background = Brushes.Transparent,
-        //        Foreground = Brushes.LightGray,
-        //        Padding = new Thickness(30)
-        //    };
-        //    Grid.SetColumn(tb, 0);
-        //    Grid.SetRow(tb, 0);
-        //    grid_right.Children.Add(tb);
-        //}
-
+        
         private void textbox_filtering_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -1328,9 +1292,7 @@ namespace projectE
             textBox.Width = 80;
             textBox.VerticalAlignment = VerticalAlignment.Stretch;
             textBox.HorizontalAlignment = HorizontalAlignment.Center;
-            //textBox.alig = TextAlignment.Center;
             textBox.FontSize = 26;
-            //textBox.pa
             buttonOk.VerticalAlignment = VerticalAlignment.Stretch;
             buttonOk.HorizontalAlignment = HorizontalAlignment.Stretch;
             buttonOk.Margin = new Thickness(5);
@@ -1369,9 +1331,6 @@ namespace projectE
             window.Width = 250;
             window.Content = grid;
             window.ResizeMode = ResizeMode.NoResize;
-            //window.AllowsTransparency = true;
-            //window.BorderBrush = Brushes.Black;
-            //window.BorderThickness = new Thickness(10);
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             window.WindowStyle = WindowStyle.SingleBorderWindow;
             window.ShowDialog();
@@ -1405,11 +1364,10 @@ namespace projectE
                     {
                         checkbox_age.IsChecked = true;
                         IsChecked[1] = true;
-                        
-                        //LoadSettings();
                     }
                 }
         }
+
     }
 
 

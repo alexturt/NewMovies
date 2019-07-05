@@ -503,6 +503,16 @@
             Click="Button_import_Click" Style="{DynamicResource ButtonStyle1}"
         />
                         <Button 
+            x:Name="button_about" 
+            Content="О создателях :)" 
+            HorizontalAlignment="Left" 
+            Margin="223,241,0,0" 
+            VerticalAlignment="Top" 
+            Width="114" 
+            Height="43" 
+            Click="Button_about_Click" Style="{DynamicResource ButtonStyle1}"
+        />
+                        <Button 
             x:Name="button_save" 
             Content="Сохранить" 
             HorizontalAlignment="Left" 

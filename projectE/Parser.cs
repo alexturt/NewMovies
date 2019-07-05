@@ -13,7 +13,6 @@ namespace projectE
     {
         DB db = new DB();
         string name, year, date, country, genres, agerating, description, poster, urltrailer, urlinfo, urlwatch;
-        //    string[,] films = new string[500, 11];
         int countElem = 0;
 
         const int settings_amount = 8;
@@ -223,9 +222,7 @@ namespace projectE
             }
             Console.WriteLine("---------------------------------------------------------------КОНЕЦ ПАРСИНГА 2017--------------------------------------");
             Console.WriteLine("Было выгружено : " + countElem + ". Всего потрачено: " + FullTime);
-
-            //        addBd();
-
+            
             Console.WriteLine("Добавление в БД закончено.");
         }
 
@@ -598,7 +595,6 @@ namespace projectE
                             }
                             if (genres == null)
                             {
-                                //  #kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value > span:nth-child(1)
                                 foreach (IDomObject obj1 in film.Find("#kino-page > div.fcols.clearfix > ul > li:nth-child(3) > span.value > span"))
                                 {
                                     try
@@ -614,7 +610,7 @@ namespace projectE
                         }
                         if (genres == null)
                         {
-                            string a = "";
+
                         }
                         description = null;
                         foreach (IDomObject obj in film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix")) //Жанр
@@ -684,7 +680,6 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-                //      Task.Delay(500).Wait();
                 string Html = @"https://www.ivi.ru" + ListFilm[i] + "/description";
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
@@ -799,7 +794,7 @@ namespace projectE
                         }
                         description = null;
                         description = film.Find("#block-ovg-content > div > section.info-section.section--center.mdl-grid.mdl-shadow--2dp > div.description.mdl-cell.mdl-cell--12-col > div > p").Text().Trim(); //Описание
-                                                                                                                                                                                                                 //       description = film.Find("#kino-page > div.kino-inner-full.mb-rem1.clearfix > div.kino-text > div.kino-desc.full-text.clearfix > div").Text(); //Описание
+                                                                              
                         urltrailer = Html; //Трейлер
                         agerating = FindAgeRating(name, year); ; //Возр.огр
                         poster = @"https://kino50.top/" + film.Find("#block-ovg-content > div > section.info-section.section--center.mdl-grid.mdl-shadow--2dp > div.cover.mdl-cell.mdl-cell--4-col-desktop.mdl-cell--3-col-tablet.mdl-cell--3-col-phone > div > img").Attr("src"); //Картинка
@@ -815,7 +810,6 @@ namespace projectE
                         }
                         urlwatch = FindLinkFilm(name, year); //Сам фильм
                         countElem++;
-                        //}
                     }
                     db.AddMovie(name, Convert.ToInt32(year), date, country, genres, agerating, description, poster, urltrailer, urlinfo, urlwatch, false, false, ReNowData(DateTime.Now));
                 }
@@ -990,7 +984,6 @@ namespace projectE
         {
             for (int i = 0; i < ListFilm.Count; i++)
             {
-                //        Task.Delay(500).Wait();
                 string Html = @"https://www.lostfilm.tv" + ListFilm[i];
                 CQ film = IsConnectInternet(Html);
                 if (film != null)
@@ -1025,7 +1018,7 @@ namespace projectE
                         agerating = FindAgeRating(name, year); ; //Возр.огр
                         poster = @"https://e-torrent.ru/uploads/posts/2016-11/1479684493_garo_svyaschennoe_plamya_2016.jpg"; //Картинка
                         date = ReData(film.Find("#left-pane > div:nth-child(4) > div.details-pane > div.left-box > a:nth-child(1)").Text()); //Дата выхода
-                        country = null;                                                                                                                     //          country = film.Find("#fstory-film > div > div.col-sm-8.col-xs-12 > div:nth-child(4) > div > div.finfo-text").Text(); //Страна
+                        country = null;                                                                                                                    
                         foreach (IDomObject obj in film.Find("#left-pane > div:nth-child(4) > div.details-pane > div.left-box > a:nth-child(3)")) //Страна
                         {
                             country += obj.FirstChild.ParentNode.NextSibling.NodeValue.Replace("(", "").Replace(")", "").Trim() + " ";
