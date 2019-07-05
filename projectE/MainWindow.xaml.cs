@@ -24,6 +24,22 @@ namespace projectE
         public MainWindow()
         {
             InitializeComponent();
+            
+            hide_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\hide.png"));
+            max_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\window.png"));
+            exit_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\exit.png"));
+            home_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\домик2.png"));
+            fav_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\звезда2.png"));
+            notify_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\notify.png")); 
+            sett_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\шестерня2.png"));
+            filo_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\лупастрелка.png"));
+            panel_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\панель2.png"));
+            seacrh_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\лупа2.png"));
+            filc_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\back_to_recomends.png"));
+            scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\up.png"));
+            content_scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\up.png"));
+            panel_close_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\back_to_recomends.png"));
+            
             UpdateSettings();
             columns_count = 2;
             columns_count_recommends = 4;
@@ -37,18 +53,12 @@ namespace projectE
             combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за месяц", Foreground = Brushes.LightGray, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.SelectedIndex = 0;
             update_combobox_years();
-            createNotifyIcon();
             { }
         }
 
-        int limitWind;
-        [STAThread]
         public void ShowBox(string v)
         {
-            thread = new Thread(Upd);
-            thread.Abort();
             MessageBox.Show(v, "Ошибка", MessageBoxButton.OK);
-            isRun = false;
         }
 
         DB db = new DB();
@@ -59,13 +69,11 @@ namespace projectE
         int offset;
         int allmoviesCount;
         double scroll_viewer_right_last_height;
-        static BitmapImage noFavoriteImg = new BitmapImage(new Uri("/Resources/пустаязвезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage FavoriteImg = new BitmapImage(new Uri("/Resources/звезда2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage noWatchedImg = new BitmapImage(new Uri("/Resources/nowatched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage WatchedImg = new BitmapImage(new Uri("/Resources/watched.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage posterNONE = new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage notifyImg = new BitmapImage(new Uri("/Resources/notify.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-        static BitmapImage redNotifyImg = new BitmapImage(new Uri("/Resources/rednotify.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+        static BitmapImage noFavoriteImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString()+@"\пустаязвезда2.png"));
+        static BitmapImage FavoriteImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\звезда2.png"));
+        static BitmapImage posterNONE = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\poster_none.png"));
+        static BitmapImage notifyImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\notify.png"));
+        static BitmapImage redNotifyImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\rednotify.png"));
 
         List<object> tags = new List<object>();
 
@@ -119,9 +127,10 @@ namespace projectE
             grid.ColumnDefinitions[2].Width = new GridLength(0);
             Width -= size;
         }
-
+        string password;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            createNotifyIcon();
             UpdateSettings();
             offset = 0;
             update_movies("Рекомендовано", limit, offset);
@@ -134,9 +143,10 @@ namespace projectE
                 str = " и " + countFavoritesWeek + " фильма из списка избранного";
             if (countWeek != 0)
                 ShowNotification(1500000, "Новые фильмы!", "Вышло " + countWeek + " новых фильмов за неделю" + str);
-
+            thread = new Thread(Upd);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
             ///////////////
-            //ShowNotification(1500000, "Новые фильмы!", "Вышло 6 новых фильмов за сегодня и 2 фильма из списка избранного!");
         }
 
         private void update_combobox_age()
@@ -223,8 +233,7 @@ namespace projectE
             grid_right.RowDefinitions.Add(new RowDefinition());
             grid_right.RowDefinitions.Add(new RowDefinition());
 
-            try
-            {
+            
                 Image img = new Image()
                 {
                     Name = "image_right_content",
@@ -238,27 +247,24 @@ namespace projectE
                 Grid.SetColumn(img, 0);
                 Grid.SetRow(img, 0);
                 grid_right.Children.Add(img);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
             TextBlock tb = new TextBlock();
-            tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), dt_movies.Rows[index]["name"].ToString(), 22, Brushes.AliceBlue));
-            Run run = new Run()
+            try
             {
-                FontSize = 16,
-                Text = Environment.NewLine +
-                    dt_movies.Rows[index]["year"].ToString() + "\r\n\r\n" +
-                    dt_movies.Rows[index]["country"].ToString() + "\r\n\r\n" +
-                    dt_movies.Rows[index]["genres"].ToString() + "\r\n\r\n" +
-                    ConvertDate(dt_movies.Rows[index]["date"].ToString()) + "\r\n\r\n" +
-                    dt_movies.Rows[index]["agerating"].ToString() + "\r\n\r\n",
-                Foreground = Brushes.LightGray,
-                Tag = index
-            };
-            tb.Inlines.Add(run);
+                tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLinfo"].ToString(), dt_movies.Rows[index]["name"].ToString(), 22, Brushes.AliceBlue));
+                Run run = new Run()
+                {
+                    FontSize = 16,
+                    Text = Environment.NewLine +
+                        dt_movies.Rows[index]["year"].ToString() + "\r\n\r\n" +
+                        dt_movies.Rows[index]["country"].ToString() + "\r\n\r\n" +
+                        dt_movies.Rows[index]["genres"].ToString() + "\r\n\r\n" +
+                        ConvertDate(dt_movies.Rows[index]["date"].ToString()) + "\r\n\r\n" +
+                        dt_movies.Rows[index]["agerating"].ToString() + "\r\n\r\n",
+                    Foreground = Brushes.LightGray,
+                    Tag = index
+                };
+                tb.Inlines.Add(run);
+
 
             if (dt_movies.Rows[index]["URLtrailer"].ToString() != "")
                 tb.Inlines.Add(createURL(dt_movies.Rows[index]["URLtrailer"].ToString(), "Трейлер\r\n", 14, Brushes.AliceBlue));
@@ -288,9 +294,11 @@ namespace projectE
             Grid.SetColumnSpan(tb2, 2);
             Grid.SetRow(tb2, 1);
             grid_right.Children.Add(tb2);
+            }
+            catch { }
         }
         //для вкладки подробнее создание гиперссылок
-        private Hyperlink createURL(string url, string name, int size, Brush brush)
+        public Hyperlink createURL(string url, string name, int size, Brush brush)
         {
             Uri uri = null;
             Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out uri);
@@ -305,7 +313,7 @@ namespace projectE
             return link;
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        public void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try
             {
@@ -413,6 +421,8 @@ namespace projectE
                         str = "Новинок за месяц нет ☹";
                         break;
                 }
+            else
+                str = "Результатов поиска \"" + textbox_filtering.Text + "\", жанры: " + (combobox_filter_genres.SelectedItem as TextBlock).Text + ", возраст: " + (combobox_filter_age.SelectedItem as TextBlock).Text + ", год: " + (combobox_filter_year.SelectedItem as TextBlock).Text + " нет";
             if (dt_movies.Rows.Count == 0)
             {
                 _grid.RowDefinitions.Add(new RowDefinition());
@@ -423,7 +433,9 @@ namespace projectE
                     VerticalAlignment = VerticalAlignment.Center,
                     FontSize = 18,
                     Foreground = Brushes.LightGray,
-                    IsEnabled = false
+                    IsEnabled = false,
+                    TextWrapping = TextWrapping.WrapWithOverflow,
+                    TextAlignment = TextAlignment.Center
                 };
                 Grid.SetRow(tb, 0);
                 _grid.Children.Add(tb);
@@ -432,16 +444,16 @@ namespace projectE
 
         private void create_and_add_elements(Grid _grid_row, int i, int _columns_count)
         {
-            try
+
+            Button btf = new Button()//кнопка добавления/удаления из избранного
             {
-                Button btf = new Button()//кнопка добавления/удаления из избранного
-                {
-                    Name = "button_favorite" + i,
-                    Height = 40,
-                    Width = 40,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
+                Name = "button_favorite" + i,
+                Height = 40,
+                Width = 40,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                BorderThickness = new Thickness(0, 0, 0, 0),
+                Style = (Style)FindResource("ButtonStyle1"),
                     //присвоение соответсвтующей картинки
                     Content = new Image() { Source = Convert.ToBoolean(dt_movies.Rows[i]["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill, Margin = new Thickness(5) },
                     Tag = dt_movies.Rows[i]["id"]//index
@@ -486,9 +498,7 @@ namespace projectE
                 Grid.SetRow(btf, 0);
                 _grid_row.Children.Add(btf);
                 tags.Add(dt_movies.Rows[i]["id"]);
-            }
-
-            catch { }
+            
         }
 
         //для отладки и прочего
@@ -540,7 +550,6 @@ namespace projectE
             openPanel();
             scroll_viewer_center.ScrollToTop();//проскролить вверх
             scroll_viewer_content.ScrollToTop();
-            //thread.Abort();
             GC.Collect();
         }
         //нажали кнопку избранное (меню)
@@ -557,12 +566,9 @@ namespace projectE
         //нажали кнопку закрыть окно
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                thread.Abort();
-            } catch { }
             GC.Collect();
-            Process.GetCurrentProcess().Kill();
+            ShowInTaskbar = false;
+            WindowState = WindowState.Minimized;
         }
         //нажали кнопку "во весь экран" или "вернуть к нормальному размеру"
         private void button_maximazing_Click(object sender, RoutedEventArgs e)
@@ -581,7 +587,6 @@ namespace projectE
         //нажали кнопку скрыть в трей
         private void button_hide_Click(object sender, RoutedEventArgs e)
         {
-            ShowInTaskbar = false;
             WindowState = WindowState.Minimized;
         }
         //перетаскивание окна за верхнюю панельку
@@ -643,13 +648,15 @@ namespace projectE
 
         }
         //из массива байт в картинку
-        private static BitmapImage LoadImage(byte[] imageData)
+        public static BitmapImage LoadImage(byte[] imageData)
         {
-            if (imageData == null || imageData.Length == 0)
-                return new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-            var image = new BitmapImage();
-            using (var mem = new MemoryStream(imageData))
-            { 
+            try
+            {
+                if (imageData == null || imageData.Length == 0)
+                    return new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+                var image = new BitmapImage();
+                using (var mem = new MemoryStream(imageData))
+                {
                     mem.Position = 0;
                     image.BeginInit();
                     image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
@@ -658,12 +665,17 @@ namespace projectE
                     image.StreamSource = mem;
                     image.EndInit();
 
+                }
+                image.Freeze();
+                return image;
             }
-            image.Freeze();
-            return image;
+            catch
+            {
+                return new BitmapImage(new Uri("/Resources/poster_none.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
+            }
         }
         //конвертирует дату из "гггг.мм.дд 00:00:00" в "20 июня 2019"
-        private string ConvertDate(string str)
+        public string ConvertDate(string str)
         {
             if (str == "01.01.0001 0:00:00")
                 return "Вышел";
@@ -837,7 +849,7 @@ namespace projectE
 
         const int settings_amount = 8;
         bool[] IsChecked = new bool[settings_amount];
-        const string settings_header = "Это настройки, bitch!";
+        const string settings_header = "Настройки";
 
         static Brush foreColorEnabled = Brushes.Green;
         static Brush foreColor = Brushes.WhiteSmoke;
@@ -854,6 +866,7 @@ namespace projectE
         //Обновление настроек
         public void UpdateSettings()
         {
+            password = db.GetPassword();
             DataTable dt = db.GetSettings();
             for (int i = 0; i < settings_amount; i++)
             {
@@ -886,9 +899,33 @@ namespace projectE
             button_export.Background = backColorButt;
             button_import.Foreground = foreColor;
             button_import.Background = backColorButt;
-            
+            button_about.Foreground = foreColor;
+            button_about.Background = backColorButt;
+
             checkbox_notify.Foreground = foreColor;
             checkbox_notify.IsChecked = IsChecked[0];
+            if (password == "")
+            {
+                db.updateAgeRestriction(false);
+                IsChecked[1] = false;
+                checkbox_age.IsEnabled = false;
+                button_age.Visibility = Visibility.Visible;
+                button_age.Content = "Получить пароль";                    
+            }
+            else
+            {
+                if (!IsChecked[1])
+                {
+                    checkbox_age.IsEnabled = false;
+                    button_age.Visibility = Visibility.Visible;
+                    button_age.Content = "Ввести пароль";
+                }
+                else
+                {
+                    checkbox_age.IsEnabled = true;
+                    button_age.Visibility = Visibility.Collapsed;
+                }
+            }
             checkbox_age.Foreground = foreColor;
             checkbox_age.IsChecked = IsChecked[1];
             checkbox_netflix_com.Foreground = foreColor;
@@ -980,6 +1017,14 @@ namespace projectE
             MessageBox.Show("Импорт настроек прошёл успешно!");
         }
 
+        //About developers
+        private void Button_about_Click(object sender, RoutedEventArgs e)
+        {
+            string about = "Александр Туртыгин - Управление командой и меню настроек; \nЕкатерина Бондаренко - Парсинг и БД; \nИгорь Чайкин - Дизайн приложения; \nРустам Романов - Главный QA проекта.";
+            string version = "\n\nВерсия приложения: " + System.Windows.Forms.Application.ProductVersion.ToString();
+            MessageBox.Show(about + version, "Над программой работали:");
+        }
+
         //Save
         private void Button_save_Click(object sender, RoutedEventArgs e)
         {
@@ -990,7 +1035,6 @@ namespace projectE
             IsChecked[4] = (bool)checkbox_lostfilm_tv.IsChecked;
             IsChecked[5] = (bool)checkbox_kinokrad_co.IsChecked;
             IsChecked[6] = (bool)checkbox_filmzor_net.IsChecked;
-            //IsChecked[7] = (bool)checkbox_hdkinozor_ru.IsChecked;
             for (int i = 0; i < settings_amount - 1; i++) 
             {
                 db.SetSettings(i.ToString(), IsChecked[i], true);
@@ -1025,6 +1069,11 @@ namespace projectE
         //Settings butt clicked
         private void Button_settings_Click(object sender, RoutedEventArgs e)
         {
+            //пример использования инпутбокса
+            //string value = "";
+            //InputBox("Изменение ограничения 18+", "Введите пароль",ref value);
+            //Title.Text = value;
+            //конец примера
             if (textBox_content_headet.Text == settings_header)
                 return;
             LoadSettings();
@@ -1043,7 +1092,7 @@ namespace projectE
         System.Windows.Forms.NotifyIcon notifyIcon;
         public void ShowNotification(int time = 10000, string header = "Notification", string text = "This is a base notification!")
         {
-            if (IsChecked[0])//Can show notification?9
+            if (IsChecked[0])//Can show notification?
             {
                 notifyIcon.ShowBalloonTip(time, header, text, notifyIcon.BalloonTipIcon);
             }
@@ -1054,7 +1103,7 @@ namespace projectE
         //ПКМ вызвает меню
         //даблклик открывает окно
         //balloontipclicked вызывается если нажали на уведомление
-        private void createNotifyIcon()
+        public void createNotifyIcon()
         {
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.Visible = true;
@@ -1064,9 +1113,7 @@ namespace projectE
                 button_notify.Content = new Image() { Source = notifyImg, Stretch = Stretch.Fill, Margin = new Thickness(6) };
                 iconNormal();
                 ShowInTaskbar = true;
-                if (WindowState == WindowState.Minimized)
-                    WindowState = WindowState.Normal;
-                Activate();
+                show_new_movies();
             };
             
             notifyIcon.BalloonTipClicked += (s, e) => 
@@ -1084,7 +1131,17 @@ namespace projectE
                 Activate();
             });
             contextMenu.MenuItems.Add(menuItem);
-            menuItem = new System.Windows.Forms.MenuItem("Выход", (s, e) => { notifyIcon.Visible = false; notifyIcon.Dispose(); Process.GetCurrentProcess().Kill(); });
+            menuItem = new System.Windows.Forms.MenuItem("Выход", (s, e) => 
+            {
+                notifyIcon.Visible = false;
+                notifyIcon.Dispose();
+                try
+                {
+                    thread.Abort();
+                }
+                catch { }
+                Process.GetCurrentProcess().Kill();
+            });
             contextMenu.MenuItems.Add(menuItem);
             notifyIcon.ContextMenu = contextMenu;
         }
@@ -1093,16 +1150,14 @@ namespace projectE
 
         private void iconNormal()
         {
-            using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/icon.ico")).Stream)
             {
-                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                notifyIcon.Icon = new System.Drawing.Icon(Environment.CurrentDirectory.ToString() + @"\icon.ico");
             }
         }
         private void iconRed()
         {
-            using (Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/iconRed.ico")).Stream)
             {
-                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                notifyIcon.Icon = new System.Drawing.Icon(Environment.CurrentDirectory.ToString() + @"\iconRed.ico");
             }
         }
 
@@ -1152,8 +1207,6 @@ namespace projectE
         }
         private void search()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             string name = textbox_filtering.Text.ToLower();
             string genre = ((TextBlock)combobox_filter_genres.SelectedItem).Text;
             string age = ((TextBlock)combobox_filter_age.SelectedItem).Text;
@@ -1170,51 +1223,16 @@ namespace projectE
                 year = int.Parse(((TextBlock)combobox_filter_year.SelectedItem).Text);
             dt_movies = db.GetMoviesByFilter(name, genre, age, year);
             allmoviesCount = dt_movies.Rows.Count;
-            sw.Stop();
-            sw.Restart();
             show_movies(grid_list, button_sctoll_top, columns_count);
             scroll_viewer_center.ScrollToTop();
-            sw.Stop();
         }
         private void button_notify_Click(object sender, RoutedEventArgs e)
         {
             button_notify.Content = new Image() { Source = notifyImg, Stretch = Stretch.Fill, Margin = new Thickness(6) };
             show_new_movies();
             iconNormal();
-            //notify_load();
-            //добавить отображение текстов уведомлений в правой вкладке
         }
-
-        private void notify_load()
-        {
-            textBox_content_headet.Text = "Уведомления";
-            scroll_viewer_content.ScrollToTop();
-            if (!grid.ColumnDefinitions[2].IsEnabled)
-                openPanel();
-            grid_recommends.Visibility = Visibility.Collapsed;
-            grid_content.Visibility = Visibility.Collapsed;
-            grid_right.Visibility = Visibility.Visible;
-            button_panel_close.Visibility = Visibility.Visible;
-            grid_right.Children.Clear();
-            grid_right.RowDefinitions.Clear();
-            grid_right.ColumnDefinitions.Clear();
-            grid_right.ColumnDefinitions.Add(new ColumnDefinition());
-            grid_right.RowDefinitions.Add(new RowDefinition());
-            grid_right.RowDefinitions.Add(new RowDefinition());
-            TextBlock tb = new TextBlock()
-            {
-                Text = "Тута что-то будет связанное с уведомлениями",
-                TextWrapping = TextWrapping.WrapWithOverflow,
-                FontSize = 22,
-                Background = Brushes.Transparent,
-                Foreground = Brushes.LightGray,
-                Padding = new Thickness(30)
-            };
-            Grid.SetColumn(tb, 0);
-            Grid.SetRow(tb, 0);
-            grid_right.Children.Add(tb);
-        }
-
+        
         private void textbox_filtering_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -1224,7 +1242,7 @@ namespace projectE
             }
         }
 
-        private bool filterIsOpen()
+        public bool filterIsOpen()
         {
             return grid.RowDefinitions[2].IsEnabled;
         }
@@ -1245,6 +1263,112 @@ namespace projectE
             textbox_filtering.Text = "";
             textbox_filtering.Focus();
         }
+        
+        public static bool InputBox(string title, string promptText, ref string value)
+        {
+            Window window = new Window();
+            TextBlock label = new TextBlock();
+            PasswordBox textBox = new PasswordBox();
+            Button buttonOk = new Button();
+            Button buttonCancel = new Button();
+            window.Loaded += (s, e) => { textBox.Focus(); };
+            window.Title = title;
+            label.Text = promptText;
+            textBox.Password = value;
+            textBox.PasswordChar = '*';
+            textBox.MaxLength = 4;
+            buttonOk.Content = "OK";
+            buttonCancel.Content = "Cancel";
+            buttonOk.IsDefault = true;
+            buttonOk.Click += (s, e) => { window.Close(); };
+            buttonCancel.IsCancel = true;
+            
+            label.HorizontalAlignment = HorizontalAlignment.Stretch;
+            label.VerticalAlignment = VerticalAlignment.Stretch;
+            label.TextAlignment = TextAlignment.Center;
+            label.FontSize = 24;
+            label.Margin = new Thickness(5);
+            textBox.Margin = new Thickness(5);
+            textBox.Width = 80;
+            textBox.VerticalAlignment = VerticalAlignment.Stretch;
+            textBox.HorizontalAlignment = HorizontalAlignment.Center;
+            textBox.FontSize = 26;
+            buttonOk.VerticalAlignment = VerticalAlignment.Stretch;
+            buttonOk.HorizontalAlignment = HorizontalAlignment.Stretch;
+            buttonOk.Margin = new Thickness(5);
+            buttonCancel.VerticalAlignment = VerticalAlignment.Stretch;
+            buttonCancel.HorizontalAlignment = HorizontalAlignment.Stretch;
+            buttonCancel.Margin = new Thickness(5);
+
+            Grid grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition());
+            grid.ColumnDefinitions.Add(new ColumnDefinition());
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.Background = Brushes.LightGray;
+
+            Grid.SetColumn(label, 0);
+            Grid.SetRow(label, 0);
+            Grid.SetColumnSpan(label, 2);
+
+            Grid.SetColumn(textBox, 0);
+            Grid.SetRow(textBox, 1);
+            Grid.SetColumnSpan(textBox, 2);
+
+            Grid.SetColumn(buttonOk, 0);
+            Grid.SetRow(buttonOk, 2);
+
+            Grid.SetColumn(buttonCancel, 1);
+            Grid.SetRow(buttonCancel, 2);
+
+            grid.Children.Add(label);
+            grid.Children.Add(textBox);
+            grid.Children.Add(buttonOk);
+            grid.Children.Add(buttonCancel);
+            
+            window.Height = 200;
+            window.Width = 250;
+            window.Content = grid;
+            window.ResizeMode = ResizeMode.NoResize;
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.WindowStyle = WindowStyle.SingleBorderWindow;
+            window.ShowDialog();
+            value = textBox.Password;
+            return true;
+        }
+
+        private void button_age_Click(object sender, RoutedEventArgs e)
+        {
+            if (password == "")
+            {
+                string str = "";
+                Random rnd = new Random();
+                str += rnd.Next(9).ToString();
+                str += rnd.Next(9).ToString();
+                str += rnd.Next(9).ToString();
+                str += rnd.Next(9).ToString();
+                IsChecked[1] = false;
+                checkbox_age.IsChecked = false;
+                db.SetPassword(str);
+                MessageBox.Show("Пароль: "+str, "Запомни", MessageBoxButton.OK);
+                db.updateAgeRestriction(true);
+                LoadSettings();
+            }
+            else
+                if(!IsChecked[1])
+                {
+                    string value = "";
+                    InputBox("Выключение ограничения 18+", "Введите пароль",ref value);
+                    if (value == db.GetPassword())
+                    {
+                        checkbox_age.IsChecked = true;
+                        IsChecked[1] = true;
+                    }
+                }
+        }
 
     }
+
+
 }

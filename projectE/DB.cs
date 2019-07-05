@@ -145,11 +145,11 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (!showRestricted)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE agerating<>'18+' ORDER BY date ASC LIMIT 28", conn);
+                dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=0 and agerating<>'18+' and genres in (select genres from movies where favorite=1) order by random() limit 28", conn);
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies ORDER BY date ASC LIMIT 28", conn);
+                dataAdapter = new SQLiteDataAdapter("select * from movies where favorite=0 and genres in (select genres from movies where favorite=1) order by random() limit 28", conn);
             }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
@@ -196,20 +196,20 @@ namespace projectE
             if (year == 0)
                 if (!showRestricted)
                 {
-                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating like '%" + age + "' AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
                 }
                 else
                 {
-                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' ORDER BY date DESC limit 50", conn);
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating like '%" + age + "' ORDER BY date DESC limit 50", conn);
                 }
             else
                 if (!showRestricted)
                 {
-                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND year=" + year + " AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating like '%" + age + "' AND year=" + year + " AND agerating<>'18+' ORDER BY date DESC limit 50", conn);
                 }
                 else
                 {
-                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating='" + age + "' AND year=" + year + " ORDER BY date DESC limit 50", conn);
+                    dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE lower(genres) like lower('%" + genre + "%') AND lower(name) like lower('%" + name + "%') AND agerating like '%" + age + "' AND year=" + year + " ORDER BY date DESC limit 50", conn);
                 }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
@@ -313,11 +313,11 @@ namespace projectE
             SQLiteDataAdapter dataAdapter;
             if (!showRestricted)
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<='" + today + "' AND agerating<>'18+' ORDER BY date DESC", conn);
             }
             else
             {
-                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<'" + today + "' ORDER BY date DESC", conn);
+                dataAdapter = new SQLiteDataAdapter("SELECT * FROM movies WHERE date>'" + date + "' AND date<='" + today + "' ORDER BY date DESC", conn);
             }
             dataAdapter.Fill(dt);
             dataAdapter.Dispose();
@@ -445,6 +445,38 @@ namespace projectE
             if (conn == null)
                 connect();
             ExecuteQuery("UPDATE movies SET watched=" + watched + " WHERE id=" + index);
+        }
+        //устанавливаем/снимаем просмотренное
+        public void SetPassword(string pass)
+        {
+            if (conn == null)
+                connect();
+            ExecuteQuery("UPDATE credentials SET password='" + pass + "' WHERE email='1'");
+        }
+        public string GetPassword()
+        {
+            string pass = "";
+            if (conn == null)
+                connect();
+            DataTable dt = new DataTable();
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("select password from credentials where email='1'", conn);
+            dataAdapter.Fill(dt);
+            dataAdapter.Dispose();
+            if (dt.Rows.Count == 0)
+            {
+                createPassword();
+                pass = "";
+            }
+            else
+                pass = dt.Rows[0][0].ToString();
+            return pass;
+        }
+        public void createPassword()
+        {
+            if (conn == null)
+                connect();
+            ExecuteQuery("insert into credentials values ('1','')");
+            close();
         }
         //для удаления удаленных записей из файла БД
         public void Vacuum()
