@@ -8,14 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Documents;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Resources;
-using System.Reflection;
-using System.ComponentModel;
-using System.Windows.Threading;
 
 namespace projectE
 {
@@ -32,28 +26,28 @@ namespace projectE
         private void Window_Initialized(object sender, EventArgs e)
         {
             //загрузка всех картинок из файлов, необходимо для установщика
-            hide_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\hide.png"));
-            max_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\window.png"));
-            exit_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\exit.png"));
-            home_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\домик2.png"));
-            fav_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\звезда2.png"));
-            notify_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\notify.png"));
-            sett_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\шестерня2.png"));
-            filo_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\лупастрелка.png"));
-            panel_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\панель2.png"));
-            seacrh_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\лупа2.png"));
-            filc_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\back_to_recomends.png"));
-            scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\up.png"));
-            content_scroll_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\up.png"));
-            panel_close_image.Source = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\back_to_recomends.png"));
+            string path = Environment.CurrentDirectory.ToString();
+            hide_image.Source = new BitmapImage(new Uri(path + @"\Resources\hide.png"));
+            max_image.Source = new BitmapImage(new Uri(path + @"\Resources\window.png"));
+            exit_image.Source = new BitmapImage(new Uri(path + @"\Resources\exit.png"));
+            home_image.Source = new BitmapImage(new Uri(path + @"\Resources\домик2.png"));
+            fav_image.Source = new BitmapImage(new Uri(path + @"\Resources\звезда2.png"));
+            notify_image.Source = new BitmapImage(new Uri(path + @"\Resources\notify.png"));
+            sett_image.Source = new BitmapImage(new Uri(path + @"\Resources\шестерня2.png"));
+            filo_image.Source = new BitmapImage(new Uri(path + @"\Resources\лупастрелка.png"));
+            panel_image.Source = new BitmapImage(new Uri(path + @"\Resources\панель2.png"));
+            seacrh_image.Source = new BitmapImage(new Uri(path + @"\Resources\лупа2.png"));
+            filc_image.Source = new BitmapImage(new Uri(path + @"\Resources\back_to_recomends.png"));
+            scroll_image.Source = new BitmapImage(new Uri(path + @"\Resources\up.png"));
+            content_scroll_image.Source = new BitmapImage(new Uri(path + @"\Resources\up.png"));
+            panel_close_image.Source = new BitmapImage(new Uri(path + @"\Resources\back_to_recomends.png"));
 
-            noFavoriteImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\пустаязвезда2.png"));
-            FavoriteImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\звезда2.png"));
-            notifyImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\notify.png"));
-            redNotifyImg = new BitmapImage(new Uri(Environment.CurrentDirectory.ToString() + @"\Resources\rednotify.png"));
-
+            noFavoriteImg = new BitmapImage(new Uri(path + @"\Resources\пустаязвезда2.png"));
+            FavoriteImg = new BitmapImage(new Uri(path + @"\Resources\звезда2.png"));
+            notifyImg = new BitmapImage(new Uri(path + @"\Resources\notify.png"));
+            redNotifyImg = new BitmapImage(new Uri(path + @"\Resources\rednotify.png"));
+            
             text_brush = Brushes.White;
-            //background_brush = (Brush)(new BrushConverter().ConvertFrom("#FF2463AE"));
             background_brush = Brushes.Red;
 
             Title.Foreground = text_brush;
@@ -142,7 +136,7 @@ namespace projectE
             update_movies("Рекомендовано", limit, offset);
             show_movies(grid_recommends, button_sctoll_top, columns_count_recommends);
             ShowNotification();
-
+            
             thread = new Thread(Upd);
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
