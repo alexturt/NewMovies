@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
-using Microsoft.Win32;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Documents;
-using System.Diagnostics;
 
 namespace projectE
 {
@@ -28,7 +28,7 @@ namespace projectE
             //загрузка всех картинок из файлов, необходимо для установщика
             string path = Environment.CurrentDirectory.ToString();
             hide_image.Source = new BitmapImage(new Uri(path + @"\Resources\hide.png"));
-            max_image.Source = new BitmapImage(new Uri(path + @"\Resources\window.png"));
+            //max_image.Source = new BitmapImage(new Uri(path + @"\Resources\window.png"));
             exit_image.Source = new BitmapImage(new Uri(path + @"\Resources\exit.png"));
             home_image.Source = new BitmapImage(new Uri(path + @"\Resources\домик2.png"));
             fav_image.Source = new BitmapImage(new Uri(path + @"\Resources\звезда2.png"));
@@ -46,7 +46,7 @@ namespace projectE
             FavoriteImg = new BitmapImage(new Uri(path + @"\Resources\звезда2.png"));
             notifyImg = new BitmapImage(new Uri(path + @"\Resources\notify.png"));
             redNotifyImg = new BitmapImage(new Uri(path + @"\Resources\rednotify.png"));
-            
+
             text_brush = Brushes.White;
             background_brush = Brushes.Red;
 
@@ -136,7 +136,7 @@ namespace projectE
             update_movies("Рекомендовано", limit, offset);
             show_movies(grid_recommends, button_sctoll_top, columns_count_recommends);
             ShowNotification();
-            
+
             thread = new Thread(Upd);
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();

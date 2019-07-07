@@ -439,7 +439,7 @@
                 <Image Name="hide_image" Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center"/>
             </Button>
             <Button Name="button_maximazing" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_maximazing_Click" >
-                <Image Name="max_image" Height="20" Width="20" Stretch="Fill"/>
+                <Image Name="max_image" Height="20" Source="Resources/window.png" Width="20" Stretch="Fill"/>
             </Button>
             <Button Name="button_exit" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_exit_Click" Padding="0" Margin="0" >
                 <Image Name="exit_image" Height="20" Width="20" Stretch="Uniform"/>
