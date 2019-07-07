@@ -46,16 +46,16 @@ namespace projectE
             }
         }
 
-        public static Hyperlink createURL(string url, string name, int size, Brush brush)
+        public static Hyperlink createURL(string url, string name, int size)
         {
             Uri uri = null;
             Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out uri);
             Hyperlink link = new Hyperlink()
             {
                 NavigateUri = uri,
-                Foreground = brush,
                 FontSize = size
             };
+            link.SetResourceReference(Hyperlink.ForegroundProperty, "textBrush");
             link.Inlines.Add(name);
             link.RequestNavigate += (s, e) => { try { Process.Start(e.Uri.ToString()); } catch { } };
             return link;
@@ -65,10 +65,10 @@ namespace projectE
         public static ComboBox update_combobox_years(ComboBox comboBox, Brush foregroung)
         {
             comboBox.Items.Clear();
-            comboBox.Items.Add(new TextBlock() { Background = Brushes.Transparent, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = "Все" });
-            comboBox.Items.Add(new TextBlock() { Background = Brushes.Transparent, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = DateTime.Now.Year.ToString() });
-            comboBox.Items.Add(new TextBlock() { Background = Brushes.Transparent, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = (DateTime.Now.Year - 1).ToString() });
-            comboBox.Items.Add(new TextBlock() { Background = Brushes.Transparent, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = (DateTime.Now.Year - 2).ToString() });
+            comboBox.Items.Add(createTextBlock("Все"));
+            comboBox.Items.Add(createTextBlock(DateTime.Now.Year.ToString()));
+            comboBox.Items.Add(createTextBlock((DateTime.Now.Year - 1).ToString()));
+            comboBox.Items.Add(createTextBlock((DateTime.Now.Year - 2).ToString()));
             comboBox.SelectedIndex = 0;
             return comboBox;
         }
@@ -76,15 +76,26 @@ namespace projectE
         public static ComboBox update_combobox_age(ComboBox comboBox, Brush foregroung, bool ageRating)
         {
             comboBox.Items.Clear();
-            comboBox.Items.Add(new TextBlock() { Background = null, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = "Все" });
-            comboBox.Items.Add(new TextBlock() { Background = null, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = "0+" });
-            comboBox.Items.Add(new TextBlock() { Background = null, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = "6+" });
-            comboBox.Items.Add(new TextBlock() { Background = null, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = "12+" });
-            comboBox.Items.Add(new TextBlock() { Background = null, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = "16+" });
+            comboBox.Items.Add(createTextBlock("Все"));
+            comboBox.Items.Add(createTextBlock("0+"));
+            comboBox.Items.Add(createTextBlock("6+"));
+            comboBox.Items.Add(createTextBlock("12+"));
+            comboBox.Items.Add(createTextBlock("16+"));
             if (ageRating)
-                comboBox.Items.Add(new TextBlock() { Background = null, Foreground = foregroung, FontSize = 14, Padding = new Thickness(5, 0, 0, 0), Text = "18+" });
+                comboBox.Items.Add(createTextBlock("18+"));
             comboBox.SelectedIndex = 0;
             return comboBox;
+        }
+
+        public static TextBlock createTextBlock(string _text)
+        {
+            TextBlock tb = new TextBlock();
+            tb.Background = Brushes.Transparent;
+            tb.FontSize = 14;
+            tb.Padding = new Thickness(5, 0, 0, 0);
+            tb.Text = _text;
+            tb.SetResourceReference(TextBlock.ForegroundProperty, "textBrush");
+            return tb;
         }
         //конвертирует дату из "гггг.мм.дд 00:00:00" в "20 июня 2019"
         public static string ConvertDate(string str)

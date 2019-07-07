@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:projectE"
         mc:Ignorable="d"
         BorderBrush="{x:Null}"
@@ -14,7 +15,7 @@
         AllowsTransparency="True"
         
         MaxHeight="{DynamicResource {x:Static SystemParameters.VirtualScreenHeight}}"
-        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged" Closing="Window_Closing" Margin="0" Padding="0" Initialized="Window_Initialized"
+        MaxWidth="{DynamicResource {x:Static SystemParameters.VirtualScreenWidth}}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Background="{x:Null}" WindowStyle="None" SizeChanged="Window_SizeChanged" Closing="Window_Closing" Margin="0" Padding="0" Initialized="Window_Initialized" PreviewKeyDown="Window_PreviewKeyDown"
         >
     <!--начало стилей-->
     <Window.Resources>
@@ -28,13 +29,13 @@
                     <ColumnDefinition Width="20" />
                 </Grid.ColumnDefinitions>
                 <Border x:Name="Border" Grid.ColumnSpan="2" 
-                      Background="#283949"
+                      Background="{DynamicResource backBrushLight}"
                       
                       BorderThickness="1" />
                 <Border 
                       Grid.Column="0"
                       Margin="1" 
-                      Background="#283949" 
+                      Background="{DynamicResource backBrushLight}" 
                       BorderThickness="0,0,1,0" />
                 <Path 
                   x:Name="Arrow"
@@ -42,12 +43,12 @@
                     
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
-                  Data="M0,0L8,8 16,0z" Fill="#FF0E1621"/>
+                  Data="M0,0L8,8 16,0z" Fill="{DynamicResource backBrushDark}"/>
             </Grid>
         </ControlTemplate>
 
         <ControlTemplate x:Key="ComboBoxTextBox" TargetType="TextBox">
-            <Border x:Name="PART_ContentHost" Focusable="False" Background="#283949" />
+            <Border x:Name="PART_ContentHost" Focusable="False" Background="Red" />
         </ControlTemplate>
 
         <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
@@ -98,8 +99,8 @@
                                       MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border 
                                         x:Name="DropDownBorder"
-                                        Background="#283949"
-                                        BorderThickness="1"/>
+                                        Background="{DynamicResource backBrushLight}"
+                                        BorderThickness="0"/>
                                     <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
@@ -176,7 +177,14 @@
         <SolidColorBrush x:Key="DisabledForegroundBrush" Color="Red" />
         <SolidColorBrush x:Key="NormalBrush" Color="Red" />
         <SolidColorBrush x:Key="NormalBorderBrush" Color="#888" />
-        <Brush x:Key="HorizontalNormalBrush">#6C7883</Brush>
+
+        <SolidColorBrush x:Key="scrollBrush" Color="Gray"/>
+        <SolidColorBrush x:Key="backBrush" Color="#17212B"/>
+        <SolidColorBrush x:Key="backBrushLight" Color="#283949"/>
+        <SolidColorBrush x:Key="backBrushDark" Color="#0E1621"/>
+        <SolidColorBrush x:Key="textBrush" Color="#EEEFEF"/>
+        <SolidColorBrush x:Key="borderBrush" Color="#0E1418"/>
+        
         <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="Red" />
         <LinearGradientBrush x:Key="ListBoxBackgroundBrush" StartPoint="0,0" EndPoint="1,0.001">
             <GradientBrush.GradientStops>
@@ -295,7 +303,7 @@
                     <Track.Thumb>
                         <Thumb Style="{StaticResource ScrollBarThumb}" 
                                 Margin="0,0,0,0" 
-                                Background="{StaticResource HorizontalNormalBrush}"
+                                Background="{DynamicResource scrollBrush}"
                                 BorderBrush="{StaticResource HorizontalNormalBorderBrush}" />
                     </Track.Thumb>
                     <Track.IncreaseRepeatButton>
@@ -409,7 +417,7 @@
     </Window.Resources>
     <!--конец стилей-->
 
-    <Grid Name="grid" Width="auto" Background="#0E1621">
+    <Grid Name="grid" Width="auto" Background="{DynamicResource backBrushDark}">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
@@ -423,7 +431,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- заголовок окна -->
-        <Grid Background="#283949" Name="grid_top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Width="auto">
+        <Grid Background="{DynamicResource backBrushLight}" Name="grid_top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="40"></ColumnDefinition>
@@ -434,21 +442,21 @@
                 <RowDefinition Height="20"></RowDefinition>
             </Grid.RowDefinitions>
             <Image Name="icon" Grid.Column="0" Source="Resources/icon.ico" HorizontalAlignment="Left"/>
-            <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" Margin="20,0,0,0" HorizontalAlignment="Stretch" FontSize="14" Foreground="LightGray" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
-            <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_hide_Click" >
+            <TextBlock Name="Title" Grid.Column="0" Text="NewMovies" Height="20" Margin="20,0,0,0" HorizontalAlignment="Stretch" FontSize="14" Foreground="{DynamicResource textBrush}" Padding="5,0,0,0" MouseLeftButtonDown="Title_MouseLeftButtonDown"/>
+            <Button Name="button_hide" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource backBrushLight}" BorderThickness="0" Click="button_hide_Click" >
                 <Image Name="hide_image" Height="20" Width="20" Stretch="Fill" HorizontalAlignment="Center"/>
             </Button>
-            <Button Name="button_maximazing" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_maximazing_Click" >
+            <Button Name="button_maximazing" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource backBrushLight}" BorderThickness="0" Click="button_maximazing_Click" >
                 <Image Name="max_image" Height="20" Width="20" Stretch="Fill"/>
             </Button>
-            <Button Name="button_exit" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#283949" BorderThickness="0" Click="button_exit_Click" Padding="0" Margin="0" >
+            <Button Name="button_exit" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource backBrushLight}" BorderThickness="0" Click="button_exit_Click" Padding="0" Margin="0" >
                 <Image Name="exit_image" Height="20" Width="20" Stretch="Uniform"/>
             </Button>
         </Grid>
 
         <!-- левая панель -->
-        <Border  Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Name="border_menu" BorderBrush="#0A121B" BorderThickness="0,0,1,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
-            <Grid Name="grid_menu" Background="#17212B" HorizontalAlignment="Stretch">
+        <Border  Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Name="border_menu" BorderBrush="{DynamicResource borderBrush}" BorderThickness="0,0,1,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_menu" Background="{DynamicResource backBrush}" HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
                     <RowDefinition Height="40"></RowDefinition>
@@ -475,8 +483,8 @@
         </Border>
 
         <!-- верхняя центральная панель -->
-        <Border  Grid.Row="1" Grid.Column="1" Name="border_search" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
-            <Grid Name="grid_central_buttons" Grid.Column="1" Grid.Row="1" Background="#17212B">
+        <Border  Grid.Row="1" Grid.Column="1" Name="border_search" BorderBrush="{DynamicResource borderBrush}" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_central_buttons" Grid.Column="1" Grid.Row="1" Background="{DynamicResource backBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
                 </Grid.RowDefinitions>
@@ -492,16 +500,21 @@
                 <Button x:Name="button_panel" Width="40" Height="40" Grid.Column="3" Grid.Row="0" VerticalContentAlignment="Top" HorizontalAlignment="Left" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_Click" >
                     <Image Name="panel_image" Height="auto" Margin="5" VerticalAlignment="Top" Width="auto" Stretch="Fill"/>
                 </Button>
-                <ComboBox Grid.Column="0" Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="#FF0E1621" Foreground="LightGray" SelectedIndex="0" SelectionChanged="combobox_top_choose_SelectionChanged">
-
+                <ComboBox Grid.Column="0" Name="combobox_top_choose" Width="auto" Height="auto" Margin="7" Background="Transparent" Foreground="{DynamicResource textBrush}" SelectionChanged="combobox_top_choose_SelectionChanged">
+                    <TextBlock Text="Все" FontSize="14" Background="Transparent" Foreground="{DynamicResource textBrush}" Padding="5,0,0,0"/>
+                    <TextBlock Text="Рекомендовано" FontSize="14" Background="Transparent" Foreground="{DynamicResource textBrush}" Padding="5,0,0,0"/>
+                    <TextBlock Text="Избранное" FontSize="14" Background="Transparent" Foreground="{DynamicResource textBrush}" Padding="5,0,0,0"/>
+                    <TextBlock Text="Новинки за сегодня" FontSize="14" Background="Transparent" Foreground="{DynamicResource textBrush}" Padding="5,0,0,0"/>
+                    <TextBlock Text="Новинки за неделю" FontSize="14" Background="Transparent" Foreground="{DynamicResource textBrush}" Padding="5,0,0,0"/>
+                    <TextBlock Text="Новинки за месяц" FontSize="14" Background="Transparent" Foreground="{DynamicResource textBrush}" Padding="5,0,0,0"/>
                 </ComboBox>
 
             </Grid>
         </Border>
 
         <!--панель поиска-->
-        <Border Grid.Column="1" Grid.Row="2" BorderBrush="#0A121B" BorderThickness="0,0,0,1">
-            <Grid Name="grid_search" Grid.Column="1" Grid.Row="2">
+        <Border Grid.Column="1" Grid.Row="2" BorderBrush="{DynamicResource borderBrush}" BorderThickness="0,0,0,1">
+            <Grid Name="grid_search" Grid.Column="1" Grid.Row="2" Background="{DynamicResource backBrush}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -513,39 +526,39 @@
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="40"></RowDefinition>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Name="textbox_search" Margin="7" Background="#0E1621" BorderThickness="1" BorderBrush="#283949" Foreground="LightGray" FontSize="14" MaxLength="70" Padding="2" KeyDown="textbox_search_KeyDown"></TextBox>
-                <TextBlock Grid.Column="0" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Жанр</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Возраст</TextBlock>
-                <TextBlock Grid.Column="2" Grid.Row="1" FontSize="14" Foreground="LightGray" Padding="14,0,0,0">Год</TextBlock>
+                <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Name="textbox_search" Margin="7" Background="{DynamicResource backBrushDark}" BorderThickness="1" BorderBrush="{DynamicResource backBrushLight}" Foreground="{DynamicResource textBrush}" FontSize="14" MaxLength="70" Padding="2" KeyDown="textbox_search_KeyDown"></TextBox>
+                <TextBlock Grid.Column="0" Grid.Row="1" FontSize="14" Foreground="{DynamicResource textBrush}" Padding="14,0,0,0">Жанр</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" FontSize="14" Foreground="{DynamicResource textBrush}" Padding="14,0,0,0">Возраст</TextBlock>
+                <TextBlock Grid.Column="2" Grid.Row="1" FontSize="14" Foreground="{DynamicResource textBrush}" Padding="14,0,0,0">Год</TextBlock>
                 <ComboBox Grid.Column="0" Grid.Row="2" Name="combobox_search_genres" Margin="7,7,7,7" SelectedIndex="0" >
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Все</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Аниме</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Биография</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Боевик</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Вестерн</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Военный</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Детектив</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Детский</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Документальный</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Драма</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Игра</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">История</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Комедия</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Концерт</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Короткометражка</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Криминал</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мелодрама</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Музыка</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мультфильм</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Мюзикл</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Новости</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Приключения</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Семейный</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Спорт</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Триллер</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Ужасы</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Фантастика</TextBlock>
-                    <TextBlock Background="{x:Null}" Foreground="LightGray" FontSize="14" Padding="5,0,0,5">Фэнтези</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Все</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Аниме</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Биография</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Боевик</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Вестерн</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Военный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Детектив</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Детский</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Документальный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Драма</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Игра</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">История</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Комедия</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Концерт</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Короткометражка</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Криминал</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Мелодрама</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Музыка</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Мультфильм</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Мюзикл</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Новости</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Приключения</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Семейный</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Спорт</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Триллер</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Ужасы</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Фантастика</TextBlock>
+                    <TextBlock Background="{x:Null}" Foreground="{DynamicResource textBrush}" FontSize="14" Padding="5,0,0,5">Фэнтези</TextBlock>
                 </ComboBox>
                 <ComboBox Grid.Column="1" Grid.Row="2" Name="combobox_search_age" Margin="7,7,7,7" SelectedIndex="0" >
                 </ComboBox>
@@ -561,15 +574,15 @@
         </Border>
 
         <!-- верхняя правая панель -->
-        <Border  Grid.Row="1" Grid.Column="2" Name="border_content_header" BorderBrush="#0A121B" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
-            <Grid Name="grid_content_header"  Background="#17212B">
+        <Border  Grid.Row="1" Grid.Column="2" Name="border_content_header" BorderBrush="{DynamicResource borderBrush}" BorderThickness="0,0,0,1" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+            <Grid Name="grid_content_header"  Background="{DynamicResource backBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="textBlock_content_header" FontSize="14" Grid.Column="0" Background="{x:Null}" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Рекомендовано" VerticalAlignment="Stretch" Width="auto" Foreground="LightGray" TextAlignment="Center" Padding="0,0,0,0"/>
+                <TextBlock x:Name="textBlock_content_header" FontSize="14" Grid.Column="0" Background="{x:Null}" HorizontalAlignment="Stretch" Height="auto" Margin="8" TextWrapping="NoWrap" Text="Рекомендовано" VerticalAlignment="Stretch" Width="auto" Foreground="{DynamicResource textBrush}" TextAlignment="Center" Padding="0,0,0,0"/>
                 <Button x:Name="button_panel_close" Width="40" Height="40" Grid.Column="0" VerticalContentAlignment="Top" HorizontalAlignment="Right" Padding="0" BorderThickness="0" Background="{x:Null}" Foreground="Black" Click="button_panel_close_Click" Visibility="Collapsed" >
                     <Image Name="panel_close_image" Height="auto" Margin="5" Width="auto" Stretch="Fill" VerticalAlignment="Top"/>
                 </Button>
@@ -589,10 +602,10 @@
         </Button>
 
         <!-- правая панель -->
-        <Border  Grid.Row="2" Grid.Column="2" Grid.RowSpan="2"  Name="border_right_box" BorderBrush="#0A121B" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
+        <Border  Grid.Row="2" Grid.Column="2" Grid.RowSpan="2"  Name="border_right_box" BorderBrush="{DynamicResource borderBrush}" BorderThickness="1,0,0,0" Height="auto" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto">
 
-            <ScrollViewer Name="scroll_viewer_right_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" ScrollChanged="scroll_viewer_content_ScrollChanged">
-                <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" Background="#17212B" MouseWheel="stack_content_MouseWheel">
+            <ScrollViewer Name="scroll_viewer_right_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Stretch" Width="auto" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto" Background="{DynamicResource backBrush}" ScrollChanged="scroll_viewer_content_ScrollChanged">
+                <StackPanel Name="stack_content" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="auto" MouseWheel="stack_content_MouseWheel">
                     <Grid Name="grid_right_content" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -606,181 +619,206 @@
                     <Grid Name="grid_settings" Visibility="Collapsed">
                         <!--| Settings block START |-->
                         <Label 
-            x:Name="label_sources" 
-            Content="Источники фильмов:" 
-            HorizontalAlignment="Left" 
-            Height = "40"
-            FontSize = "16"
-            Margin="20,20,0,0" 
-            VerticalAlignment="Top"
+                            x:Name="label_sources" 
+                            Content="Источники фильмов:" 
+                            HorizontalAlignment="Left" 
+                            Height = "40"
+                            FontSize = "16"
+                            Margin="20,20,0,0" 
+                            VerticalAlignment="Top"
+                            Foreground="{DynamicResource textBrush}"
+                        />
+                        <CheckBox 
+                            x:Name = "checkbox_hdkinozor_ru"
+                            IsThreeState = "false"
+                            IsChecked = "true"
+                            Height = "40"
+                            FontSize = "16"
+                            Content = "hdkinozor.ru"
+                            VerticalContentAlignment = "Center"
+                            HorizontalAlignment = "Left"
+                            Padding = "5, 5, 5, 5" 
+                            Margin="20,60,0,319" 
+                            IsEnabled="False"
+                            Foreground="{DynamicResource textBrush}"
+                        />
+                        <CheckBox 
+                            x:Name = "checkbox_netflix_com"
+                            IsThreeState = "false"
+                            IsChecked = "true"
+                            Height = "40"
+                            FontSize = "16"
+                            Content = "netflix.com"
+                            VerticalContentAlignment = "Center"
+                            HorizontalAlignment = "Left"
+                            Padding = "5, 5, 5, 5" 
+                            Margin="20,100,0,279"
+                            Foreground="{DynamicResource textBrush}"
+                        />
+                        <CheckBox 
+                            x:Name = "checkbox_ivi_ru"
+                            IsThreeState = "false"
+                            IsChecked = "true"
+                            Height = "40"
+                            FontSize = "16"
+                            Content = "ivi.ru"
+                            VerticalContentAlignment = "Center"
+                            HorizontalAlignment = "Left"
+                            Padding = "5, 5, 5, 5" 
+                            Margin="20,140,0,239"
+                            Foreground="{DynamicResource textBrush}"
         />
                         <CheckBox 
-            x:Name = "checkbox_hdkinozor_ru"
-            IsThreeState = "false"
-            IsChecked = "true"
-            Height = "40"
-            FontSize = "16"
-            Content = "hdkinozor.ru"
-            VerticalContentAlignment = "Center"
-            HorizontalAlignment = "Left"
-            Padding = "5, 5, 5, 5" 
-            Margin="20,60,0,319" 
-            IsEnabled="False"
-        />
+                            x:Name = "checkbox_lostfilm_tv"
+                            IsThreeState = "false"
+                            IsChecked = "true"
+                            Height = "40"
+                            FontSize = "16"
+                            Content = "lostfilm.tv"
+                            VerticalContentAlignment = "Center"
+                            HorizontalAlignment = "Left"
+                            Padding = "5, 5, 5, 5" 
+                            Margin="20,180,0,199"
+                            Foreground="{DynamicResource textBrush}"
+                        />
                         <CheckBox 
-            x:Name = "checkbox_netflix_com"
-            IsThreeState = "false"
-            IsChecked = "true"
-            Height = "40"
-            FontSize = "16"
-            Content = "netflix.com"
-            VerticalContentAlignment = "Center"
-            HorizontalAlignment = "Left"
-            Padding = "5, 5, 5, 5" 
-            Margin="20,100,0,279"
-        />
+                            x:Name = "checkbox_kinokrad_co"
+                            IsThreeState = "false"
+                            IsChecked = "true"
+                            Height = "40"
+                            FontSize = "16"
+                            Content = "kinokrad.co"
+                            VerticalContentAlignment = "Center"
+                            HorizontalAlignment = "Left"
+                            Padding = "5, 5, 5, 5" 
+                            Margin="20,220,0,159"
+                            Foreground="{DynamicResource textBrush}"
+                        />
                         <CheckBox 
-            x:Name = "checkbox_ivi_ru"
-            IsThreeState = "false"
-            IsChecked = "true"
-            Height = "40"
-            FontSize = "16"
-            Content = "ivi.ru"
-            VerticalContentAlignment = "Center"
-            HorizontalAlignment = "Left"
-            Padding = "5, 5, 5, 5" 
-            Margin="20,140,0,239"
-        />
-                        <CheckBox 
-            x:Name = "checkbox_lostfilm_tv"
-            IsThreeState = "false"
-            IsChecked = "true"
-            Height = "40"
-            FontSize = "16"
-            Content = "lostfilm.tv"
-            VerticalContentAlignment = "Center"
-            HorizontalAlignment = "Left"
-            Padding = "5, 5, 5, 5" 
-            Margin="20,180,0,199"
-        />
-                        <CheckBox 
-            x:Name = "checkbox_kinokrad_co"
-            IsThreeState = "false"
-            IsChecked = "true"
-            Height = "40"
-            FontSize = "16"
-            Content = "kinokrad.co"
-            VerticalContentAlignment = "Center"
-            HorizontalAlignment = "Left"
-            Padding = "5, 5, 5, 5" 
-            Margin="20,220,0,159"
-        />
-                        <CheckBox 
-            x:Name = "checkbox_filmzor_net"
-            IsThreeState = "false"
-            IsChecked = "true"
-            Height = "40"
-            FontSize = "16"
-            Content = "filmzor.net"
-            VerticalContentAlignment = "Center"
-            HorizontalAlignment = "Left"
-            Padding = "5, 5, 5, 5" 
-            Margin="20,260,0,119"
-        />
+                            x:Name = "checkbox_filmzor_net"
+                            IsThreeState = "false"
+                            IsChecked = "true"
+                            Height = "40"
+                            FontSize = "16"
+                            Content = "filmzor.net"
+                            VerticalContentAlignment = "Center"
+                            HorizontalAlignment = "Left"
+                            Padding = "5, 5, 5, 5" 
+                            Margin="20,260,0,119"
+                            Foreground="{DynamicResource textBrush}"
+                        />
                         <Label 
-            x:Name="label_other" 
-            Content="Прочие настройки:" 
-            HorizontalAlignment="Left" 
-            Height = "40"
-            FontSize = "16"
-            Margin="223,20,0,0" 
-            VerticalAlignment="Top"
-        />
+                            x:Name="label_other" 
+                            Content="Прочие настройки:" 
+                            HorizontalAlignment="Left" 
+                            Height = "40"
+                            FontSize = "16"
+                            Margin="223,20,0,0" 
+                            VerticalAlignment="Top"
+                            Foreground="{DynamicResource textBrush}"
+                        />
                         <CheckBox 
-            x:Name = "checkbox_notify"
-            IsThreeState = "false"
-            IsChecked = "true"
-            Height = "40"
-            FontSize = "16"
-            Content = "Показывать уведомления?"
-            VerticalContentAlignment = "Center"
-            HorizontalAlignment = "Left"
-            Padding = "5, 5, 5, 5"
-            Margin = "223,60,0,319"
-        />
+                            x:Name = "checkbox_notify"
+                            IsThreeState = "false"
+                            IsChecked = "true"
+                            Height = "40"
+                            FontSize = "16"
+                            Content = "Показывать уведомления?"
+                            VerticalContentAlignment = "Center"
+                            HorizontalAlignment = "Left"
+                            Padding = "5, 5, 5, 5"
+                            Margin = "223,60,0,319"
+                            Foreground="{DynamicResource textBrush}"
+                        />
                         <CheckBox 
-            x:Name = "checkbox_age"
-            IsThreeState = "false"
-            IsChecked = "true"
-            Height = "40"
-            FontSize = "16"
-            Content = "Показывать 18+?"
-            VerticalContentAlignment = "Center"
-            HorizontalAlignment = "Left"
-            Padding = "5, 5, 5, 5" 
-            Margin="223,100,0,279"
-        />
-                        <Button Name="button_age" Width="120" Margin="380,105,75,279" Click="button_age_Click"  Background="#283949" Foreground="WhiteSmoke"/>
+                            x:Name = "checkbox_age"
+                            IsThreeState = "false"
+                            IsChecked = "true"
+                            Height = "40"
+                            FontSize = "16"
+                            Content = "Показывать 18+?"
+                            VerticalContentAlignment = "Center"
+                            HorizontalAlignment = "Left"
+                            Padding = "5, 5, 5, 5" 
+                            Margin="223,100,0,279"
+                            Foreground="{DynamicResource textBrush}"
+                        />
+                        <Button Name="button_age" Width="120" Margin="380,105,75,279" Click="button_age_Click"  Background="{DynamicResource backBrushDark}" Foreground="{DynamicResource textBrush}"/>
                         <Button 
-            x:Name="button_export" 
-            Content="Экспорт настроек" 
-            HorizontalAlignment="Left" 
-            Margin="223,145,0,0" 
-            VerticalAlignment="Top" 
-            Width="114" 
-            Height="43" 
-            Click="Button_export_Click" 
-        />
+                            x:Name="button_export" 
+                            Content="Экспорт настроек" 
+                            HorizontalAlignment="Left" 
+                            Margin="223,145,0,0" 
+                            VerticalAlignment="Top" 
+                            Width="114" 
+                            Height="43" 
+                            Click="Button_export_Click" 
+                            Foreground="{DynamicResource textBrush}"
+                            Background="{DynamicResource backBrushDark}"
+                        />
                         <Button 
-            x:Name="button_import" 
-            Content="Импорт настроек" 
-            HorizontalAlignment="Left" 
-            Margin="223,193,0,0" 
-            VerticalAlignment="Top" 
-            Width="114" 
-            Height="43" 
-            Click="Button_import_Click" 
-        />
+                            x:Name="button_import" 
+                            Content="Импорт настроек" 
+                            HorizontalAlignment="Left" 
+                            Margin="223,193,0,0" 
+                            VerticalAlignment="Top" 
+                            Width="114" 
+                            Height="43" 
+                            Click="Button_import_Click" 
+                            Foreground="{DynamicResource textBrush}"
+                            Background="{DynamicResource backBrushDark}"
+                        />
                         <Button 
-            x:Name="button_about" 
-            Content="О создателях :)" 
-            HorizontalAlignment="Left" 
-            Margin="223,241,0,0" 
-            VerticalAlignment="Top" 
-            Width="114" 
-            Height="43" 
-            Click="Button_about_Click"
-        />
+                            x:Name="button_about" 
+                            Content="О создателях :)" 
+                            HorizontalAlignment="Left" 
+                            Margin="223,241,0,0" 
+                            VerticalAlignment="Top" 
+                            Width="114" 
+                            Height="43" 
+                            Click="Button_about_Click"
+                            Foreground="{DynamicResource textBrush}"
+                            Background="{DynamicResource backBrushDark}"
+                        />
                         <Button 
-            x:Name="button_save" 
-            Content="Сохранить" 
-            HorizontalAlignment="Left" 
-            Margin="20,333,0,0" 
-            VerticalAlignment="Top" 
-            Width="76" 
-            Height="30" 
-            Click="Button_save_Click" 
-        />
+                            x:Name="button_save" 
+                            Content="Сохранить" 
+                            HorizontalAlignment="Left" 
+                            Margin="20,379,0,0" 
+                            VerticalAlignment="Top" 
+                            Width="76" 
+                            Height="30" 
+                            Click="Button_save_Click" 
+                            Foreground="{DynamicResource textBrush}"
+                            Background="{DynamicResource backBrushDark}"
+                        />
                         <Button 
-            x:Name="button_cancel" 
-            Content="Отменить" 
-            HorizontalAlignment="Left" 
-            Margin="101,333,0,0" 
-            VerticalAlignment="Top" 
-            Width="76" 
-            Height="30" 
-            Click="Button_cancel_Click" 
-        />
+                            x:Name="button_cancel" 
+                            Content="Отменить" 
+                            HorizontalAlignment="Left" 
+                            Margin="101,379,0,0" 
+                            VerticalAlignment="Top" 
+                            Width="76" 
+                            Height="30" 
+                            Click="Button_cancel_Click" 
+                            Foreground="{DynamicResource textBrush}"
+                            Background="{DynamicResource backBrushDark}"
+                        />
                         <Button 
-            x:Name="button_defaults" 
-            Content="По умолчанию" 
-            HorizontalAlignment="Left" 
-            Margin="182,333,0,0" 
-            VerticalAlignment="Top" 
-            Width="95" 
-            Height="30" 
-            Click="Button_defaults_Click" 
-        />
+                            x:Name="button_defaults" 
+                            Content="По умолчанию" 
+                            HorizontalAlignment="Left" 
+                            Margin="182,379,0,0" 
+                            VerticalAlignment="Top" 
+                            Width="95" 
+                            Height="30" 
+                            Click="Button_defaults_Click" 
+                            Foreground="{DynamicResource textBrush}"
+                            Background="{DynamicResource backBrushDark}"
+                        />
+                        <xctk:ColorPicker Name="ClrPcker_Background" Height="50" Width="70" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged" Margin="26,305,479,64"></xctk:ColorPicker>
+                        <xctk:ColorPicker Name="ClrPcker_text" Height="50" Width="70" SelectedColorChanged="ClrPcker_text_SelectedColorChanged" Margin="114,305,391,64" RenderTransformOrigin="0.857,0.52"></xctk:ColorPicker>
+
                         <!--| Settings block END |-->
                     </Grid>
                     <Grid Name="grid_recommends" Visibility="Collapsed" MouseLeftButtonUp="grid_list_MouseLeftButtonUp_1">

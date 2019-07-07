@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace projectE
 {
@@ -50,22 +51,16 @@ namespace projectE
             text_brush = Brushes.White;
             background_brush = Brushes.Red;
 
-            Title.Foreground = text_brush;
-            textBlock_content_header.Foreground = text_brush;
+            //Title.Foreground = text_brush;
+            //textBlock_content_header.Foreground = text_brush;
 
             UpdateSettings();
-
+            
             columns_count = 2;
             columns_count_recommends = 4;
             limit = columns_count * 8;
             offset = 0;
             //если их прописывать в xaml выдает ошибку
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Все", Foreground = text_brush, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Рекомендовано", Foreground = text_brush, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Избранное", Foreground = text_brush, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за сегодня", Foreground = text_brush, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за неделю", Foreground = text_brush, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
-            combobox_top_choose.Items.Add(new TextBlock() { Text = "Новинки за месяц", Foreground = text_brush, Background = Brushes.Transparent, FontSize = 14, Padding = new Thickness(5, 0, 0, 5) });
             combobox_top_choose.SelectedIndex = 0;
             combobox_search_year = Functions.update_combobox_years(combobox_search_year, text_brush);
         }
@@ -202,7 +197,7 @@ namespace projectE
             grid_right_content.Children.Add(img);
 
             TextBlock tb = new TextBlock();
-            tb.Inlines.Add(Functions.createURL(_dataRow["URLinfo"].ToString(), _dataRow["name"].ToString(), 22, Brushes.CornflowerBlue));
+            tb.Inlines.Add(Functions.createURL(_dataRow["URLinfo"].ToString(), _dataRow["name"].ToString(), 22));
             Run run = new Run()
             {
                 FontSize = 16,
@@ -212,14 +207,13 @@ namespace projectE
                     _dataRow["genres"].ToString() + "\r\n\r\n" +
                     Functions.ConvertDate(_dataRow["date"].ToString()) + "\r\n\r\n" +
                     _dataRow["agerating"].ToString() + "\r\n\r\n",
-                Foreground = text_brush,
             };
             tb.Inlines.Add(run);
-
+            tb.SetResourceReference(TextBlock.ForegroundProperty, "textBrush");
             if (_dataRow["URLtrailer"].ToString() != "")
-                tb.Inlines.Add(Functions.createURL(_dataRow["URLtrailer"].ToString(), "Трейлер\r\n", 14, Brushes.CornflowerBlue));
+                tb.Inlines.Add(Functions.createURL(_dataRow["URLtrailer"].ToString(), "Трейлер\r\n", 14));
             if (_dataRow["URLwatch"].ToString() != "")
-                tb.Inlines.Add(Functions.createURL(_dataRow["URLwatch"].ToString(), "Просмотр\r\n", 14, Brushes.CornflowerBlue));
+                tb.Inlines.Add(Functions.createURL(_dataRow["URLwatch"].ToString(), "Просмотр\r\n", 14));
             tb.TextWrapping = TextWrapping.WrapWithOverflow;
             tb.Padding = new Thickness(5, 5, 5, 5);
             TextBlock tb2 = new TextBlock()
@@ -232,7 +226,7 @@ namespace projectE
                 Foreground = text_brush,
                 Padding = new Thickness(5, 5, 5, 5),
             };
-
+            tb2.SetResourceReference(TextBlock.ForegroundProperty, "textBrush");
             Grid.SetColumn(tb, 1);
             Grid.SetRow(tb, 0);
             grid_right_content.Children.Add(tb);
@@ -371,7 +365,6 @@ namespace projectE
                 Content = new Image() { Source = Convert.ToBoolean(_dataRow["favorite"]) == false ? noFavoriteImg : FavoriteImg, Stretch = Stretch.Fill, Margin = new Thickness(5) },
                 Tag = _dataRow["id"]//index
             };
-
             btf.Click += button_favorite_Click;//привязывание события клика
             TextBlock tb = new TextBlock()//текст справа от постера
             {
@@ -380,12 +373,14 @@ namespace projectE
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Text = movies_table.Rows[i]["name"].ToString(),
-                Foreground = text_brush,
+                //Foreground = text_brush,
                 FontSize = 14,
                 Padding = new Thickness(5, 5, 5, 25),
-                Tag = _dataRow["id"]//index
+                Tag = _dataRow["id"],//index
+                //Foreground = Resources.MergedDictionaries.Where(p => p["textBrush"] == Resources["textBrush"])
+                //Foreground.SetValue(dp,ob)
             };
-
+            tb.SetResourceReference(TextBlock.ForegroundProperty, "textBrush");
             Image img = new Image()//постер
             {
                 Source = Functions.LoadImage(movies_table.Rows[i]["poster"]),//картинка из массива по id
@@ -689,8 +684,8 @@ namespace projectE
             UpdateSettings();
 
             textBlock_content_header.Text = settings_header;
-            textBlock_content_header.FontSize = fontSize + 2;
-
+            //textBlock_content_header.FontSize = fontSize + 2;
+            /*
             label_other.Foreground = text_brush;
             label_sources.Foreground = text_brush;
 
@@ -707,9 +702,9 @@ namespace projectE
             button_import.Background = backColorButt;
 
             button_age.Foreground = text_brush;
+            
 
-
-            checkbox_notify.Foreground = text_brush;
+            checkbox_notify.Foreground = text_brush;*/
             checkbox_notify.IsChecked = IsChecked[0];
             if (db.GetPassword() == "")
             {
@@ -733,19 +728,19 @@ namespace projectE
                     button_age.Visibility = Visibility.Collapsed;
                 }
             }
-            checkbox_age.Foreground = text_brush;
+            //checkbox_age.Foreground = text_brush;
             checkbox_age.IsChecked = IsChecked[1];
-            checkbox_netflix_com.Foreground = text_brush;
+            //checkbox_netflix_com.Foreground = text_brush;
             checkbox_netflix_com.IsChecked = IsChecked[2];
-            checkbox_ivi_ru.Foreground = text_brush;
+            //checkbox_ivi_ru.Foreground = text_brush;
             checkbox_ivi_ru.IsChecked = IsChecked[3];
-            checkbox_lostfilm_tv.Foreground = text_brush;
+            //checkbox_lostfilm_tv.Foreground = text_brush;
             checkbox_lostfilm_tv.IsChecked = IsChecked[4];
-            checkbox_kinokrad_co.Foreground = text_brush;
+            //checkbox_kinokrad_co.Foreground = text_brush;
             checkbox_kinokrad_co.IsChecked = IsChecked[5];
-            checkbox_filmzor_net.Foreground = text_brush;
+            //checkbox_filmzor_net.Foreground = text_brush;
             checkbox_filmzor_net.IsChecked = IsChecked[6];
-            checkbox_hdkinozor_ru.Foreground = text_brush;
+            //checkbox_hdkinozor_ru.Foreground = text_brush;
             checkbox_hdkinozor_ru.IsChecked = IsChecked[7];
 
             grid_recommends.Visibility = Visibility.Collapsed;
@@ -1099,7 +1094,37 @@ namespace projectE
                 }
         }
 
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                Resources["scrollBrush"] = Brushes.Black;
+            }
+        }
 
+        private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            Color color = e.NewValue.Value;
+            Resources["backBrush"] = new SolidColorBrush(color);
+            color.R += 17;
+            color.G += 24;
+            color.B += 31;
+            Resources["backBrushLight"] = new SolidColorBrush(color);
+            color.R -= 28;
+            color.G -= 35;
+            color.B -= 40;
+            Resources["backBrushDark"] = new SolidColorBrush(color);
+            color.R -= 5;
+            color.G -= 5;
+            color.B -= 5;
+            Resources["borderBrush"] = new SolidColorBrush(color);
+        }
+
+        private void ClrPcker_text_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            Color color = e.NewValue.Value;
+            Resources["textBrush"] = new SolidColorBrush(color);
+        }
     }
 
 
