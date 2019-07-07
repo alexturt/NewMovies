@@ -28,7 +28,7 @@ namespace projectE
             //загрузка всех картинок из файлов, необходимо для установщика
             string path = Environment.CurrentDirectory.ToString();
             hide_image.Source = new BitmapImage(new Uri(path + @"\Resources\hide.png"));
-            //max_image.Source = new BitmapImage(new Uri(path + @"\Resources\window.png"));
+            max_image.Source = new BitmapImage(new Uri(path + @"\Resources\window.png"));
             exit_image.Source = new BitmapImage(new Uri(path + @"\Resources\exit.png"));
             home_image.Source = new BitmapImage(new Uri(path + @"\Resources\домик2.png"));
             fav_image.Source = new BitmapImage(new Uri(path + @"\Resources\звезда2.png"));
