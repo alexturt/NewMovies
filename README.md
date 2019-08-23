@@ -4,3 +4,4 @@
 <br>
 ### About our project
 Find new movies with style! That's the main purpose of our app)
+
